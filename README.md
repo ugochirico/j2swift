@@ -1,0 +1,1 @@
+This project plan to translate java to swift. J2objc is very nice project that can translate java to object-c with only loss very litte performace. swift code feather is very similar with java, that is my intension.
