@@ -19,31 +19,24 @@ package com.kingxt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.io.Resources;
 import com.kingxt.j2swift.util.ErrorUtil;
-import com.kingxt.j2swift.util.FileUtil;
 import com.kingxt.j2swift.util.HeaderMap;
 import com.kingxt.j2swift.util.PackagePrefixes;
 import com.kingxt.j2swift.util.Version;
@@ -197,7 +190,72 @@ public class Options {
   }
 
   private String[] loadInternal(String[] args) throws IOException {
-	  return null;
+	  setLogLevel(Level.INFO);
+
+	    addJreMappings();
+
+	    // Create a temporary directory as the sourcepath's first entry, so that
+	    // modified sources will take precedence over regular files.
+	    sourcePathEntries = Lists.newArrayList();
+
+	    int nArg = 0;
+	    String[] noFiles = new String[0];
+	    while (nArg < args.length) {
+	      String arg = args[nArg];
+	      if (arg.isEmpty()) {
+	        ++nArg;
+	        continue;
+	      }
+	      if (arg.equals("-classpath")) {
+	        if (++nArg == args.length) {
+	          return noFiles;
+	        }
+	        classPathEntries = getPathArgument(args[nArg]);
+	      } else if (arg.equals("-sourcepath")) {
+	        if (++nArg == args.length) {
+	          usage("-sourcepath requires an argument");
+	        }
+	        sourcePathEntries.addAll(getPathArgument(args[nArg]));
+	      } else if (arg.equals("-d")) {
+	        if (++nArg == args.length) {
+	          usage("-d requires an argument");
+	        }
+	        outputDirectory = new File(args[nArg]);
+	      } else if (arg.equals("-encoding")) {
+	        if (++nArg == args.length) {
+	          usage("-encoding requires an argument");
+	        }
+	        fileEncoding = args[nArg];
+	        try {
+	          // Verify encoding has a supported charset.
+	          Charset.forName(fileEncoding);
+	        } catch (UnsupportedCharsetException e) {
+	          ErrorUtil.warning(e.getMessage());
+	        }
+	      } else if (arg.equals("--doc-comments")) {
+	        docCommentsEnabled = true;
+	      } else if (arg.equals("-version")) {
+	        version();
+	      } else if (arg.startsWith("-h") || arg.equals("--help")) {
+	        help(false);
+	      } else if (arg.startsWith("-")) {
+	        usage("invalid flag: " + arg);
+	      } else {
+	        break;
+	      }
+	      ++nArg;
+	    }
+
+	    int nFiles = args.length - nArg;
+	    String[] files = new String[nFiles];
+	    for (int i = 0; i < nFiles; i++) {
+	      String path = args[i + nArg];
+	      if (path.endsWith(".jar")) {
+	        appendSourcePath(path);
+	      }
+	      files[i] = path;
+	    }
+	    return files;
   }
 
   /**
@@ -225,14 +283,6 @@ public class Options {
     props.load(fis);
     fis.close();
     instance.packagePrefixes.addPrefixProperties(props);
-  }
-
-  private void addMappingsFiles(String[] filenames) throws IOException {
-    for (String filename : filenames) {
-      if (!filename.isEmpty()) {
-        addMappingsProperties(FileUtil.loadProperties(filename));
-      }
-    }
   }
 
   private void addJreMappings() throws IOException {

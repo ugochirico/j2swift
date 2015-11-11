@@ -19,8 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.kingxt.Options;
 import com.kingxt.j2swift.ast.CompilationUnit;
 import com.kingxt.j2swift.gen.GenerationUnit;
+import com.kingxt.j2swift.gen.SwiftHeaderGenerator;
 import com.kingxt.j2swift.types.HeaderImportCollector;
 import com.kingxt.j2swift.types.ImplementationImportCollector;
 import com.kingxt.j2swift.types.Import;
@@ -221,19 +223,20 @@ public class TranslationProcessor extends FileProcessor {
 
   @VisibleForTesting
   public static void generateObjectiveCSource(GenerationUnit unit) {
-//    assert unit.getOutputPath() != null;
-//    assert unit.isFullyParsed();
-//    TimeTracker ticker = getTicker(unit.getOutputPath());
-//    logger.fine("Generating " + unit.getOutputPath());
-//    logger.finest("writing output file(s) to " + Options.getOutputDirectory().getAbsolutePath());
-//    ticker.push();
-//
-//    // write header
+    assert unit.getOutputPath() != null;
+    assert unit.isFullyParsed();
+    TimeTracker ticker = getTicker(unit.getOutputPath());
+    logger.fine("Generating " + unit.getOutputPath());
+    logger.finest("writing output file(s) to " + Options.getOutputDirectory().getAbsolutePath());
+    ticker.push();
+
+    // write header
 //    if (Options.generateSegmentedHeaders()) {
 //      ObjectiveCSegmentedHeaderGenerator.generate(unit);
 //    } else {
 //      ObjectiveCHeaderGenerator.generate(unit);
 //    }
+    SwiftHeaderGenerator.generate(unit);
 //    ticker.tick("Header generation");
 //
 //    // write implementation file

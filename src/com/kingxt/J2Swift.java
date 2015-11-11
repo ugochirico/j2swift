@@ -3,6 +3,7 @@ package com.kingxt;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -21,86 +22,107 @@ import com.kingxt.j2swift.util.ProGuardUsageParser;
 public class J2Swift {
 
 	public static void main(String[] args) {
+		args = new String[]{"-d", "/Users/kingxt/Desktop/", "/Users/kingxt/Documents/project/j2swift/src/com/kingxt/test/TestBaseClass.java"};
 		
+		if (args.length == 0) {
+			Options.help(true);
+		}
+		String[] files = null;
+		try {
+			files = Options.load(args);
+			if (files.length == 0) {
+				Options.usage("no source files");
+			}
+		} catch (IOException e) {
+			ErrorUtil.error(e.getMessage());
+			System.exit(1);
+		}
+
+		run(Arrays.asList(files));
+
+		checkErrors();
 	}
-	
+
 	/**
-	   * Runs the entire J2ObjC pipeline.
-	   * @param fileArgs the files to process, same format as command-line args to {@link #main}.
-	   */
-	  public static void run(List<String> fileArgs) {
-	    File preProcessorTempDir = null;
-	    File strippedSourcesDir = null;
-	    try {
-	      JdtParser parser = createParser();
+	 * Runs the entire J2ObjC pipeline.
+	 * 
+	 * @param fileArgs
+	 *            the files to process, same format as command-line args to
+	 *            {@link #main}.
+	 */
+	public static void run(List<String> fileArgs) {
+		File preProcessorTempDir = null;
+		File strippedSourcesDir = null;
+		try {
+			JdtParser parser = createParser();
 
-	      List<ProcessingContext> inputs = Lists.newArrayList();
-	      GenerationBatch batch = new GenerationBatch();
-	      batch.processFileArgs(fileArgs);
-	      inputs.addAll(batch.getInputs());
-	      if (ErrorUtil.errorCount() > 0) {
-	        return;
-	      }
+			List<ProcessingContext> inputs = Lists.newArrayList();
+			GenerationBatch batch = new GenerationBatch();
+			batch.processFileArgs(fileArgs);
+			inputs.addAll(batch.getInputs());
+			if (ErrorUtil.errorCount() > 0) {
+				return;
+			}
+			InputFilePreprocessor inputFilePreprocessor = new InputFilePreprocessor(
+					parser);
+			inputFilePreprocessor.processInputs(inputs);
+			if (ErrorUtil.errorCount() > 0) {
+				return;
+			}
+			strippedSourcesDir = inputFilePreprocessor.getStrippedSourcesDir();
+			if (strippedSourcesDir != null) {
+				parser.prependSourcepathEntry(strippedSourcesDir.getPath());
+			}
 
-//	      AnnotationPreProcessor preProcessor = new AnnotationPreProcessor();
-//	      preProcessor.process(fileArgs);
-//	      preProcessor.collectInputs(inputs);
-//	      preProcessorTempDir = preProcessor.getTemporaryDirectory();
-//	      if (ErrorUtil.errorCount() > 0) {
-//	        return;
-//	      }
-//	      if (preProcessorTempDir != null) {
-//	        parser.addSourcepathEntry(preProcessorTempDir.getAbsolutePath());
-//	      }
+			Options.getHeaderMap().loadMappings();
+			TranslationProcessor translationProcessor = new TranslationProcessor(
+					parser, loadDeadCodeMap());
+			translationProcessor.processInputs(inputs);
+			translationProcessor.processBuildClosureDependencies();
+			if (ErrorUtil.errorCount() > 0) {
+				return;
+			}
+			translationProcessor.postProcess();
 
-	      InputFilePreprocessor inputFilePreprocessor = new InputFilePreprocessor(parser);
-	      inputFilePreprocessor.processInputs(inputs);
-	      if (ErrorUtil.errorCount() > 0) {
-	        return;
-	      }
-	      strippedSourcesDir = inputFilePreprocessor.getStrippedSourcesDir();
-	      if (strippedSourcesDir != null) {
-	        parser.prependSourcepathEntry(strippedSourcesDir.getPath());
-	      }
+			Options.getHeaderMap().printMappings();
+		} finally {
+			FileUtil.deleteTempDir(preProcessorTempDir);
+			FileUtil.deleteTempDir(strippedSourcesDir);
+		}
+	}
 
-	      Options.getHeaderMap().loadMappings();
-	      TranslationProcessor translationProcessor =
-	          new TranslationProcessor(parser, loadDeadCodeMap());
-	      translationProcessor.processInputs(inputs);
-	      translationProcessor.processBuildClosureDependencies();
-	      if (ErrorUtil.errorCount() > 0) {
-	        return;
-	      }
-	      translationProcessor.postProcess();
+	@VisibleForTesting
+	public static JdtParser createParser() {
+		JdtParser parser = new JdtParser();
+		parser.addClasspathEntries(Options.getClassPathEntries());
+		parser.addClasspathEntries(Options.getBootClasspath());
+		parser.addSourcepathEntries(Options.getSourcePathEntries());
+		parser.setIncludeRunningVMBootclasspath(false);
+		parser.setEncoding(Options.fileEncoding());
+		parser.setEnableDocComments(Options.docCommentsEnabled());
+		return parser;
+	}
 
-	      Options.getHeaderMap().printMappings();
-	    } finally {
-	      FileUtil.deleteTempDir(preProcessorTempDir);
-	      FileUtil.deleteTempDir(strippedSourcesDir);
-	    }
-	  }
-	  
-	  @VisibleForTesting
-	  public static JdtParser createParser() {
-	    JdtParser parser = new JdtParser();
-	    parser.addClasspathEntries(Options.getClassPathEntries());
-	    parser.addClasspathEntries(Options.getBootClasspath());
-	    parser.addSourcepathEntries(Options.getSourcePathEntries());
-	    parser.setIncludeRunningVMBootclasspath(false);
-	    parser.setEncoding(Options.fileEncoding());
-	    parser.setEnableDocComments(Options.docCommentsEnabled());
-	    return parser;
-	  }
+	private static DeadCodeMap loadDeadCodeMap() {
+		File file = Options.getProGuardUsageFile();
+		if (file != null) {
+			try {
+				return ProGuardUsageParser.parse(Files.asCharSource(file,
+						Charset.defaultCharset()));
+			} catch (IOException e) {
+				throw new AssertionError(e);
+			}
+		}
+		return null;
+	}
 
-	  private static DeadCodeMap loadDeadCodeMap() {
-		    File file = Options.getProGuardUsageFile();
-		    if (file != null) {
-		      try {
-		        return ProGuardUsageParser.parse(Files.asCharSource(file, Charset.defaultCharset()));
-		      } catch (IOException e) {
-		        throw new AssertionError(e);
-		      }
-		    }
-		    return null;
-		  }
+	private static void checkErrors() {
+		int errors = ErrorUtil.errorCount();
+		if (Options.treatWarningsAsErrors()) {
+			errors += ErrorUtil.warningCount();
+		}
+		if (errors > 0) {
+			System.exit(errors);
+		}
+	}
 }
