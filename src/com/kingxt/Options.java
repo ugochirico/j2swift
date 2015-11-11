@@ -128,25 +128,25 @@ public class Options {
 
   static {
     // Load string resources.
-    URL propertiesUrl = Resources.getResource(J2ObjC.class, "J2ObjC.properties");
-    Properties properties = new Properties();
-    try {
-      properties.load(propertiesUrl.openStream());
-    } catch (IOException e) {
-      System.err.println("unable to access tool properties: " + e);
-      System.exit(1);
-    }
-    fileHeader = properties.getProperty(FILE_HEADER_KEY);
-    Preconditions.checkNotNull(fileHeader);
-    usageMessage = properties.getProperty(USAGE_MSG_KEY);
-    Preconditions.checkNotNull(usageMessage);
-    helpMessage = properties.getProperty(HELP_MSG_KEY);
-    Preconditions.checkNotNull(helpMessage);
-
-    Logger rootLogger = Logger.getLogger("");
-    for (Handler handler : rootLogger.getHandlers()) {
-      handler.setLevel(Level.ALL);
-    }
+//    URL propertiesUrl = Resources.getResource(J2ObjC.class, "J2ObjC.properties");
+//    Properties properties = new Properties();
+//    try {
+//      properties.load(propertiesUrl.openStream());
+//    } catch (IOException e) {
+//      System.err.println("unable to access tool properties: " + e);
+//      System.exit(1);
+//    }
+//    fileHeader = properties.getProperty(FILE_HEADER_KEY);
+//    Preconditions.checkNotNull(fileHeader);
+//    usageMessage = properties.getProperty(USAGE_MSG_KEY);
+//    Preconditions.checkNotNull(usageMessage);
+//    helpMessage = properties.getProperty(HELP_MSG_KEY);
+//    Preconditions.checkNotNull(helpMessage);
+//
+//    Logger rootLogger = Logger.getLogger("");
+//    for (Handler handler : rootLogger.getHandlers()) {
+//      handler.setLevel(Level.ALL);
+//    }
   }
 
   /**
@@ -481,8 +481,8 @@ public class Options {
   }
 
   private void addJreMappings() throws IOException {
-    InputStream stream = J2ObjC.class.getResourceAsStream(JRE_MAPPINGS_FILE);
-    addMappingsProperties(FileUtil.loadProperties(stream));
+//    InputStream stream = J2ObjC.class.getResourceAsStream(JRE_MAPPINGS_FILE);
+//    addMappingsProperties(FileUtil.loadProperties(stream));
   }
 
   private void addMappingsProperties(Properties mappings) {

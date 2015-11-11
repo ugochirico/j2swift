@@ -14,14 +14,6 @@
 
 package com.kingxt.j2swift.util;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.devtools.j2objc.Options;
-import com.google.devtools.j2objc.types.IOSTypeBinding;
-
-import org.eclipse.jdt.core.dom.ITypeBinding;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import org.eclipse.jdt.core.dom.ITypeBinding;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.kingxt.Options;
+import com.kingxt.j2swift.types.IOSTypeBinding;
 
 /**
  * Manages the mapping of types to their header files.

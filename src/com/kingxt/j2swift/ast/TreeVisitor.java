@@ -14,8 +14,8 @@
 
 package com.kingxt.j2swift.ast;
 
-import com.google.devtools.j2objc.types.Types;
-import com.google.devtools.j2objc.util.NameTable;
+import com.kingxt.j2swift.types.Types;
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Base visitor class for the J2ObjC tree.

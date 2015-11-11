@@ -27,6 +27,8 @@ import org.eclipse.jdt.internal.compiler.ast.ASTNode;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Binding class for methods created during translation.

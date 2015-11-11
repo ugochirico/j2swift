@@ -22,6 +22,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
+import com.kingxt.j2swift.gen.JavadocGenerator;
+import com.kingxt.j2swift.gen.SourceBuilder;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.UnicodeUtils;
+
 /**
  * Simple AST printer, suitable for node toString() results. This printer is based on
  * org.eclipse.jdt.internal.core.dom.NaiveASTFlattener.

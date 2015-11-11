@@ -14,9 +14,9 @@
 
 package com.kingxt.j2swift.ast;
 
-import com.google.devtools.j2objc.util.NameTable;
-
 import org.eclipse.jdt.core.dom.ASTNode;
+
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Converts a Java AST from the JDT data structure to our J2ObjC data structure.

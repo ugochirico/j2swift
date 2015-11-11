@@ -62,6 +62,8 @@ import com.kingxt.j2swift.ast.TypeLiteral;
 import com.kingxt.j2swift.ast.UnionType;
 import com.kingxt.j2swift.ast.VariableDeclarationExpression;
 import com.kingxt.j2swift.ast.VariableDeclarationStatement;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.TranslationUtil;
 
 /**
  * Collects the set of imports needed to resolve type references in an

@@ -24,6 +24,8 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.collect.Maps;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Types is a singleton service class for type-related operations.

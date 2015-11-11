@@ -31,6 +31,7 @@ import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kingxt.j2swift.types.Types;
+import com.kingxt.j2swift.util.BindingUtil;
 
 /**
  * Collection of utility methods for examining tree nodes.

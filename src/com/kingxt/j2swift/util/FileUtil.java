@@ -13,16 +13,6 @@
  */
 package com.kingxt.j2swift.util;
 
-import com.google.common.io.CharStreams;
-import com.google.devtools.j2objc.J2ObjC;
-import com.google.devtools.j2objc.Options;
-import com.google.devtools.j2objc.file.InputFile;
-import com.google.devtools.j2objc.file.JarredInputFile;
-import com.google.devtools.j2objc.file.RegularInputFile;
-
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +22,15 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Nullable;
+
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+
+import com.google.common.io.CharStreams;
+import com.kingxt.Options;
+import com.kingxt.j2swift.file.InputFile;
+import com.kingxt.j2swift.file.JarredInputFile;
+import com.kingxt.j2swift.file.RegularInputFile;
 
 /**
  * Utilities for reading {@link com.google.devtools.j2objc.file.InputFile}s.
@@ -115,7 +114,8 @@ public class FileUtil {
     if (f.exists()) {
       return new FileInputStream(f);
     } else {
-      InputStream stream = J2ObjC.class.getResourceAsStream(filename);
+    	//TODO
+      InputStream stream = null;// J2ObjC.class.getResourceAsStream(filename);
       if (stream == null) {
         throw new FileNotFoundException(filename);
       }

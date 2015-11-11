@@ -16,27 +16,6 @@
 
 package com.kingxt.j2swift.util;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.devtools.j2objc.Options;
-import com.google.devtools.j2objc.ast.CompilationUnit;
-import com.google.devtools.j2objc.types.GeneratedVariableBinding;
-import com.google.devtools.j2objc.types.IOSMethodBinding;
-import com.google.devtools.j2objc.types.PointerTypeBinding;
-import com.google.devtools.j2objc.types.Types;
-import com.google.j2objc.annotations.ObjectiveCName;
-
-import org.eclipse.jdt.core.dom.IAnnotationBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.IPackageBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,6 +27,27 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclipse.jdt.core.dom.IAnnotationBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.IPackageBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.j2objc.annotations.ObjectiveCName;
+import com.kingxt.Options;
+import com.kingxt.j2swift.ast.CompilationUnit;
+import com.kingxt.j2swift.types.GeneratedVariableBinding;
+import com.kingxt.j2swift.types.IOSMethodBinding;
+import com.kingxt.j2swift.types.PointerTypeBinding;
+import com.kingxt.j2swift.types.Types;
 
 /**
  * Singleton service for type/method/variable name support.

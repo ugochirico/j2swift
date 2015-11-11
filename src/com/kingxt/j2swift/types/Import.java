@@ -16,17 +16,17 @@
 
 package com.kingxt.j2swift.types;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import com.google.devtools.j2objc.Options;
-import com.google.devtools.j2objc.ast.CompilationUnit;
-import com.google.devtools.j2objc.util.BindingUtil;
-import com.google.devtools.j2objc.util.NameTable;
+import java.util.Collection;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
-import java.util.Collection;
-import java.util.Set;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import com.kingxt.Options;
+import com.kingxt.j2swift.ast.CompilationUnit;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Description of an imported type. Imports are equal if their fully qualified

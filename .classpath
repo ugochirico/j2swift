@@ -25,5 +25,8 @@
 	<classpathentry kind="lib" path="libs/org.eclipse.jdt.core-3.10.0.v20140604-1726.jar"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.osgi-3.10.2.v20150203-1939.jar"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.text-3.5.101.jar"/>
+	<classpathentry kind="lib" path="libs/asm-5.0.4.jar"/>
+	<classpathentry kind="lib" path="libs/doclava-1.0.6.jar"/>
+	<classpathentry kind="lib" path="libs/jsilver-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

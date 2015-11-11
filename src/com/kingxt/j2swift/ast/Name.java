@@ -19,6 +19,8 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
+import com.kingxt.j2swift.util.BindingUtil;
+
 /**
  * Base node class for a name.
  */

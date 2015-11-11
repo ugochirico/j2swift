@@ -14,34 +14,34 @@
 
 package com.kingxt.j2swift.util;
 
-import com.google.devtools.j2objc.Options;
-import com.google.devtools.j2objc.ast.AbstractTypeDeclaration;
-import com.google.devtools.j2objc.ast.Annotation;
-import com.google.devtools.j2objc.ast.ArrayAccess;
-import com.google.devtools.j2objc.ast.ArrayCreation;
-import com.google.devtools.j2objc.ast.Assignment;
-import com.google.devtools.j2objc.ast.CastExpression;
-import com.google.devtools.j2objc.ast.ClassInstanceCreation;
-import com.google.devtools.j2objc.ast.ConditionalExpression;
-import com.google.devtools.j2objc.ast.Expression;
-import com.google.devtools.j2objc.ast.FieldAccess;
-import com.google.devtools.j2objc.ast.InfixExpression;
-import com.google.devtools.j2objc.ast.MethodInvocation;
-import com.google.devtools.j2objc.ast.PackageDeclaration;
-import com.google.devtools.j2objc.ast.ParenthesizedExpression;
-import com.google.devtools.j2objc.ast.PostfixExpression;
-import com.google.devtools.j2objc.ast.PrefixExpression;
-import com.google.devtools.j2objc.ast.TreeNode;
-import com.google.devtools.j2objc.ast.TreeUtil;
-import com.google.devtools.j2objc.types.GeneratedMethodBinding;
-import com.google.devtools.j2objc.types.IOSMethodBinding;
-import com.google.devtools.j2objc.types.Types;
-import com.google.j2objc.annotations.ReflectionSupport;
-
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+
+import com.google.j2objc.annotations.ReflectionSupport;
+import com.kingxt.Options;
+import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
+import com.kingxt.j2swift.ast.Annotation;
+import com.kingxt.j2swift.ast.ArrayAccess;
+import com.kingxt.j2swift.ast.ArrayCreation;
+import com.kingxt.j2swift.ast.Assignment;
+import com.kingxt.j2swift.ast.CastExpression;
+import com.kingxt.j2swift.ast.ClassInstanceCreation;
+import com.kingxt.j2swift.ast.ConditionalExpression;
+import com.kingxt.j2swift.ast.Expression;
+import com.kingxt.j2swift.ast.FieldAccess;
+import com.kingxt.j2swift.ast.InfixExpression;
+import com.kingxt.j2swift.ast.MethodInvocation;
+import com.kingxt.j2swift.ast.PackageDeclaration;
+import com.kingxt.j2swift.ast.ParenthesizedExpression;
+import com.kingxt.j2swift.ast.PostfixExpression;
+import com.kingxt.j2swift.ast.PrefixExpression;
+import com.kingxt.j2swift.ast.TreeNode;
+import com.kingxt.j2swift.ast.TreeUtil;
+import com.kingxt.j2swift.types.GeneratedMethodBinding;
+import com.kingxt.j2swift.types.IOSMethodBinding;
+import com.kingxt.j2swift.types.Types;
 
 /**
  * General collection of utility methods.

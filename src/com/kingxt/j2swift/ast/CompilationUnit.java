@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.kingxt.j2swift.types.Types;
+import com.kingxt.j2swift.util.NameTable;
 
 /**
  * Tree node for a Java compilation unit.

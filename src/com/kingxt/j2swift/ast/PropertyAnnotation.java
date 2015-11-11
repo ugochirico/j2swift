@@ -28,6 +28,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import com.kingxt.j2swift.util.BindingUtil;
+import com.kingxt.j2swift.util.ErrorUtil;
 
 /**
  * Node type for a com.google.j2objc.annotations.Property annotation.
