@@ -266,7 +266,7 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 					sb.append("(");
 				}
 				if (i != 0) {
-					sb.append(", ");
+					sb.append(", _ ");
 				}
 				IVariableBinding var = params.get(i).getVariableBinding();
 				String typeName = nameTable.getSpecificObjCType(var.getType());
