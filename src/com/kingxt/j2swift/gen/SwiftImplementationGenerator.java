@@ -1,8 +1,6 @@
 package com.kingxt.j2swift.gen;
 
 
-
-
 public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 
 	protected SwiftImplementationGenerator(GenerationUnit unit) {
@@ -22,10 +20,6 @@ public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 	      print(generatedType.getImplementationCode());
 	    }
 	    save(getOutputPath());
-	}
-
-	private void printTypeDeclaration(GeneratedType generatedType) {
-		print(generatedType.getPublicDeclarationCode());
 	}
 
 	/**
