@@ -118,7 +118,7 @@ public class GeneratedType {
     String privateDeclarationCode = builder.toString();
 
     builder = new SourceBuilder(Options.emitLineDirectives());
-//    TypeImplementationGenerator.generate(builder, typeNode);
+    TypeImplementationGenerator.generate(builder, typeNode);
     //TODO
     String implementationCode = builder.toString();
 

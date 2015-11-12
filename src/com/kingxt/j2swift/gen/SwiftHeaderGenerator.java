@@ -1,14 +1,10 @@
 package com.kingxt.j2swift.gen;
 
 
-public class SwiftHeaderGenerator extends AbstractSourceGenerator {
+public class SwiftHeaderGenerator extends SwiftSourceFileGenerator {
 
-	protected SwiftHeaderGenerator(SourceBuilder builder, GenerationUnit unit) {
-		super(builder);
-	}
-
-	public SwiftHeaderGenerator(GenerationUnit unit) {
-		super(new SourceBuilder(false));
+	protected SwiftHeaderGenerator(GenerationUnit unit) {
+		super(unit);
 	}
 
 	public static void generate(GenerationUnit unit) {
@@ -16,8 +12,28 @@ public class SwiftHeaderGenerator extends AbstractSourceGenerator {
 	}
 
 	private void generate() {
-		// TODO Auto-generated method stub
-		
+		generateFileHeader();
+
+		for (GeneratedType generatedType : getOrderedTypes()) {
+			printTypeDeclaration(generatedType);
+		}
+
+		generateFileFooter();
+		save(getOutputPath());
 	}
 
+	private void printTypeDeclaration(GeneratedType generatedType) {
+		print(generatedType.getPublicDeclarationCode());
+	}
+
+	/**
+	 * Create import statements
+	 */
+	private void generateFileHeader() {
+		printf("import Foundation");
+	}
+
+	protected void generateFileFooter() {
+		newline();
+	}
 }
