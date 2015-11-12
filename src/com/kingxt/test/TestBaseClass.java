@@ -6,6 +6,8 @@ public class TestBaseClass
 	public String username;
 	public String password;
 	
+	public String info1, info2 = "1";
+	
 	public void test(String username, String password) {
 	}
 

@@ -373,9 +373,6 @@ public class NameTable {
    */
   public String getVariableShortName(IVariableBinding var) {
     String baseName = getVariableBaseName(var);
-    if (var.isField() && !BindingUtil.isPrimitiveConstant(var) && !var.isEnumConstant()) {
-      return baseName + '_';
-    }
     return baseName;
   }
 
@@ -857,7 +854,7 @@ public class NameTable {
       }
     }
     String protocols = interfaces.isEmpty() ? "" : "<" + Joiner.on(", ").join(interfaces) + ">";
-    return classType == null ? ID_TYPE + protocols : classType + protocols + " *";
+    return classType == null ? ID_TYPE + protocols : classType + protocols;
   }
 
   /**

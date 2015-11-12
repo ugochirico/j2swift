@@ -92,9 +92,9 @@ public class Types {
 
     // Create core IOS types.
     NSCopying = mapIOSType(IOSTypeBinding.newInterface("NSCopying", javaCloneableType));
-    NSObject = mapIOSType(IOSTypeBinding.newClass("NSObject", javaObjectType));
+    NSObject = mapIOSType(IOSTypeBinding.newClass("AnyObject", javaObjectType));
     NSNumber = mapIOSType(IOSTypeBinding.newClass("NSNumber", javaNumberType, NSObject));
-    NSString = mapIOSType(IOSTypeBinding.newClass("NSString", javaStringType, NSObject));
+    NSString = mapIOSType(IOSTypeBinding.newClass("String", javaStringType, NSObject));
     IOSClass = mapIOSType(IOSTypeBinding.newUnmappedClass("IOSClass"));
     mapIOSType(IOSTypeBinding.newUnmappedClass("NSZone"));
     idType = mapIOSType(IOSTypeBinding.newUnmappedClass("id"));
