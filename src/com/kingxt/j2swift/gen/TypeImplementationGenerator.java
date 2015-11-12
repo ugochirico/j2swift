@@ -1,15 +1,12 @@
 package com.kingxt.j2swift.gen;
 
-import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.Modifier;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
-import com.kingxt.j2swift.ast.BodyDeclaration;
 import com.kingxt.j2swift.ast.FunctionDeclaration;
 import com.kingxt.j2swift.ast.MethodDeclaration;
 import com.kingxt.j2swift.ast.NativeDeclaration;
-import com.kingxt.j2swift.ast.VariableDeclarationFragment;
+import com.kingxt.j2swift.ast.Statement;
 
 public class TypeImplementationGenerator extends TypeGenerator {
 
@@ -55,9 +52,18 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	}
 
 	@Override
-	protected void printMethodDeclaration(MethodDeclaration decl) {
-		// TODO Auto-generated method stub
+	protected void printMethodDeclaration(MethodDeclaration m) {
+		if (typeBinding.isInterface() || Modifier.isAbstract(m.getModifiers())) {
+			return;
+		}
+		syncLineNumbers(m.getName()); // avoid doc-comment
+		String methodBody = generateStatement(m.getBody());
+		print(getMethodSignature(m) + " " + reindent(methodBody) + "\n");
+		newline();
+	}
 
+	protected String generateStatement(Statement stmt) {
+		return StatementGenerator.generate(stmt, getBuilder().getCurrentLine());
 	}
 
 	@Override

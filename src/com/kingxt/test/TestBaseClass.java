@@ -9,6 +9,8 @@ public class TestBaseClass
 	public String info1, info2 = "1";
 	
 	public void test(String username, String password) {
+		test1("my name");
+		test2();
 	}
 
 	public void test1(String username) {

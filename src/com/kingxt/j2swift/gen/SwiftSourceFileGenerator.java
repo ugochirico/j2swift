@@ -23,7 +23,7 @@ public abstract class SwiftSourceFileGenerator extends AbstractSourceGenerator {
 
 	/**
 	 * Create a new generator.
-	 *
+	 * 
 	 * @param unit
 	 *            The AST of the source to generate
 	 * @param emitLineDirectives
@@ -99,29 +99,30 @@ public abstract class SwiftSourceFileGenerator extends AbstractSourceGenerator {
 
 	protected void save(String outputPath) {
 		try {
-		      File outputDirectory = Options.getOutputDirectory();
-		      File outputFile = new File(outputDirectory, outputPath);
-		      File dir = outputFile.getParentFile();
-		      if (dir != null && !dir.exists()) {
-		        if (!dir.mkdirs()) {
-		          ErrorUtil.warning("cannot create output directory: " + outputDirectory);
-		        }
-		      }
-		      String source = getBuilder().toString();
+			File outputDirectory = Options.getOutputDirectory();
+			File outputFile = new File(outputDirectory, outputPath);
+			File dir = outputFile.getParentFile();
+			if (dir != null && !dir.exists()) {
+				if (!dir.mkdirs()) {
+					ErrorUtil.warning("cannot create output directory: "
+							+ outputDirectory);
+				}
+			}
+			String source = getBuilder().toString();
 
-		      // Make sure file ends with a new-line.
-		      if (!source.endsWith("\n")) {
-		        source += '\n';
-		      }
+			// Make sure file ends with a new-line.
+			if (!source.endsWith("\n")) {
+				source += '\n';
+			}
 
-		      Files.write(source, outputFile, Options.getCharset());
-		    } catch (IOException e) {
-		      ErrorUtil.error(e.getMessage());
-		    } finally {
-		      reset();
-		    }
+			Files.write(source, outputFile, Options.getCharset());
+		} catch (IOException e) {
+			ErrorUtil.error(e.getMessage());
+		} finally {
+			reset();
+		}
 	}
-	
+
 	private String getSuffix() {
 		return ".swift";
 	}
