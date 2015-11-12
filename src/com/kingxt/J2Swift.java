@@ -125,4 +125,9 @@ public class J2Swift {
 			System.exit(errors);
 		}
 	}
+
+	public static String getFileHeader(String sourceName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

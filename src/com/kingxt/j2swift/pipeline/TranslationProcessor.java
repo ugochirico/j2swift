@@ -22,7 +22,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.kingxt.Options;
 import com.kingxt.j2swift.ast.CompilationUnit;
 import com.kingxt.j2swift.gen.GenerationUnit;
-import com.kingxt.j2swift.gen.SwiftHeaderGenerator;
+import com.kingxt.j2swift.gen.SwiftImplementationGenerator;
 import com.kingxt.j2swift.types.HeaderImportCollector;
 import com.kingxt.j2swift.types.ImplementationImportCollector;
 import com.kingxt.j2swift.types.Import;
@@ -236,7 +236,7 @@ public class TranslationProcessor extends FileProcessor {
 //    } else {
 //      ObjectiveCHeaderGenerator.generate(unit);
 //    }
-    SwiftHeaderGenerator.generate(unit);
+    SwiftImplementationGenerator.generate(unit);
 //    ticker.tick("Header generation");
 //
 //    // write implementation file

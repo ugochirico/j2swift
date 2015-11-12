@@ -23,14 +23,14 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	    if (!typeBinding.isInterface() || needsCompanionClass()) {
 	      newline();
 	      syncLineNumbers(typeNode.getName()); // avoid doc-comment
-//	      printf("@implementation %s\n", typeName);
+	      printf("class %s { \n", typeName);
 	      printProperties();
 	      printStaticAccessors();
 	      printInnerDeclarations();
 //	      printAnnotationImplementation();
 //	      printInitializeMethod();
 //	      printReflectionMethods();
-//	      println("\n@end");
+	      println("\n}");
 	    }
 
 	    printOuterDeclarations();
