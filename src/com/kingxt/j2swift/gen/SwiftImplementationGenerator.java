@@ -13,6 +13,7 @@ public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 
 	private void generate() {
 	    printImports();
+	    newline();
 	    for (GeneratedType generatedType : getOrderedTypes()) {
 	      print(generatedType.getPrivateDeclarationCode());
 	    }

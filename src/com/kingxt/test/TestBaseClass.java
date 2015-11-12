@@ -2,11 +2,17 @@ package com.kingxt.test;
 
 public class TestBaseClass 
 {
-	public void test() {
+	public static final String testFinalField = "1";
+	public String username;
+	public String password;
+	
+	public void test(String username, String password) {
+	}
+
+	public void test1(String username) {
 	}
 	
-	public void test2(String a) {
-		
+	public void test2() {
 	}
 	
 //	func test2(a:String) {
