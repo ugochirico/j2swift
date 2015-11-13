@@ -11,6 +11,9 @@ public class TestBaseClass
 	public String test(String username, String password) {
 		test1("my name");
 		test2();
+		if (username.equals("123")) {
+			return "123";
+		}
 		return "";
 	}
 
