@@ -34,4 +34,12 @@ extension String {
         }
         return false;
     }
+    
+    /**
+     * the length of the sequence of characters represented by this
+     *          object.
+     */
+    public func length() -> Int {
+        return characters.count;
+    }
 }

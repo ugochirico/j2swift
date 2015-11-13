@@ -174,6 +174,9 @@ public class StatementGenerator extends TreeVisitor {
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
 		node.getName().accept(this);
+		IVariableBinding binding = node.getVariableBinding();
+		String swiftType = nameTable.getSpecificObjCType(binding);
+		buffer.append(":").append(swiftType).append("?");
 		Expression initializer = node.getInitializer();
 		if (initializer != null) {
 			buffer.append(" = ");
@@ -187,25 +190,18 @@ public class StatementGenerator extends TreeVisitor {
 	    List<VariableDeclarationFragment> vars = node.getFragments();
 	    assert !vars.isEmpty();
 	    IVariableBinding binding = vars.get(0).getVariableBinding();
-	    String objcType = nameTable.getSpecificObjCType(binding);
-	    String objcTypePointers = " ";
-	    int idx = objcType.indexOf(" *");
-	    if (idx != -1) {
-	      // Split the type at the first pointer. The second part of the type is
-	      // applied to each fragment. (eg. Foo *one, *two)
-	      objcTypePointers = objcType.substring(idx);
-	      objcType = objcType.substring(0, idx);
-	    }
-	    buffer.append(objcType);
+	    String swiftType = nameTable.getSpecificObjCType(binding);
+	    buffer.append("var").append(" ");
+//	    buffer.append(swiftType);
 	    for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it.hasNext();) {
 	      VariableDeclarationFragment f = it.next();
-	      buffer.append(objcTypePointers);
+//	      buffer.append(swiftType);
 	      f.accept(this);
 	      if (it.hasNext()) {
 	        buffer.append(",");
 	      }
 	    }
-	    buffer.append(";\n");
+	    buffer.append("\n");
 	    return false;
 	  }
 

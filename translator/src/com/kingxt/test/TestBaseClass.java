@@ -16,6 +16,7 @@ public class TestBaseClass
 		test2();
 		
 		String a = "23";
+		String b, c, d;
 		int aLength = a.length();
 		return "";
 	}
