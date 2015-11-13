@@ -1,6 +1,7 @@
 package com.kingxt.j2swift.gen;
 
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -28,7 +29,6 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 
 	private void generate() {
 		printClassExtension();
-
 	}
 
 	private static final Predicate<VariableDeclarationFragment> PROPERTIES = new Predicate<VariableDeclarationFragment>() {
@@ -62,6 +62,17 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 		}
 
 		indent();
+		// Prints static field
+		Boolean needStaticDeclarationLine = false;
+		for (VariableDeclarationFragment fragment : getStaticFields()) {
+			printStaticFieldFullDeclaration(fragment);
+			needStaticDeclarationLine = true;
+		}
+		if (needStaticDeclarationLine) {
+			newline();
+		}
+		
+		Boolean needDeclarationLine = false;
 		for (VariableDeclarationFragment fragment : fields) {
 			IVariableBinding varBinding = fragment.getVariableBinding();
 			FieldDeclaration declaration = (FieldDeclaration) fragment
@@ -76,21 +87,63 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 				// included by a file compiled with ARC.
 				print("weak ");
 			}
+			if (BindingUtil.isPrivate(varBinding)) {
+				print("private ");
+			}
 			print("var ");
 			print(nameTable.getVariableShortName(varBinding));
 
 			print(':');
 			String swiftType = getDeclarationType(varBinding);
 			print(swiftType + "?");
-			
+
 			Expression initializer = fragment.getInitializer();
 			if (initializer != null) {
 				String value = generateExpression(initializer);
-				printf(" = %s",value);
+				printf(" = %s", value);
 			}
 			println("");
+			needDeclarationLine = true;
+		}
+		if (needDeclarationLine) {
+			newline();
 		}
 		unindent();
+	}
+
+	private void printStaticFieldFullDeclaration(
+			VariableDeclarationFragment fragment) {
+		IVariableBinding var = fragment.getVariableBinding();
+		String declType = getDeclarationType(var);
+		String name = nameTable.getVariableShortName(var);
+		String accessDeclaration;
+		String staticStr = "static ";
+		String finalStr;
+		if (BindingUtil.isPrivate(var)) {
+			accessDeclaration = "private ";
+		} else {
+			accessDeclaration = "";
+		}
+		if (BindingUtil.isFinal(var)) {
+			finalStr = "let ";
+		} else {
+			finalStr = "var ";
+		}
+		printStaticFieldDeclaration(fragment, String.format("%s%s%s%s:%s",
+				accessDeclaration, staticStr, finalStr, name, declType));
+	}
+
+	private void printStaticFieldDeclaration(
+			VariableDeclarationFragment fragment, String baseDeclaration) {
+		Expression initializer = fragment.getInitializer();
+		printIndent();
+		print("" + baseDeclaration);
+		if (initializer != null) {
+			print(" = " + generateExpression(initializer));
+		} else {
+			print("?");
+		}
+		newline();
 	}
 
 	@Override
@@ -110,7 +163,7 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	protected String generateExpression(Expression expr) {
 		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
 	}
