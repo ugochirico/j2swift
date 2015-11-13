@@ -16,8 +16,12 @@ public class TestBaseClass
 		test2();
 		
 		String a = "23";
-		String b, c, d;
+		String b = null, c = "45", d = null;
 		int aLength = a.length();
+		for (int i = 0; i < aLength; i++) {
+			b = c = d = String.valueOf(i);
+		}
+		a = b + c + d;
 		return "";
 	}
 

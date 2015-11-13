@@ -15,9 +15,14 @@ import com.kingxt.j2swift.ast.CStringLiteral;
 import com.kingxt.j2swift.ast.CharacterLiteral;
 import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.ExpressionStatement;
+import com.kingxt.j2swift.ast.ForStatement;
 import com.kingxt.j2swift.ast.FunctionInvocation;
 import com.kingxt.j2swift.ast.IfStatement;
 import com.kingxt.j2swift.ast.MethodInvocation;
+import com.kingxt.j2swift.ast.NullLiteral;
+import com.kingxt.j2swift.ast.NumberLiteral;
+import com.kingxt.j2swift.ast.PostfixExpression;
+import com.kingxt.j2swift.ast.PrefixExpression;
 import com.kingxt.j2swift.ast.ReturnStatement;
 import com.kingxt.j2swift.ast.SimpleName;
 import com.kingxt.j2swift.ast.Statement;
@@ -184,26 +189,40 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		return false;
 	}
-	
+
 	@Override
-	  public boolean visit(VariableDeclarationStatement node) {
-	    List<VariableDeclarationFragment> vars = node.getFragments();
-	    assert !vars.isEmpty();
-	    IVariableBinding binding = vars.get(0).getVariableBinding();
-	    String swiftType = nameTable.getSpecificObjCType(binding);
-	    buffer.append("var").append(" ");
-//	    buffer.append(swiftType);
-	    for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it.hasNext();) {
-	      VariableDeclarationFragment f = it.next();
-//	      buffer.append(swiftType);
-	      f.accept(this);
-	      if (it.hasNext()) {
-	        buffer.append(",");
-	      }
-	    }
-	    buffer.append("\n");
-	    return false;
-	  }
+	public boolean visit(VariableDeclarationStatement node) {
+		List<VariableDeclarationFragment> vars = node.getFragments();
+		assert !vars.isEmpty();
+		IVariableBinding binding = vars.get(0).getVariableBinding();
+		String swiftType = nameTable.getSpecificObjCType(binding);
+		buffer.append("var").append(" ");
+		// buffer.append(swiftType);
+		for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it
+				.hasNext();) {
+			VariableDeclarationFragment f = it.next();
+			// buffer.append(swiftType);
+			f.accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(NullLiteral node) {
+		buffer.append("nil");
+		return false;
+	}
+
+	@Override
+	public boolean visit(CharacterLiteral node) {
+		char c = node.charValue();
+		buffer.append(node.charValue());
+		return false;
+	}
 
 	private void printMethodInvocationNameAndArgs(String selector,
 			List<Expression> args) {
@@ -216,13 +235,6 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(WhileStatement node) {
 		// TODO Auto-generated method stub
 		return super.visit(node);
-	}
-
-	@Override
-	public boolean visit(CharacterLiteral node) {
-		char c = node.charValue();
-		buffer.append(node.charValue());
-		return false;
 	}
 
 	@Override
@@ -239,7 +251,49 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(com.kingxt.j2swift.ast.NumberLiteral node) {
+	public boolean visit(ForStatement node) {
+		buffer.append("for (");
+		for (Iterator<Expression> it = node.getInitializers().iterator(); it
+				.hasNext();) {
+			Expression next = it.next();
+			next.accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append("; ");
+		if (node.getExpression() != null) {
+			node.getExpression().accept(this);
+		}
+		buffer.append("; ");
+		for (Iterator<Expression> it = node.getUpdaters().iterator(); it
+				.hasNext();) {
+			it.next().accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append(") ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(PostfixExpression node) {
+		node.getOperand().accept(this);
+		buffer.append(node.getOperator().toString());
+		return false;
+	}
+
+	@Override
+	public boolean visit(PrefixExpression node) {
+		buffer.append(node.getOperator().toString());
+		node.getOperand().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(NumberLiteral node) {
 		String token = node.getToken();
 		if (token != null) {
 			buffer.append(token);
