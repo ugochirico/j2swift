@@ -18,6 +18,7 @@ import com.kingxt.j2swift.ast.ExpressionStatement;
 import com.kingxt.j2swift.ast.ForStatement;
 import com.kingxt.j2swift.ast.FunctionInvocation;
 import com.kingxt.j2swift.ast.IfStatement;
+import com.kingxt.j2swift.ast.InfixExpression;
 import com.kingxt.j2swift.ast.MethodInvocation;
 import com.kingxt.j2swift.ast.NullLiteral;
 import com.kingxt.j2swift.ast.NumberLiteral;
@@ -178,6 +179,7 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
+		buffer.append("var").append(" ");
 		node.getName().accept(this);
 		IVariableBinding binding = node.getVariableBinding();
 		String swiftType = nameTable.getSpecificObjCType(binding);
@@ -196,7 +198,6 @@ public class StatementGenerator extends TreeVisitor {
 		assert !vars.isEmpty();
 		IVariableBinding binding = vars.get(0).getVariableBinding();
 		String swiftType = nameTable.getSpecificObjCType(binding);
-		buffer.append("var").append(" ");
 		// buffer.append(swiftType);
 		for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it
 				.hasNext();) {
@@ -204,7 +205,7 @@ public class StatementGenerator extends TreeVisitor {
 			// buffer.append(swiftType);
 			f.accept(this);
 			if (it.hasNext()) {
-				buffer.append(", ");
+				buffer.append("\n");
 			}
 		}
 		buffer.append("\n");
@@ -289,6 +290,43 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(PrefixExpression node) {
 		buffer.append(node.getOperator().toString());
 		node.getOperand().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(InfixExpression node) {
+		InfixExpression.Operator op = node.getOperator();
+		List<Expression> operands = node.getOperands();
+		assert operands.size() >= 2;
+		if ((op.equals(InfixExpression.Operator.EQUALS) || op
+				.equals(InfixExpression.Operator.NOT_EQUALS))) {
+			Expression lhs = operands.get(0);
+			Expression rhs = operands.get(1);
+			//TODO
+			if (lhs instanceof StringLiteral || rhs instanceof StringLiteral) {
+				if (!(lhs instanceof StringLiteral)) {
+					// In case the lhs can't call isEqual.
+					lhs = operands.get(1);
+					rhs = operands.get(0);
+				}
+				buffer.append(op.equals(InfixExpression.Operator.NOT_EQUALS) ? "!["
+						: "[");
+				lhs.accept(this);
+				buffer.append(" isEqual:");
+				rhs.accept(this);
+				buffer.append("]");
+				return false;
+			}
+		}
+		String opStr = ' ' + op.toString() + ' ';
+		boolean isFirst = true;
+		for (Expression operand : operands) {
+			if (!isFirst) {
+				buffer.append(opStr);
+			}
+			isFirst = false;
+			operand.accept(this);
+		}
 		return false;
 	}
 
