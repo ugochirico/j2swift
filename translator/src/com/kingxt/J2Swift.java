@@ -22,7 +22,9 @@ import com.kingxt.j2swift.util.ProGuardUsageParser;
 public class J2Swift {
 
 	public static void main(String[] args) {
-		args = new String[]{"-d", "/Users/xutao1/Desktop/otu", "/Users/xutao1/Documents/j2swift/translator/src/com/kingxt/test/TestBaseClass.java"};
+
+		args = new String[]{"-d", "/Users/kingxt/Desktop/otu", "/Users/kingxt/Documents/project/j2swift/src/com/kingxt/test/TestBaseClass.java"};
+
 		
 		if (args.length == 0) {
 			Options.help(true);
@@ -44,7 +46,7 @@ public class J2Swift {
 	}
 
 	/**
-	 * Runs the entire J2ObjC pipeline.
+	 * Runs the entire J2Swift pipeline.
 	 * 
 	 * @param fileArgs
 	 *            the files to process, same format as command-line args to
