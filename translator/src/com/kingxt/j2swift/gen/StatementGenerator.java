@@ -27,6 +27,7 @@ import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
 import com.kingxt.j2swift.ast.VariableDeclarationFragment;
+import com.kingxt.j2swift.ast.VariableDeclarationStatement;
 import com.kingxt.j2swift.ast.WhileStatement;
 import com.kingxt.j2swift.types.IOSTypeBinding;
 import com.kingxt.j2swift.util.BindingUtil;
@@ -180,6 +181,33 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		return false;
 	}
+	
+	@Override
+	  public boolean visit(VariableDeclarationStatement node) {
+	    List<VariableDeclarationFragment> vars = node.getFragments();
+	    assert !vars.isEmpty();
+	    IVariableBinding binding = vars.get(0).getVariableBinding();
+	    String objcType = nameTable.getSpecificObjCType(binding);
+	    String objcTypePointers = " ";
+	    int idx = objcType.indexOf(" *");
+	    if (idx != -1) {
+	      // Split the type at the first pointer. The second part of the type is
+	      // applied to each fragment. (eg. Foo *one, *two)
+	      objcTypePointers = objcType.substring(idx);
+	      objcType = objcType.substring(0, idx);
+	    }
+	    buffer.append(objcType);
+	    for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it.hasNext();) {
+	      VariableDeclarationFragment f = it.next();
+	      buffer.append(objcTypePointers);
+	      f.accept(this);
+	      if (it.hasNext()) {
+	        buffer.append(",");
+	      }
+	    }
+	    buffer.append(";\n");
+	    return false;
+	  }
 
 	private void printMethodInvocationNameAndArgs(String selector,
 			List<Expression> args) {
