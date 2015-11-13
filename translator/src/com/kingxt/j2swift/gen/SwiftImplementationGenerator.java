@@ -28,6 +28,8 @@ public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 	 */
 	private void printImports() {
 		printf("import Foundation");
+		newline();
+		printf("import JreEmulation");
 	}
 
 	protected void generateFileFooter() {
