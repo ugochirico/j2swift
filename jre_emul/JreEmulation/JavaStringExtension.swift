@@ -39,7 +39,7 @@ extension String {
      * the length of the sequence of characters represented by this
      *          object.
      */
-    public func length() -> Int {
-        return characters.count;
+    public func length() -> jint {
+        return jint(characters.count);
     }
 }
