@@ -13,6 +13,7 @@ import com.kingxt.j2swift.ast.CharacterLiteral;
 import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.ExpressionStatement;
 import com.kingxt.j2swift.ast.FunctionInvocation;
+import com.kingxt.j2swift.ast.IfStatement;
 import com.kingxt.j2swift.ast.MethodInvocation;
 import com.kingxt.j2swift.ast.ReturnStatement;
 import com.kingxt.j2swift.ast.Statement;
@@ -46,22 +47,23 @@ public class StatementGenerator extends TreeVisitor {
 	private String getResult() {
 		return buffer.toString();
 	}
+
 	@Override
-	  public boolean visit(ExpressionStatement node) {
-	    Expression expression = node.getExpression();
-	    ITypeBinding type = expression.getTypeBinding();
-	    if (!type.isPrimitive() && Options.useARC()
-	        && (expression instanceof MethodInvocation
-	            || expression instanceof SuperMethodInvocation
-	            || expression instanceof FunctionInvocation)) {
-	      // Avoid clang warning that the return value is unused.
-	      buffer.append("(void) ");
-	    }
-	    expression.accept(this);
-	    buffer.append("\n");
-	    return false;
-	  }
-	
+	public boolean visit(ExpressionStatement node) {
+		Expression expression = node.getExpression();
+		ITypeBinding type = expression.getTypeBinding();
+		if (!type.isPrimitive()
+				&& Options.useARC()
+				&& (expression instanceof MethodInvocation
+						|| expression instanceof SuperMethodInvocation || expression instanceof FunctionInvocation)) {
+			// Avoid clang warning that the return value is unused.
+			buffer.append("(void) ");
+		}
+		expression.accept(this);
+		buffer.append("\n");
+		return false;
+	}
+
 	@Override
 	public boolean visit(MethodInvocation node) {
 		IMethodBinding binding = node.getMethodBinding();
@@ -93,26 +95,27 @@ public class StatementGenerator extends TreeVisitor {
 			s.accept(this);
 		}
 	}
-	
+
 	@Override
 	public boolean visit(ReturnStatement node) {
 		buffer.append("return");
-	    Expression expr = node.getExpression();
-	    IMethodBinding methodBinding = TreeUtil.getOwningMethodBinding(node);
-	    if (expr != null) {
-	      buffer.append(' ');
-	      expr.accept(this);
-	    } else if (methodBinding != null && methodBinding.isConstructor()) {
-	      // A return statement without any expression is allowed in constructors.
-	      buffer.append(" self");
-	    }
-	    buffer.append("\n");
-	    return false;
+		Expression expr = node.getExpression();
+		IMethodBinding methodBinding = TreeUtil.getOwningMethodBinding(node);
+		if (expr != null) {
+			buffer.append(' ');
+			expr.accept(this);
+		} else if (methodBinding != null && methodBinding.isConstructor()) {
+			// A return statement without any expression is allowed in
+			// constructors.
+			buffer.append(" self");
+		}
+		buffer.append("\n");
+		return false;
 	}
 
 	@Override
 	public boolean visit(StringLiteral node) {
-		buffer.append("\""+ node.getLiteralValue() + "\"");
+		buffer.append("\"" + node.getLiteralValue() + "\"");
 		return false;
 	}
 
@@ -134,30 +137,44 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		buffer.append(')');
 	}
-	
+
 	@Override
 	public boolean visit(WhileStatement node) {
 		// TODO Auto-generated method stub
 		return super.visit(node);
 	}
-	
-	 @Override
+
+	@Override
 	public boolean visit(CharacterLiteral node) {
-		 char c = node.charValue();
-		  buffer.append(node.charValue());
-		  return false;
+		char c = node.charValue();
+		buffer.append(node.charValue());
+		return false;
 	}
-	 
-	 @Override
+
+	@Override
+	public boolean visit(IfStatement node) {
+		buffer.append("if (");
+		node.getExpression().accept(this);
+		buffer.append(") ");
+		node.getThenStatement().accept(this);
+		if (node.getElseStatement() != null) {
+			buffer.append(" else ");
+			node.getElseStatement().accept(this);
+		}
+		return false;
+	}
+
+	@Override
 	public boolean visit(com.kingxt.j2swift.ast.NumberLiteral node) {
-		 String token = node.getToken();
-		    if (token != null) {
-		    	buffer.append(token);
-		    	//TODO: to fix typeBingding
-//		      buffer.append(LiteralGenerator.fixNumberToken(token, node.getTypeBinding()));
-		    } else {
-//		      buffer.append(LiteralGenerator.generate(node.getValue()));
-		    }
-		    return false;
+		String token = node.getToken();
+		if (token != null) {
+			buffer.append(token);
+			// TODO: to fix typeBingding
+			// buffer.append(LiteralGenerator.fixNumberToken(token,
+			// node.getTypeBinding()));
+		} else {
+			// buffer.append(LiteralGenerator.generate(node.getValue()));
+		}
+		return false;
 	}
 }
