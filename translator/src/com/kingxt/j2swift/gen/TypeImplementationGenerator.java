@@ -32,7 +32,8 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			newline();
 			syncLineNumbers(typeNode.getName()); // avoid doc-comment
 			printf("class %s { \n", typeNode.getName());
-			TypeDeclarationGenerator.generate(this.getBuilder(), this.typeNode);
+			//
+			VariablesDeclarationGenerator.generate(this.getBuilder(), this.typeNode);
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
@@ -53,7 +54,6 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	@Override
 	protected void printFunctionDeclaration(FunctionDeclaration decl) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -20,16 +20,16 @@ import com.kingxt.j2swift.util.BindingUtil;
  * @author xutao1
  *
  */
-public class TypeDeclarationGenerator extends TypeGenerator {
+public class VariablesDeclarationGenerator extends TypeGenerator {
 
-	protected TypeDeclarationGenerator(SourceBuilder builder,
+	protected VariablesDeclarationGenerator(SourceBuilder builder,
 			AbstractTypeDeclaration node) {
 		super(builder, node);
 	}
 
 	public static void generate(SourceBuilder builder,
 			AbstractTypeDeclaration node) {
-		new TypeDeclarationGenerator(builder, node).generate();
+		new VariablesDeclarationGenerator(builder, node).generate();
 	}
 
 	private void generate() {
