@@ -10,6 +10,7 @@
 		0F042A851BF595EE00690F83 /* JreEmulation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F042A841BF595EE00690F83 /* JreEmulation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0F042A8C1BF595EE00690F83 /* JreEmulation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F042A811BF595EE00690F83 /* JreEmulation.framework */; };
 		0F042A911BF595EE00690F83 /* JreEmulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A901BF595EE00690F83 /* JreEmulationTests.swift */; };
+		0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		0F042A8B1BF595EE00690F83 /* JreEmulationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JreEmulationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F042A901BF595EE00690F83 /* JreEmulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JreEmulationTests.swift; sourceTree = "<group>"; };
 		0F042A921BF595EE00690F83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaStringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				0F042A841BF595EE00690F83 /* JreEmulation.h */,
 				0F042A861BF595EE00690F83 /* Info.plist */,
+				0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */,
 			);
 			path = JreEmulation;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +312,7 @@
 		0F042A961BF595EE00690F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -318,12 +323,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kingxt.JreEmulation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		0F042A971BF595EE00690F83 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -376,6 +383,7 @@
 				0F042A971BF595EE00690F83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0F042A981BF595EE00690F83 /* Build configuration list for PBXNativeTarget "JreEmulationTests" */ = {
 			isa = XCConfigurationList;
@@ -384,6 +392,7 @@
 				0F042A9A1BF595EE00690F83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
