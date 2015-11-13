@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    func isEmpty()->Bool {
+    public func isEmpty()->Bool {
         return characters.count == 0;
     }
     
@@ -25,7 +25,7 @@ extension String {
      * returns: {@code true} if the given object represents a {@code String}
      *          equivalent to this string, {@code false} otherwise
      */
-    func equals(anObject:AnyObject!)->Bool {
+    public func equals(anObject:AnyObject!)->Bool {
         if anObject is String {
             let anotherString:String = anObject as! String;
             if self == anotherString {

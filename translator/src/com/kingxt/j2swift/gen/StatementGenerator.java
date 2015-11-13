@@ -82,6 +82,7 @@ public class StatementGenerator extends TreeVisitor {
 			receiver.accept(this);
 		}
 		if (receiver != null) {
+			buffer.append("!"); //TODO 
 			buffer.append(".");
 		}
 		buffer.append(binding.getName());
