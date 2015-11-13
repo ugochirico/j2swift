@@ -15,6 +15,11 @@ import com.kingxt.j2swift.ast.NativeDeclaration;
 import com.kingxt.j2swift.ast.VariableDeclarationFragment;
 import com.kingxt.j2swift.util.BindingUtil;
 
+/**
+ * Generator all declaration variable
+ * @author xutao1
+ *
+ */
 public class TypeDeclarationGenerator extends TypeGenerator {
 
 	protected TypeDeclarationGenerator(SourceBuilder builder,

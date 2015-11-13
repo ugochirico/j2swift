@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.kingxt.Options;
+import com.kingxt.j2swift.ast.Assignment;
 import com.kingxt.j2swift.ast.Block;
 import com.kingxt.j2swift.ast.CStringLiteral;
 import com.kingxt.j2swift.ast.CharacterLiteral;
@@ -25,6 +26,7 @@ import com.kingxt.j2swift.ast.SuperMethodInvocation;
 import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
+import com.kingxt.j2swift.ast.VariableDeclarationFragment;
 import com.kingxt.j2swift.ast.WhileStatement;
 import com.kingxt.j2swift.types.IOSTypeBinding;
 import com.kingxt.j2swift.util.BindingUtil;
@@ -82,7 +84,7 @@ public class StatementGenerator extends TreeVisitor {
 			receiver.accept(this);
 		}
 		if (receiver != null) {
-			buffer.append("!"); //TODO 
+			buffer.append("!"); // TODO
 			buffer.append(".");
 		}
 		buffer.append(binding.getName());
@@ -137,7 +139,7 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("\"");
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(SimpleName node) {
 		IBinding binding = node.getBinding();
@@ -157,7 +159,28 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		return false;
 	}
-	
+
+	@Override
+	public boolean visit(Assignment node) {
+		node.getLeftHandSide().accept(this);
+		buffer.append(' ');
+		buffer.append(node.getOperator().toString());
+		buffer.append(' ');
+		node.getRightHandSide().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(VariableDeclarationFragment node) {
+		node.getName().accept(this);
+		Expression initializer = node.getInitializer();
+		if (initializer != null) {
+			buffer.append(" = ");
+			initializer.accept(this);
+		}
+		return false;
+	}
+
 	private void printMethodInvocationNameAndArgs(String selector,
 			List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {

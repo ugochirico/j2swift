@@ -8,6 +8,11 @@ import com.kingxt.j2swift.ast.MethodDeclaration;
 import com.kingxt.j2swift.ast.NativeDeclaration;
 import com.kingxt.j2swift.ast.Statement;
 
+/**
+ * Generator java implement to Swift 
+ * @author xutao1
+ *
+ */
 public class TypeImplementationGenerator extends TypeGenerator {
 
 	protected TypeImplementationGenerator(SourceBuilder builder,

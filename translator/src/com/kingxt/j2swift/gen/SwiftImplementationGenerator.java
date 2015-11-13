@@ -15,9 +15,6 @@ public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 	    printImports();
 	    newline();
 	    for (GeneratedType generatedType : getOrderedTypes()) {
-	      print(generatedType.getPrivateDeclarationCode());
-	    }
-	    for (GeneratedType generatedType : getOrderedTypes()) {
 	      print(generatedType.getImplementationCode());
 	    }
 	    save(getOutputPath());
