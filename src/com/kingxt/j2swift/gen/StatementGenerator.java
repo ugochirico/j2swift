@@ -13,10 +13,12 @@ import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.ExpressionStatement;
 import com.kingxt.j2swift.ast.FunctionInvocation;
 import com.kingxt.j2swift.ast.MethodInvocation;
+import com.kingxt.j2swift.ast.ReturnStatement;
 import com.kingxt.j2swift.ast.Statement;
 import com.kingxt.j2swift.ast.StringLiteral;
 import com.kingxt.j2swift.ast.SuperMethodInvocation;
 import com.kingxt.j2swift.ast.TreeNode;
+import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
 import com.kingxt.j2swift.util.BindingUtil;
 
@@ -88,6 +90,22 @@ public class StatementGenerator extends TreeVisitor {
 			Statement s = (Statement) it.next();
 			s.accept(this);
 		}
+	}
+	
+	@Override
+	public boolean visit(ReturnStatement node) {
+		buffer.append("return");
+	    Expression expr = node.getExpression();
+	    IMethodBinding methodBinding = TreeUtil.getOwningMethodBinding(node);
+	    if (expr != null) {
+	      buffer.append(' ');
+	      expr.accept(this);
+	    } else if (methodBinding != null && methodBinding.isConstructor()) {
+	      // A return statement without any expression is allowed in constructors.
+	      buffer.append(" self");
+	    }
+	    buffer.append("\n");
+	    return false;
 	}
 
 	@Override

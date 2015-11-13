@@ -24,6 +24,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kingxt.Options;
@@ -255,7 +256,7 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 			// value.
 			returnType = "NSUInteger";
 		}
-		sb.append(String.format("  %sfunc %s", prefix, selector));
+		sb.append(String.format("%sfunc %s", prefix, selector));
 
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (params.isEmpty()) {
@@ -277,7 +278,9 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 				}
 			}
 		}
-
+		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
+			sb.append(" ->").append(returnType);
+		}
 		return sb.toString();
 	}
 
