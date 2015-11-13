@@ -5,7 +5,7 @@ public class TestBaseClass
 	public static final String testFinalField = "1";
 	public String username;
 	public String password;
-	
+	public int uId = 1000;
 	public String info1, info2 = "1";
 	
 	public String test(String username, String password) {

@@ -6,6 +6,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
 import com.kingxt.j2swift.ast.BodyDeclaration;
+import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.FieldDeclaration;
 import com.kingxt.j2swift.ast.FunctionDeclaration;
 import com.kingxt.j2swift.ast.MethodDeclaration;
@@ -81,6 +82,12 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 			print(':');
 			String swiftType = getDeclarationType(varBinding);
 			print(swiftType + "?");
+			
+			Expression initializer = fragment.getInitializer();
+			if (initializer != null) {
+				String value = generateExpression(initializer);
+				printf(" = %s",value);
+			}
 			println("");
 		}
 		unindent();
@@ -102,5 +109,9 @@ public class TypeDeclarationGenerator extends TypeGenerator {
 	protected void printNativeDeclaration(NativeDeclaration decl) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	protected String generateExpression(Expression expr) {
+		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
 	}
 }

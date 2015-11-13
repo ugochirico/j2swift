@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import com.kingxt.Options;
 import com.kingxt.j2swift.ast.Block;
 import com.kingxt.j2swift.ast.CStringLiteral;
+import com.kingxt.j2swift.ast.CharacterLiteral;
 import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.ExpressionStatement;
 import com.kingxt.j2swift.ast.FunctionInvocation;
@@ -20,6 +21,7 @@ import com.kingxt.j2swift.ast.SuperMethodInvocation;
 import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
+import com.kingxt.j2swift.ast.WhileStatement;
 import com.kingxt.j2swift.util.BindingUtil;
 
 public class StatementGenerator extends TreeVisitor {
@@ -131,5 +133,31 @@ public class StatementGenerator extends TreeVisitor {
 			args.get(i).accept(this);
 		}
 		buffer.append(')');
+	}
+	
+	@Override
+	public boolean visit(WhileStatement node) {
+		// TODO Auto-generated method stub
+		return super.visit(node);
+	}
+	
+	 @Override
+	public boolean visit(CharacterLiteral node) {
+		 char c = node.charValue();
+		  buffer.append(node.charValue());
+		  return false;
+	}
+	 
+	 @Override
+	public boolean visit(com.kingxt.j2swift.ast.NumberLiteral node) {
+		 String token = node.getToken();
+		    if (token != null) {
+		    	buffer.append(token);
+		    	//TODO: to fix typeBingding
+//		      buffer.append(LiteralGenerator.fixNumberToken(token, node.getTypeBinding()));
+		    } else {
+//		      buffer.append(LiteralGenerator.generate(node.getValue()));
+		    }
+		    return false;
 	}
 }
