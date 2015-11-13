@@ -9,11 +9,11 @@ public class TestBaseClass
 	public String info1, info2 = "1";
 	
 	public String test(String username, String password) {
-		test1("my name");
-		test2();
 		if (username.equals("123")) {
 			return "123";
 		}
+		test1("my name");
+		test2();
 		return "";
 	}
 

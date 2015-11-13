@@ -3,8 +3,10 @@ package com.kingxt.j2swift.gen;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.kingxt.Options;
 import com.kingxt.j2swift.ast.Block;
@@ -16,6 +18,7 @@ import com.kingxt.j2swift.ast.FunctionInvocation;
 import com.kingxt.j2swift.ast.IfStatement;
 import com.kingxt.j2swift.ast.MethodInvocation;
 import com.kingxt.j2swift.ast.ReturnStatement;
+import com.kingxt.j2swift.ast.SimpleName;
 import com.kingxt.j2swift.ast.Statement;
 import com.kingxt.j2swift.ast.StringLiteral;
 import com.kingxt.j2swift.ast.SuperMethodInvocation;
@@ -23,6 +26,7 @@ import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
 import com.kingxt.j2swift.ast.WhileStatement;
+import com.kingxt.j2swift.types.IOSTypeBinding;
 import com.kingxt.j2swift.util.BindingUtil;
 
 public class StatementGenerator extends TreeVisitor {
@@ -77,7 +81,13 @@ public class StatementGenerator extends TreeVisitor {
 		} else if (receiver != null) {
 			receiver.accept(this);
 		}
+		if (receiver != null) {
+			buffer.append(".");
+		}
+		buffer.append(binding.getName());
+		buffer.append('(');
 		printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
+		buffer.append(')');
 		return false;
 	}
 
@@ -126,16 +136,32 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("\"");
 		return false;
 	}
-
+	
+	@Override
+	public boolean visit(SimpleName node) {
+		IBinding binding = node.getBinding();
+		if (binding instanceof IVariableBinding) {
+			buffer.append(nameTable
+					.getVariableQualifiedName((IVariableBinding) binding));
+			return false;
+		}
+		if (binding instanceof ITypeBinding) {
+			if (binding instanceof IOSTypeBinding) {
+				buffer.append(binding.getName());
+			} else {
+				buffer.append(nameTable.getFullName((ITypeBinding) binding));
+			}
+		} else {
+			buffer.append(node.getIdentifier());
+		}
+		return false;
+	}
+	
 	private void printMethodInvocationNameAndArgs(String selector,
 			List<Expression> args) {
-		buffer.append(selector);
-		buffer.append('(');
 		for (int i = 0; i < args.size(); i++) {
-
 			args.get(i).accept(this);
 		}
-		buffer.append(')');
 	}
 
 	@Override
