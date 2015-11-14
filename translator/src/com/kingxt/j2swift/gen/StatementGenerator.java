@@ -293,6 +293,12 @@ public class StatementGenerator extends TreeVisitor {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.InfixExpression)
+	 * 
+	 * Tranlator Java Operation as < > <= >= etc...
+	 */
 	@Override
 	public boolean visit(InfixExpression node) {
 		InfixExpression.Operator op = node.getOperator();
