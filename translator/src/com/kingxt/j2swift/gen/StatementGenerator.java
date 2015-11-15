@@ -85,14 +85,15 @@ public class StatementGenerator extends TreeVisitor {
 
 		// Object receiving the message, or null if it's a method in this class.
 		Expression receiver = node.getExpression();
-
+		if (receiver != null) {
+			receiver.setNeedUnwarpOptional(true);
+		}
 		if (BindingUtil.isStatic(binding)) {
 			buffer.append(nameTable.getFullName(binding.getDeclaringClass()));
 		} else if (receiver != null) {
 			receiver.accept(this);
 		}
 		if (receiver != null) {
-			buffer.append("!"); // TODO
 			buffer.append(".");
 		}
 		buffer.append(binding.getName());
@@ -154,16 +155,19 @@ public class StatementGenerator extends TreeVisitor {
 		if (binding instanceof IVariableBinding) {
 			buffer.append(nameTable
 					.getVariableQualifiedName((IVariableBinding) binding));
-			return false;
-		}
-		if (binding instanceof ITypeBinding) {
-			if (binding instanceof IOSTypeBinding) {
-				buffer.append(binding.getName());
+		}else {
+			if (binding instanceof ITypeBinding) {
+				if (binding instanceof IOSTypeBinding) {
+					buffer.append(binding.getName());
+				} else {
+					buffer.append(nameTable.getFullName((ITypeBinding) binding));
+				}
 			} else {
-				buffer.append(nameTable.getFullName((ITypeBinding) binding));
+				buffer.append(node.getIdentifier());
 			}
-		} else {
-			buffer.append(node.getIdentifier());
+		}
+		if (node.isNeedUnwarpOptional()) {
+			buffer.append("!");
 		}
 		return false;
 	}
@@ -184,7 +188,10 @@ public class StatementGenerator extends TreeVisitor {
 		node.getName().accept(this);
 		IVariableBinding binding = node.getVariableBinding();
 		String swiftType = nameTable.getSpecificObjCType(binding);
-		buffer.append(":").append(swiftType).append("?");
+		buffer.append(":").append(swiftType);
+		if (node.isOptional()) {
+			buffer.append("?");
+		}
 		Expression initializer = node.getInitializer();
 		if (initializer != null) {
 			buffer.append(" = ");
@@ -334,7 +341,10 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		String opStr = ' ' + op.toString() + ' ';
 		boolean isFirst = true;
+		//TODO
+		boolean needUnwarpOptional = operands.size() > 1;
 		for (Expression operand : operands) {
+			operand.setNeedUnwarpOptional(needUnwarpOptional);
 			if (!isFirst) {
 				buffer.append(opStr);
 			}
