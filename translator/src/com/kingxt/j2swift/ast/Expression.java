@@ -21,26 +21,37 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  */
 public abstract class Expression extends TreeNode {
 
-  private Object constantValue = null;
+	private Object constantValue = null;
 
-  protected Expression(org.eclipse.jdt.core.dom.Expression jdtNode) {
-    super(jdtNode);
-    constantValue = jdtNode.resolveConstantExpressionValue();
-  }
+	private boolean needUnwarpOptional;
 
-  protected Expression(Expression other) {
-    super(other);
-    constantValue = other.getConstantValue();
-  }
+	protected Expression(org.eclipse.jdt.core.dom.Expression jdtNode) {
+		super(jdtNode);
+		constantValue = jdtNode.resolveConstantExpressionValue();
+	}
 
-  protected Expression() {}
+	protected Expression(Expression other) {
+		super(other);
+		constantValue = other.getConstantValue();
+	}
 
-  public abstract ITypeBinding getTypeBinding();
+	protected Expression() {
+	}
 
-  public Object getConstantValue() {
-    return constantValue;
-  }
+	public abstract ITypeBinding getTypeBinding();
 
-  @Override
-  public abstract Expression copy();
+	public Object getConstantValue() {
+		return constantValue;
+	}
+
+	public boolean isNeedUnwarpOptional() {
+		return needUnwarpOptional;
+	}
+
+	public void setNeedUnwarpOptional(boolean needUnwarpOptional) {
+		this.needUnwarpOptional = needUnwarpOptional;
+	}
+
+	@Override
+	public abstract Expression copy();
 }

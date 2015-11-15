@@ -23,59 +23,59 @@ import org.eclipse.jdt.core.dom.IBinding;
  */
 public class SimpleName extends Name {
 
-  private String identifier;
+	private String identifier;
 
-  public SimpleName(org.eclipse.jdt.core.dom.SimpleName jdtNode) {
-    super(jdtNode);
-    identifier = jdtNode.getIdentifier();
-  }
+	public SimpleName(org.eclipse.jdt.core.dom.SimpleName jdtNode) {
+		super(jdtNode);
+		identifier = jdtNode.getIdentifier();
+	}
 
-  public SimpleName(SimpleName other) {
-    super(other);
-    identifier = other.getIdentifier();
-  }
+	public SimpleName(SimpleName other) {
+		super(other);
+		identifier = other.getIdentifier();
+	}
 
-  public SimpleName(IBinding binding) {
-    super(binding);
-    identifier = binding.getName();
-  }
+	public SimpleName(IBinding binding) {
+		super(binding);
+		identifier = binding.getName();
+	}
 
-  public SimpleName(String identifier) {
-    super((IBinding) null);
-    this.identifier = identifier;
-  }
+	public SimpleName(String identifier) {
+		super((IBinding) null);
+		this.identifier = identifier;
+	}
 
-  @Override
-  public Kind getKind() {
-    return Kind.SIMPLE_NAME;
-  }
+	@Override
+	public Kind getKind() {
+		return Kind.SIMPLE_NAME;
+	}
 
-  public String getIdentifier() {
-    return identifier;
-  }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-  public void setIdentifier(String identifier) {
-    this.identifier = identifier;
-  }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-  public String getFullyQualifiedName() {
-    return identifier;
-  }
+	public String getFullyQualifiedName() {
+		return identifier;
+	}
 
-  @Override
-  protected void acceptInner(TreeVisitor visitor) {
-    visitor.visit(this);
-    visitor.endVisit(this);
-  }
+	@Override
+	protected void acceptInner(TreeVisitor visitor) {
+		visitor.visit(this);
+		visitor.endVisit(this);
+	}
 
-  @Override
-  public SimpleName copy() {
-    return new SimpleName(this);
-  }
+	@Override
+	public SimpleName copy() {
+		return new SimpleName(this);
+	}
 
-  @Override
-  public void validateInner() {
-    super.validateInner();
-    Preconditions.checkNotNull(identifier);
-  }
+	@Override
+	public void validateInner() {
+		super.validateInner();
+		Preconditions.checkNotNull(identifier);
+	}
 }
