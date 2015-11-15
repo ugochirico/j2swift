@@ -42,4 +42,12 @@ extension String {
     public func length() -> jint {
         return jint(characters.count);
     }
+    
+    public static func valueOf(obj:Any?) ->String? {
+        if obj == nil {
+            return nil;
+        }
+        let str:String = obj as! String;
+        return str;
+    }
 }
