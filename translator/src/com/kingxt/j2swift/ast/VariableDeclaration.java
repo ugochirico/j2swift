@@ -25,6 +25,7 @@ public abstract class VariableDeclaration extends TreeNode {
   private int extraDimensions = 0;
   protected ChildLink<SimpleName> name = ChildLink.create(SimpleName.class, this);
   protected ChildLink<Expression> initializer = ChildLink.create(Expression.class, this);
+  private boolean isOptional;
 
   public VariableDeclaration(org.eclipse.jdt.core.dom.VariableDeclaration jdtNode) {
     super(jdtNode);
@@ -76,4 +77,12 @@ public abstract class VariableDeclaration extends TreeNode {
   public void setInitializer(Expression newInitializer) {
     initializer.set(newInitializer);
   }
+
+public boolean isOptional() {
+	return isOptional;
+}
+
+public void setOptional(boolean isOptional) {
+	this.isOptional = isOptional;
+}
 }

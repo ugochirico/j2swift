@@ -26,6 +26,7 @@ public class FieldDeclaration extends BodyDeclaration {
   private ChildLink<Type> type = ChildLink.create(Type.class, this);
   private ChildList<VariableDeclarationFragment> fragments =
       ChildList.create(VariableDeclarationFragment.class, this);
+  private boolean isOptional;
 
   public FieldDeclaration(org.eclipse.jdt.core.dom.FieldDeclaration jdtNode) {
     super(jdtNode);
@@ -81,4 +82,12 @@ public class FieldDeclaration extends BodyDeclaration {
   public FieldDeclaration copy() {
     return new FieldDeclaration(this);
   }
+
+public boolean isOptional() {
+	return isOptional;
+}
+
+public void setOptional(boolean isOptional) {
+	this.isOptional = isOptional;
+}
 }
