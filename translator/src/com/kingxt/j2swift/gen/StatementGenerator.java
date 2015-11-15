@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import com.kingxt.Options;
 import com.kingxt.j2swift.ast.Assignment;
 import com.kingxt.j2swift.ast.Block;
+import com.kingxt.j2swift.ast.BooleanLiteral;
 import com.kingxt.j2swift.ast.CStringLiteral;
 import com.kingxt.j2swift.ast.CharacterLiteral;
 import com.kingxt.j2swift.ast.Expression;
@@ -300,7 +301,9 @@ public class StatementGenerator extends TreeVisitor {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.InfixExpression)
+	 * 
+	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.
+	 * InfixExpression)
 	 * 
 	 * Tranlator Java Operation as < > <= >= etc...
 	 */
@@ -313,7 +316,7 @@ public class StatementGenerator extends TreeVisitor {
 				.equals(InfixExpression.Operator.NOT_EQUALS))) {
 			Expression lhs = operands.get(0);
 			Expression rhs = operands.get(1);
-			//TODO
+			// TODO
 			if (lhs instanceof StringLiteral || rhs instanceof StringLiteral) {
 				if (!(lhs instanceof StringLiteral)) {
 					// In case the lhs can't call isEqual.
@@ -352,6 +355,12 @@ public class StatementGenerator extends TreeVisitor {
 		} else {
 			// buffer.append(LiteralGenerator.generate(node.getValue()));
 		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(BooleanLiteral node) {
+		buffer.append(node.booleanValue() ? "true" : "false");
 		return false;
 	}
 }

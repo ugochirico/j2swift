@@ -63,6 +63,14 @@ public final class BindingUtil {
   public static boolean isPrivate(IBinding binding) {
     return Modifier.isPrivate(binding.getModifiers());
   }
+  
+  public static boolean isPublic(IBinding binding) {
+	  return Modifier.isPublic(binding.getModifiers());
+  }
+  
+  public static boolean isProtected(IBinding binding) {
+	  return Modifier.isProtected(binding.getModifiers());
+  }
 
   public static boolean isVolatile(IVariableBinding binding) {
     return Modifier.isVolatile(binding.getModifiers());
