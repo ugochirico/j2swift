@@ -16,73 +16,76 @@ package com.kingxt.j2swift.ast;
 
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
+import com.kingxt.j2swift.util.BindingUtil;
+
 /**
  * Node type for the declaration of a single local variable.
  */
 public abstract class VariableDeclaration extends TreeNode {
 
-  private IVariableBinding variableBinding;
-  private int extraDimensions = 0;
-  protected ChildLink<SimpleName> name = ChildLink.create(SimpleName.class, this);
-  protected ChildLink<Expression> initializer = ChildLink.create(Expression.class, this);
-  private boolean isOptional;
+	private IVariableBinding variableBinding;
+	private int extraDimensions = 0;
+	protected ChildLink<SimpleName> name = ChildLink.create(SimpleName.class,
+			this);
+	protected ChildLink<Expression> initializer = ChildLink.create(
+			Expression.class, this);
+	private boolean isOptional;
 
-  public VariableDeclaration(org.eclipse.jdt.core.dom.VariableDeclaration jdtNode) {
-    super(jdtNode);
-    variableBinding = jdtNode.resolveBinding();
-    extraDimensions = jdtNode.getExtraDimensions();
-    name.set((SimpleName) TreeConverter.convert(jdtNode.getName()));
-    initializer.set((Expression) TreeConverter.convert(jdtNode.getInitializer()));
-  }
+	public VariableDeclaration(
+			org.eclipse.jdt.core.dom.VariableDeclaration jdtNode) {
+		super(jdtNode);
+		variableBinding = jdtNode.resolveBinding();
+		extraDimensions = jdtNode.getExtraDimensions();
+		name.set((SimpleName) TreeConverter.convert(jdtNode.getName()));
+		initializer.set((Expression) TreeConverter.convert(jdtNode
+				.getInitializer()));
+	}
 
-  public VariableDeclaration(VariableDeclaration other) {
-    super(other);
-    variableBinding = other.getVariableBinding();
-    extraDimensions = other.getExtraDimensions();
-    name.copyFrom(other.getName());
-    initializer.copyFrom(other.getInitializer());
-  }
+	public VariableDeclaration(VariableDeclaration other) {
+		super(other);
+		variableBinding = other.getVariableBinding();
+		extraDimensions = other.getExtraDimensions();
+		name.copyFrom(other.getName());
+		initializer.copyFrom(other.getInitializer());
+	}
 
-  public VariableDeclaration(IVariableBinding variableBinding, Expression initializer) {
-    super();
-    this.variableBinding = variableBinding;
-    name.set(new SimpleName(variableBinding));
-    this.initializer.set(initializer);
-  }
+	public VariableDeclaration(IVariableBinding variableBinding,
+			Expression initializer) {
+		super();
+		this.variableBinding = variableBinding;
+		name.set(new SimpleName(variableBinding));
+		this.initializer.set(initializer);
+	}
 
-  public IVariableBinding getVariableBinding() {
-    return variableBinding;
-  }
+	public IVariableBinding getVariableBinding() {
+		return variableBinding;
+	}
 
-  public void setVariableBinding(IVariableBinding newVariableBinding) {
-    variableBinding = newVariableBinding;
-  }
+	public void setVariableBinding(IVariableBinding newVariableBinding) {
+		variableBinding = newVariableBinding;
+	}
 
-  public int getExtraDimensions() {
-    return extraDimensions;
-  }
+	public int getExtraDimensions() {
+		return extraDimensions;
+	}
 
-  public void setExtraDimensions(int newExtraDimensions) {
-    extraDimensions = newExtraDimensions;
-  }
+	public void setExtraDimensions(int newExtraDimensions) {
+		extraDimensions = newExtraDimensions;
+	}
 
-  public SimpleName getName() {
-    return name.get();
-  }
+	public SimpleName getName() {
+		return name.get();
+	}
 
-  public Expression getInitializer() {
-    return initializer.get();
-  }
+	public Expression getInitializer() {
+		return initializer.get();
+	}
 
-  public void setInitializer(Expression newInitializer) {
-    initializer.set(newInitializer);
-  }
+	public void setInitializer(Expression newInitializer) {
+		initializer.set(newInitializer);
+	}
 
-public boolean isOptional() {
-	return isOptional;
-}
-
-public void setOptional(boolean isOptional) {
-	this.isOptional = isOptional;
-}
+	public boolean isOptional() {
+		return !BindingUtil.isFinal(variableBinding);
+	}
 }
