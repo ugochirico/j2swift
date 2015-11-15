@@ -21,7 +21,7 @@ public class TestBaseClass
 		for (int i = 0; i < aLength; i++) {
 			b = c = d = String.valueOf(i);
 		}
-		a = b + c + d;
+		a = b + c + d + "123";
 		return "";
 	}
 
