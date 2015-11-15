@@ -79,41 +79,57 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		
 		Boolean needDeclarationLine = false;
 		for (VariableDeclarationFragment fragment : fields) {
-			IVariableBinding varBinding = fragment.getVariableBinding();
-			FieldDeclaration declaration = (FieldDeclaration) fragment
-					.getParent();
-			JavadocGenerator.printDocComment(getBuilder(),
-					declaration.getJavadoc());
-			printIndent();
-			if (BindingUtil.isWeakReference(varBinding)
-					&& !BindingUtil.isVolatile(varBinding)) {
-				// We must add this even without -use-arc because the header may
-				// be
-				// included by a file compiled with ARC.
-				print("weak ");
-			}
-			if (BindingUtil.isPrivate(varBinding)) {
-				print("private ");
-			}
-			print("var ");
-			print(nameTable.getVariableShortName(varBinding));
-
-			print(':');
-			String swiftType = getDeclarationType(varBinding);
-			print(swiftType + "?");
-
-			Expression initializer = fragment.getInitializer();
-			if (initializer != null) {
-				String value = generateExpression(initializer);
-				printf(" = %s", value);
-			}
-			println("");
+			printFieldFullDeclaration(fragment);
 			needDeclarationLine = true;
 		}
 		if (needDeclarationLine) {
 			newline();
 		}
 		unindent();
+	}
+	
+	private void printFieldFullDeclaration(VariableDeclarationFragment fragment) {
+		IVariableBinding varBinding = fragment.getVariableBinding();
+		FieldDeclaration declaration = (FieldDeclaration) fragment
+				.getParent();
+		JavadocGenerator.printDocComment(getBuilder(),
+				declaration.getJavadoc());
+		printIndent();
+		if (BindingUtil.isWeakReference(varBinding)
+				&& !BindingUtil.isVolatile(varBinding)) {
+			// We must add this even without -use-arc because the header may
+			// be
+			// included by a file compiled with ARC.
+			print("weak ");
+		}
+		if (BindingUtil.isPrivate(varBinding)) {
+			print("private ");
+		}
+		else if (BindingUtil.isPublic(varBinding)) {
+			print("public ");
+		}
+		else {
+			//default
+		}
+		
+		if (BindingUtil.isFinal(varBinding)) {
+			print("let ");
+		}
+		else {
+			print("var ");
+		}
+		print(nameTable.getVariableShortName(varBinding));
+
+		print(':');
+		String swiftType = getDeclarationType(varBinding);
+		print(swiftType + "?");
+
+		Expression initializer = fragment.getInitializer();
+		if (initializer != null) {
+			String value = generateExpression(initializer);
+			printf(" = %s", value);
+		}
+		println("");
 	}
 
 	private void printStaticFieldFullDeclaration(
@@ -126,9 +142,13 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		String finalStr;
 		if (BindingUtil.isPrivate(var)) {
 			accessDeclaration = "private ";
-		} else {
+		} else if (BindingUtil.isPublic(var)) {
+			accessDeclaration = "public ";
+		}
+		else {
 			accessDeclaration = "";
 		}
+		
 		if (BindingUtil.isFinal(var)) {
 			finalStr = "let ";
 		} else {
