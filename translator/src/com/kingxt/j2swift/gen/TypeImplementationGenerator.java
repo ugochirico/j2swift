@@ -1,5 +1,6 @@
 package com.kingxt.j2swift.gen;
 
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
 import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
@@ -9,7 +10,8 @@ import com.kingxt.j2swift.ast.NativeDeclaration;
 import com.kingxt.j2swift.ast.Statement;
 
 /**
- * Generator java implement to Swift 
+ * Generator java implement to Swift
+ * 
  * @author xutao1
  *
  */
@@ -31,9 +33,15 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
 			syncLineNumbers(typeNode.getName()); // avoid doc-comment
-			printf("class %s { \n", typeNode.getName());
+			String superClass = getSuperTypeName();
+			if (superClass != null) {
+				printf("class %s : %s {", typeNode.getName(), superClass);
+			} else {
+				printf("class %s { \n", typeNode.getName());
+			}
 			//
-			VariablesDeclarationGenerator.generate(this.getBuilder(), this.typeNode);
+			VariablesDeclarationGenerator.generate(this.getBuilder(),
+					this.typeNode);
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
@@ -69,6 +77,11 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	protected String generateStatement(Statement stmt) {
 		return StatementGenerator.generate(stmt, getBuilder().getCurrentLine());
+	}
+
+	private String getSuperTypeName() {
+		ITypeBinding superclass = typeBinding.getSuperclass();
+		return superclass.getName();
 	}
 
 	@Override
