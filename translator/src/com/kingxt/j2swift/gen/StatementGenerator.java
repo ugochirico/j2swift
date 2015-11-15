@@ -192,6 +192,11 @@ public class StatementGenerator extends TreeVisitor {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.VariableDeclarationStatement)
+	 * etc method public final String a=23;
+	 */
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
 		List<VariableDeclarationFragment> vars = node.getFragments();
