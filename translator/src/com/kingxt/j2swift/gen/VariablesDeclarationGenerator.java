@@ -122,7 +122,10 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 
 		print(':');
 		String swiftType = getDeclarationType(varBinding);
-		print(swiftType + "?");
+		print(swiftType);
+		if (!BindingUtil.isFinal(varBinding)) {
+			print("?");
+		}
 
 		Expression initializer = fragment.getInitializer();
 		if (initializer != null) {
@@ -163,10 +166,11 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		Expression initializer = fragment.getInitializer();
 		printIndent();
 		print("" + baseDeclaration);
+		if (!BindingUtil.isFinal(fragment.getVariableBinding())) {
+			print("?");
+		}
 		if (initializer != null) {
 			print(" = " + generateExpression(initializer));
-		} else {
-			print("?");
 		}
 		newline();
 	}
