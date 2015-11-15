@@ -23,6 +23,7 @@ import com.kingxt.Options;
 import com.kingxt.j2swift.ast.CompilationUnit;
 import com.kingxt.j2swift.gen.GenerationUnit;
 import com.kingxt.j2swift.gen.SwiftImplementationGenerator;
+import com.kingxt.j2swift.translate.Rewriter;
 import com.kingxt.j2swift.types.HeaderImportCollector;
 import com.kingxt.j2swift.types.ImplementationImportCollector;
 import com.kingxt.j2swift.types.Import;
@@ -100,10 +101,10 @@ public class TranslationProcessor extends FileProcessor {
 //    new GwtConverter().run(unit);
 //    ticker.tick("GwtConverter");
 //
-//    // Modify AST to be more compatible with Objective C
-//    new Rewriter(outerResolver).run(unit);
-//    ticker.tick("Rewriter");
-//
+    // Modify AST to be more compatible with Objective C
+    new Rewriter().run(unit);
+    ticker.tick("Rewriter");
+
 //    // Add abstract method stubs.
 //    new AbstractMethodRewriter(unit).run(unit);
 //    ticker.tick("AbstractMethodRewriter");
