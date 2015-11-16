@@ -14,7 +14,16 @@ public class TestBaseClass
 		}
 		test1("my name");
 		test2();
-		int uninitValue;
+		
+		int intShotType;
+//		char cShotType;
+		long longShotType;
+		float floatShotType;
+		double doubleShotType;
+		byte byteShotType;
+		short shortShotType;
+		boolean booleanShotType;
+		
 		String a = "23";
 		String b = null, c = "45", d = b;
 		int aLength = a.length();

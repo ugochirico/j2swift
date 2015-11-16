@@ -13,6 +13,7 @@
 		0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */; };
 		0F043FC41BF5CC7F00690F83 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC31BF5CC7F00690F83 /* Class.swift */; };
 		0F043FC61BF5CC8900690F83 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC51BF5CC8900690F83 /* Object.swift */; };
+		0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaStringExtension.swift; sourceTree = "<group>"; };
 		0F043FC31BF5CC7F00690F83 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 		0F043FC51BF5CC8900690F83 /* Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
+		0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = J2SwiftHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */,
 				0F043FC31BF5CC7F00690F83 /* Class.swift */,
 				0F043FC51BF5CC8900690F83 /* Object.swift */,
+				0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */,
 			);
 			path = JreEmulation;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,
 				0F043FC41BF5CC7F00690F83 /* Class.swift in Sources */,
 				0F043FC61BF5CC8900690F83 /* Object.swift in Sources */,
 				0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */,
