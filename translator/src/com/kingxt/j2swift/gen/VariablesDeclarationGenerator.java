@@ -1,7 +1,6 @@
 package com.kingxt.j2swift.gen;
 
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

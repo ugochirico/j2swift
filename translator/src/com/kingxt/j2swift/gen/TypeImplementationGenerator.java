@@ -2,10 +2,10 @@ package com.kingxt.j2swift.gen;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
+
 
 //import com.google.devtools.j2objc.ast.EnumConstantDeclaration;
 //import com.google.devtools.j2objc.ast.EnumDeclaration;
@@ -44,7 +44,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 					}
 				}
 			}
-			printf("enum %s %s {", typeNode.getName(), enumExtendName);
+			String bareTypeName =
+			        typeName.endsWith("Enum") ? typeName.substring(0, typeName.length() - 4) : typeName;
+			printf("enum %s %s {", bareTypeName, enumExtendName);
 			printNativeEnum();
 			printIndent();
 			printf("}");
@@ -57,9 +59,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			String superClass = getSuperTypeName();
 			if (superClass != null) {
-				printf("class %s : %s {", typeNode.getName(), superClass);
+				printf("class %s : %s {", typeName, superClass);
 			} else {
-				printf("class %s { \n", typeNode.getName());
+				printf("class %s { \n", typeName);
 			}
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);

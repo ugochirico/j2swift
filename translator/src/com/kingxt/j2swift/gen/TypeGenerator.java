@@ -38,7 +38,6 @@ import com.kingxt.j2swift.ast.MethodDeclaration;
 import com.kingxt.j2swift.ast.NativeDeclaration;
 import com.kingxt.j2swift.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.SingleVariableDeclaration;
-import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TypeDeclaration;
 import com.kingxt.j2swift.ast.VariableDeclarationFragment;
