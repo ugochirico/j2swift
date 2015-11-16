@@ -22,9 +22,6 @@ import com.kingxt.j2swift.util.ProGuardUsageParser;
 public class J2Swift {
 
 	public static void main(String[] args) {
-
-		args = new String[]{"-d", "/Users/kingxt/Desktop/otu", "/Users/kingxt/Documents/project/j2swift/src/com/kingxt/test/TestBaseClass.java"};
-
 		
 		if (args.length == 0) {
 			Options.help(true);
