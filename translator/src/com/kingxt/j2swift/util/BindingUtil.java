@@ -82,6 +82,10 @@ public final class BindingUtil {
         // Exclude local variables declared final.
         && binding.getDeclaringClass() != null;
   }
+  
+  public static boolean isPrimitive(IVariableBinding binding) {
+	  return binding != null && binding.getType().isPrimitive();
+  }
 
   public static boolean isStringConstant(IVariableBinding binding) {
     Object constantValue = binding.getConstantValue();

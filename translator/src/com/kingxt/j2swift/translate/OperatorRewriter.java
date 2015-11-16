@@ -1,4 +1,4 @@
-package com.kingxt.j2swift.types;
+package com.kingxt.j2swift.translate;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +12,7 @@ import com.kingxt.j2swift.ast.InfixExpression;
 import com.kingxt.j2swift.ast.SimpleName;
 import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeVisitor;
+import com.kingxt.j2swift.types.FunctionBinding;
 import com.kingxt.j2swift.util.BindingUtil;
 
 public class OperatorRewriter extends TreeVisitor {

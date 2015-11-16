@@ -166,7 +166,7 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(node.getIdentifier());
 			}
 		}
-		if (node.isNeedUnwarpOptional()) {
+		if (node.isNeedUnwarpOptional() && !BindingUtil.isPrimitive((IVariableBinding)node.getBinding())) {
 			buffer.append("!");
 		}
 		return false;

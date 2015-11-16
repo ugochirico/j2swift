@@ -23,11 +23,12 @@ import com.kingxt.Options;
 import com.kingxt.j2swift.ast.CompilationUnit;
 import com.kingxt.j2swift.gen.GenerationUnit;
 import com.kingxt.j2swift.gen.SwiftImplementationGenerator;
+import com.kingxt.j2swift.translate.OperatorRewriter;
+import com.kingxt.j2swift.translate.PrimitiveRewriter;
 import com.kingxt.j2swift.translate.Rewriter;
 import com.kingxt.j2swift.types.HeaderImportCollector;
 import com.kingxt.j2swift.types.ImplementationImportCollector;
 import com.kingxt.j2swift.types.Import;
-import com.kingxt.j2swift.types.OperatorRewriter;
 import com.kingxt.j2swift.util.DeadCodeMap;
 import com.kingxt.j2swift.util.ErrorUtil;
 import com.kingxt.j2swift.util.JdtParser;
@@ -190,6 +191,9 @@ public class TranslationProcessor extends FileProcessor {
 //
     new OperatorRewriter().run(unit);
     ticker.tick("OperatorRewriter");
+    
+    new PrimitiveRewriter().run(unit);
+    ticker.tick("PrimitiveRewriter");
 //
 //    // After: OperatorRewriter - Static load rewriting needs to happen after
 //    //   operator rewriting.

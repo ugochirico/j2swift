@@ -18,7 +18,7 @@ public class TestBaseClass
 		String a = "23";
 		String b = null, c = "45", d = b;
 		int aLength = a.length();
-		for (int i = 0; i < aLength; i = i+1) {
+		for (int i = 0; i < aLength; i = i+1*2) {
 			b = c = d = String.valueOf(i);
 		}
 		a = b + c + d + "123";
