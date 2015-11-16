@@ -55,4 +55,8 @@ public class TestBaseClass {
 			i--;
 		} while (i > 0);
 	}
+	
+	public void testSwitchStatment() {
+		Object o;
+	}
 }
