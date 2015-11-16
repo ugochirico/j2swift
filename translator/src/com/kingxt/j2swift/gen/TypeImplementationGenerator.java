@@ -7,8 +7,6 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
-
-
 //import com.google.devtools.j2objc.ast.EnumConstantDeclaration;
 //import com.google.devtools.j2objc.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.*;
@@ -44,7 +42,7 @@ public class TypeImplementationGenerator extends TypeGenerator {
 					ITypeBinding[] type = declaredMethod.getParameterTypes();
 					if (type.length == 1) {
 						enumExtendName = ": " + type[0].getName();
-					}		
+					}
 				}
 			}
 			printf("enum %s %s {", typeNode.getName(), enumExtendName);
@@ -66,11 +64,13 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
-			
-			List<com.kingxt.j2swift.ast.BodyDeclaration> bodyDeclatations = typeNode.getBodyDeclarations();
+
+			List<com.kingxt.j2swift.ast.BodyDeclaration> bodyDeclatations = typeNode
+					.getBodyDeclarations();
 			for (com.kingxt.j2swift.ast.BodyDeclaration body : bodyDeclatations) {
 				indent();
-				TypeImplementationGenerator.generate(this.getBuilder(), (AbstractTypeDeclaration)body);
+				TypeImplementationGenerator.generate(this.getBuilder(),
+						(AbstractTypeDeclaration) body);
 				unindent();
 			}
 			printStaticAccessors();
@@ -95,8 +95,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 				.getEnumConstants();
 
 		// Strip enum type suffix.
-//		String bareTypeName = typeName.endsWith("Enum") ? typeName.substring(0,
-//				typeName.length() - 4) : typeName;
+		// String bareTypeName = typeName.endsWith("Enum") ?
+		// typeName.substring(0,
+		// typeName.length() - 4) : typeName;
 
 		// C doesn't allow empty enum declarations. Java does, so we skip the
 		// C enum declaration and generate the type declaration.
@@ -110,8 +111,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 				printIndent();
 				List<Expression> expressions = constant.getArguments();
 				if (expressions != null && expressions.size() >= 1) {
-					Expression e = expressions.get(0); 
-					printf("case %s = %s\n", constant.getName(), generateExpression(e));
+					Expression e = expressions.get(0);
+					printf("case %s = %s\n", constant.getName(),
+							generateExpression(e));
 				} else {
 					printf("case %s\n", constant.getName());
 				}
@@ -149,7 +151,10 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	private String getSuperTypeName() {
 		ITypeBinding superclass = typeBinding.getSuperclass();
-		return superclass.getName();
+		if (superclass == null) {
+			return null;
+		}
+		return nameTable.getFullName(superclass);
 	}
 
 	@Override
