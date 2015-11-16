@@ -174,9 +174,9 @@ public class LiteralGenerator {
 
   public static String generate(Long value) {
     if (value.longValue() == Long.MIN_VALUE) {
-      return "((jlong) 0x8000000000000000LL)";
+      return "((jlong) 0x8000000000000000)";
     } else {
-      return value.toString() + "LL";
+      return value.toString();
     }
   }
 
@@ -191,30 +191,30 @@ public class LiteralGenerator {
   public static String generate(Float value) {
     float f = value.floatValue();
     if (Float.isNaN(f)) {
-      return "NAN";
+      return "Float.NaN";
     } else if (f == Float.POSITIVE_INFINITY) {
-      return "INFINITY";
+      return "Float.infinity";
     } else if (f == Float.NEGATIVE_INFINITY) {
       // FP representations are symmetrical.
-      return "-INFINITY";
+      return "-Float.infinity";
     } else if (f == Float.MAX_VALUE) {
       return "__FLT_MAX__";
     } else if (f == Float.MIN_NORMAL) {
       return "__FLT_MIN__";
     } else {
-      return value.toString() + "f";
+      return value.toString();
     }
   }
 
   public static String generate(Double value) {
     double d = ((Double) value).doubleValue();
     if (Double.isNaN(d)) {
-      return "NAN";
+      return "Double.NaN";
     } else if (d == Double.POSITIVE_INFINITY) {
-      return "INFINITY";
+      return "Double.infinity";
     } else if (d == Double.NEGATIVE_INFINITY) {
       // FP representations are symmetrical.
-      return "-INFINITY";
+      return "-Double.infinity";
     } else if (d == Double.MAX_VALUE) {
       return "__DBL_MAX__";
     } else if (d == Double.MIN_NORMAL) {
