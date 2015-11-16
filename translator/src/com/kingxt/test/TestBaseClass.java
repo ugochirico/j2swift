@@ -9,11 +9,9 @@ public class TestBaseClass
 	public String info1, info2 = "1";
 	
 	public String test(String username, String password) {
-		if (username.equals("123")) {
-			return "123";
-		}
-		test1("my name");
-		test2();
+		testForStatement();
+		testIfStatement("22");
+		testWhileStatement();
 		
 		int intShotType;
 //		char cShotType;
@@ -51,16 +49,4 @@ public class TestBaseClass
 			i--;
 		}
 	}
-
-	public void test1(String username) {
-	}
-	
-	public void test2() {
-	}
-	
-//	func test2(a:String) {
-//		
-//	}
-//	
-//	test(a:"123");
 }

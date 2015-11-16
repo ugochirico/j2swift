@@ -155,7 +155,7 @@ public class StatementGenerator extends TreeVisitor {
 		if (binding instanceof IVariableBinding) {
 			buffer.append(nameTable
 					.getVariableQualifiedName((IVariableBinding) binding));
-		}else {
+		} else {
 			if (binding instanceof ITypeBinding) {
 				if (binding instanceof IOSTypeBinding) {
 					buffer.append(binding.getName());
@@ -166,7 +166,9 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(node.getIdentifier());
 			}
 		}
-		if (node.isNeedUnwarpOptional() && !BindingUtil.isPrimitive((IVariableBinding)node.getBinding())) {
+		if (node.isNeedUnwarpOptional()
+				&& !BindingUtil.isPrimitive((IVariableBinding) node
+						.getBinding())) {
 			buffer.append("!");
 		}
 		return false;
@@ -206,8 +208,9 @@ public class StatementGenerator extends TreeVisitor {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.VariableDeclarationStatement)
-	 * etc method public final String a=23;
+	 * 
+	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.
+	 * VariableDeclarationStatement) etc method public final String a=23;
 	 */
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
@@ -250,12 +253,6 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(WhileStatement node) {
-		// TODO Auto-generated method stub
-		return super.visit(node);
-	}
-
-	@Override
 	public boolean visit(IfStatement node) {
 		buffer.append("if (");
 		node.getExpression().accept(this);
@@ -294,6 +291,15 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append(") ");
 		node.getBody().accept(this);
 		return false;
+	}
+	
+	@Override
+	public boolean visit(WhileStatement node) {
+		buffer.append("while (");
+	    node.getExpression().accept(this);
+	    buffer.append(") ");
+	    node.getBody().accept(this);
+	    return false;
 	}
 
 	@Override
@@ -345,7 +351,7 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		String opStr = ' ' + op.toString() + ' ';
 		boolean isFirst = true;
-		//TODO
+		// TODO
 		boolean needUnwarpOptional = operands.size() > 1;
 		for (Expression operand : operands) {
 			operand.setNeedUnwarpOptional(needUnwarpOptional);
@@ -367,7 +373,7 @@ public class StatementGenerator extends TreeVisitor {
 			// buffer.append(LiteralGenerator.fixNumberToken(token,
 			// node.getTypeBinding()));
 		} else {
-			 buffer.append(LiteralGenerator.generate(node.getValue()));
+			buffer.append(LiteralGenerator.generate(node.getValue()));
 		}
 		return false;
 	}
