@@ -184,7 +184,11 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		buffer.append("var").append(" ");
+		if (BindingUtil.isFinal(node.getVariableBinding())) {
+			buffer.append("let").append(" ");
+		} else {
+			buffer.append("var").append(" ");
+		}
 		node.getName().accept(this);
 		IVariableBinding binding = node.getVariableBinding();
 		String swiftType = nameTable.getSpecificObjCType(binding);
