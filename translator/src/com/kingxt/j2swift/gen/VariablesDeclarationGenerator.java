@@ -7,11 +7,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
 import com.kingxt.j2swift.ast.BodyDeclaration;
+import com.kingxt.j2swift.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.FieldDeclaration;
 import com.kingxt.j2swift.ast.FunctionDeclaration;
 import com.kingxt.j2swift.ast.MethodDeclaration;
 import com.kingxt.j2swift.ast.NativeDeclaration;
+import com.kingxt.j2swift.ast.TypeDeclaration;
 import com.kingxt.j2swift.ast.VariableDeclarationFragment;
 import com.kingxt.j2swift.util.BindingUtil;
 
@@ -191,5 +193,17 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 	protected void printNativeDeclaration(NativeDeclaration decl) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected void printInnerEnumDeclaration(EnumDeclaration decl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void printInnerTypeDeclaration(TypeDeclaration decl) {
+		// TODO Auto-generated method stub
+		
 	}
 }

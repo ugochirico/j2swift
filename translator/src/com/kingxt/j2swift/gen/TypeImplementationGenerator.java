@@ -33,7 +33,6 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	private void generate() {
 		syncFilename(compilationUnit.getSourceFilePath());
 		if (typeBinding.isEnum()) {// enum
-			newline();
 			printIndent();
 			String enumExtendName = "";
 			IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
@@ -64,15 +63,6 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
-
-			List<com.kingxt.j2swift.ast.BodyDeclaration> bodyDeclatations = typeNode
-					.getBodyDeclarations();
-			for (com.kingxt.j2swift.ast.BodyDeclaration body : bodyDeclatations) {
-				indent();
-				TypeImplementationGenerator.generate(this.getBuilder(),
-						(AbstractTypeDeclaration) body);
-				unindent();
-			}
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
@@ -165,5 +155,19 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	protected String generateExpression(Expression expr) {
 		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
+	}
+
+	@Override
+	protected void printInnerEnumDeclaration(EnumDeclaration decl) {
+		indent();
+		TypeImplementationGenerator.generate(this.getBuilder(), decl);
+		unindent();
+	}
+
+	@Override
+	protected void printInnerTypeDeclaration(TypeDeclaration decl) {
+		indent();
+		TypeImplementationGenerator.generate(this.getBuilder(), decl);
+		unindent();
 	}
 }

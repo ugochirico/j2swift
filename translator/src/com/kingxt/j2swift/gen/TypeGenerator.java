@@ -36,8 +36,11 @@ import com.kingxt.j2swift.ast.FieldDeclaration;
 import com.kingxt.j2swift.ast.FunctionDeclaration;
 import com.kingxt.j2swift.ast.MethodDeclaration;
 import com.kingxt.j2swift.ast.NativeDeclaration;
+import com.kingxt.j2swift.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.SingleVariableDeclaration;
+import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
+import com.kingxt.j2swift.ast.TypeDeclaration;
 import com.kingxt.j2swift.ast.VariableDeclarationFragment;
 import com.kingxt.j2swift.types.Types;
 import com.kingxt.j2swift.util.BindingUtil;
@@ -119,6 +122,8 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 			switch (decl.getKind()) {
 			case METHOD_DECLARATION:
 			case NATIVE_DECLARATION:
+			case ENUM_DECLARATION:
+			case TYPE_DECLARATION:
 				return true;
 			default:
 				return false;
@@ -132,6 +137,10 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 
 	protected abstract void printNativeDeclaration(NativeDeclaration decl);
 
+	protected abstract void printInnerEnumDeclaration(EnumDeclaration decl);
+	
+	protected abstract void printInnerTypeDeclaration(TypeDeclaration decl);
+
 	private void printDeclaration(BodyDeclaration declaration) {
 		switch (declaration.getKind()) {
 		case FUNCTION_DECLARATION:
@@ -142,6 +151,12 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 			return;
 		case NATIVE_DECLARATION:
 			printNativeDeclaration((NativeDeclaration) declaration);
+			return;
+		case ENUM_DECLARATION:
+			printInnerEnumDeclaration((EnumDeclaration) declaration);
+			return;
+		case TYPE_DECLARATION:
+			printInnerTypeDeclaration((TypeDeclaration) declaration);
 			return;
 		default:
 			break;
