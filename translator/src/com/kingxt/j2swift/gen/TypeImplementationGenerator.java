@@ -34,10 +34,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	private void generate() {
 		syncFilename(compilationUnit.getSourceFilePath());
-
 		if (typeBinding.isEnum()) {// enum
 			newline();
-			syncLineNumbers(typeNode.getName());
+			printIndent();
 			String enumExtendName = "";
 			IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
 			for (IMethodBinding declaredMethod : declaredMethods) {
@@ -50,11 +49,12 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			printf("enum %s %s {", typeNode.getName(), enumExtendName);
 			printNativeEnum();
+			printIndent();
 			printf("}");
 			newline();
 		} else if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
-			syncLineNumbers(typeNode.getName()); // avoid doc-comment
+			printIndent();
 			if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
 				print("public ");
 			}
@@ -66,14 +66,22 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
+			
+			List<com.kingxt.j2swift.ast.BodyDeclaration> bodyDeclatations = typeNode.getBodyDeclarations();
+			for (com.kingxt.j2swift.ast.BodyDeclaration body : bodyDeclatations) {
+				indent();
+				TypeImplementationGenerator.generate(this.getBuilder(), (AbstractTypeDeclaration)body);
+				unindent();
+			}
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
 			// printInitializeMethod();
 			// printReflectionMethods();
-			println("\n}");
+			newline();
+			printIndent();
+			printf("}");
 		}
-
 		printOuterDeclarations();
 		// printTypeLiteralImplementation();
 	}
