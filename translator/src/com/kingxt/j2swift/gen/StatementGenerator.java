@@ -12,7 +12,9 @@ import com.kingxt.Options;
 import com.kingxt.j2swift.ast.Assignment;
 import com.kingxt.j2swift.ast.Block;
 import com.kingxt.j2swift.ast.BooleanLiteral;
+import com.kingxt.j2swift.ast.BreakStatement;
 import com.kingxt.j2swift.ast.CStringLiteral;
+import com.kingxt.j2swift.ast.CastExpression;
 import com.kingxt.j2swift.ast.CharacterLiteral;
 import com.kingxt.j2swift.ast.DoStatement;
 import com.kingxt.j2swift.ast.Expression;
@@ -374,9 +376,7 @@ public class StatementGenerator extends TreeVisitor {
 			boolean isEnumConstant = expr.getTypeBinding().isEnum();
 			if (isEnumConstant) {
 				String typeName = nameTable.getFullName(expr.getTypeBinding());
-				String bareTypeName = typeName.endsWith("Enum") ? typeName
-						.substring(0, typeName.length() - 4) : typeName;
-				buffer.append(bareTypeName).append(".");
+				buffer.append(typeName).append(".");
 			}
 			if (isEnumConstant && expr instanceof SimpleName) {
 				buffer.append(((SimpleName) expr).getIdentifier());
@@ -385,8 +385,21 @@ public class StatementGenerator extends TreeVisitor {
 			} else {
 				expr.accept(this);
 			}
-			buffer.append(":\n");
+			buffer.append(": \n");
 		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(BreakStatement node) {
+		if (node.getLabel() != null) {
+			// Objective-C doesn't have a labeled break, so use a goto.
+			buffer.append("fallthrough ");
+			node.getLabel().accept(this);
+		} else {
+			buffer.append("break");
+		}
+		buffer.append(";\n");
 		return false;
 	}
 

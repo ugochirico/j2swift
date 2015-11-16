@@ -11,7 +11,18 @@ public class TestBaseClass {
 	public int uId = 1000;
 	public String info1, info2 = "1";
 	
-	public void testSwitchStatment() {
+	public void test2SwitchStatement() {
+		int color = 1;
+		int b = 4;
+		switch (color) {
+		case 1:
+			b += 5;
+			break;
+		default:
+			break;
+		}
+	}
+	public void testSwitchStatement() {
 		Color color = Color.Red;
 		switch (color) {
 		case Red:
@@ -23,6 +34,7 @@ public class TestBaseClass {
 			break;
 		}
 	}
+	
 	public String test(String username, String password) {
 		testForStatement();
 		testIfStatement("22");
