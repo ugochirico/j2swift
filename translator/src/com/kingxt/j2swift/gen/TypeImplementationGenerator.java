@@ -1,13 +1,15 @@
 package com.kingxt.j2swift.gen;
 
+import java.util.List;
+
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
-import com.kingxt.j2swift.ast.AbstractTypeDeclaration;
-import com.kingxt.j2swift.ast.FunctionDeclaration;
-import com.kingxt.j2swift.ast.MethodDeclaration;
-import com.kingxt.j2swift.ast.NativeDeclaration;
-import com.kingxt.j2swift.ast.Statement;
+
+//import com.google.devtools.j2objc.ast.EnumConstantDeclaration;
+//import com.google.devtools.j2objc.ast.EnumDeclaration;
+import com.kingxt.j2swift.ast.*;
 
 /**
  * Generator java implement to Swift
@@ -30,7 +32,14 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	private void generate() {
 		syncFilename(compilationUnit.getSourceFilePath());
 
-		if (!typeBinding.isInterface() || needsCompanionClass()) {
+		if (typeBinding.isEnum()) {//enum
+			syncLineNumbers(typeNode.getName());
+			printf("enum %s : Int {",typeNode.getName());
+			printNativeEnum();
+//			VariablesDeclarationGenerator.generate(this.getBuilder(),this.typeNode);
+//			printInnerDeclarations();
+			printf("}");
+		} else if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
 			syncLineNumbers(typeNode.getName()); // avoid doc-comment
 			String superClass = getSuperTypeName();
@@ -39,9 +48,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			} else {
 				printf("class %s { \n", typeNode.getName());
 			}
-			//
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
+			printNativeEnum();
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
@@ -52,6 +61,36 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 		printOuterDeclarations();
 		// printTypeLiteralImplementation();
+	}
+
+	private void printNativeEnum() {
+		if (!(typeNode instanceof EnumDeclaration)) {
+			return;
+		}
+
+		List<EnumConstantDeclaration> constants = ((EnumDeclaration) typeNode)
+				.getEnumConstants();
+
+		// Strip enum type suffix.
+		String bareTypeName = typeName.endsWith("Enum") ? typeName.substring(0,
+				typeName.length() - 4) : typeName;
+
+		// C doesn't allow empty enum declarations. Java does, so we skip the
+		// C enum declaration and generate the type declaration.
+		if (!constants.isEmpty()) {
+			newline();
+//			printf("typedef NS_ENUM(NSUInteger, %s) {\n", bareTypeName);
+
+			// Print C enum typedef.
+			indent();
+			int ordinal = 0;
+			for (EnumConstantDeclaration constant : constants) {
+				printIndent();
+				printf("case %s_%s = %d\n", bareTypeName, constant.getName()
+						.getIdentifier(), ordinal++);
+			}
+			unindent();
+		}
 	}
 
 	private void printStaticAccessors() {
