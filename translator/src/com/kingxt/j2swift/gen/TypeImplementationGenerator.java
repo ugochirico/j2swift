@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
-
+import com.google.common.collect.Lists;
 //import com.google.devtools.j2objc.ast.EnumConstantDeclaration;
 //import com.google.devtools.j2objc.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.*;
@@ -44,8 +44,8 @@ public class TypeImplementationGenerator extends TypeGenerator {
 					}
 				}
 			}
-			String bareTypeName =
-			        typeName.endsWith("Enum") ? typeName.substring(0, typeName.length() - 4) : typeName;
+			String bareTypeName = typeName.endsWith("Enum") ? typeName
+					.substring(0, typeName.length() - 4) : typeName;
 			printf("enum %s %s {", bareTypeName, enumExtendName);
 			printNativeEnum();
 			printIndent();
@@ -58,11 +58,17 @@ public class TypeImplementationGenerator extends TypeGenerator {
 				print("public ");
 			}
 			String superClass = getSuperTypeName();
+			boolean hasSuperClass = false;
 			if (superClass != null) {
-				printf("class %s : %s {", typeName, superClass);
+				printf("class %s : %s", typeName, superClass);
+				hasSuperClass = true;
 			} else {
-				printf("class %s { \n", typeName);
+				printf("class %s ", typeName);
 			}
+			printImplementedProtocols(hasSuperClass);
+
+			printf(" {\n");
+			
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
 			printStaticAccessors();
@@ -72,10 +78,27 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			// printReflectionMethods();
 			newline();
 			printIndent();
-			printf("}");
+			println("}");
 		}
 		printOuterDeclarations();
 		// printTypeLiteralImplementation();
+	}
+
+	private void printImplementedProtocols(boolean hasSuperClass) {
+		List<String> interfaces = getInterfaceNames();
+		if (!interfaces.isEmpty()) {
+			boolean isFirst = !hasSuperClass;
+			if (isFirst) {
+				print(":");
+			}
+			for (String name : interfaces) {
+				if (!isFirst) {
+					print(", ");
+				}
+				isFirst = false;
+				print(name);
+			}
+		}
 	}
 
 	private void printNativeEnum() {
@@ -162,5 +185,23 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		indent();
 		TypeImplementationGenerator.generate(this.getBuilder(), decl);
 		unindent();
+	}
+
+	private List<String> getInterfaceNames() {
+		if (typeBinding.isAnnotation()) {
+			return Lists.newArrayList("JavaLangAnnotationAnnotation");
+		}
+		List<String> names = Lists.newArrayList();
+		for (ITypeBinding intrface : typeBinding.getInterfaces()) {
+			names.add(nameTable.getFullName(intrface));
+		}
+		if (typeBinding.isEnum()) {
+			names.remove("NSCopying");
+			names.add(0, "NSCopying");
+		} else if (isInterfaceType()) {
+			names.add("NSObject");
+			names.add("JavaObject");
+		}
+		return names;
 	}
 }
