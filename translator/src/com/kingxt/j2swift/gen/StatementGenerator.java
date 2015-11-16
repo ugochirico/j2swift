@@ -14,6 +14,7 @@ import com.kingxt.j2swift.ast.Block;
 import com.kingxt.j2swift.ast.BooleanLiteral;
 import com.kingxt.j2swift.ast.CStringLiteral;
 import com.kingxt.j2swift.ast.CharacterLiteral;
+import com.kingxt.j2swift.ast.DoStatement;
 import com.kingxt.j2swift.ast.Expression;
 import com.kingxt.j2swift.ast.ExpressionStatement;
 import com.kingxt.j2swift.ast.ForStatement;
@@ -292,14 +293,24 @@ public class StatementGenerator extends TreeVisitor {
 		node.getBody().accept(this);
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(WhileStatement node) {
 		buffer.append("while (");
-	    node.getExpression().accept(this);
-	    buffer.append(") ");
-	    node.getBody().accept(this);
-	    return false;
+		node.getExpression().accept(this);
+		buffer.append(") ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(DoStatement node) {
+		buffer.append("repeat ");
+		node.getBody().accept(this);
+		buffer.append(" while (");
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		return false;
 	}
 
 	@Override
