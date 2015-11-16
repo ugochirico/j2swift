@@ -7,9 +7,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
 
+
 //import com.google.devtools.j2objc.ast.EnumConstantDeclaration;
 //import com.google.devtools.j2objc.ast.EnumDeclaration;
 import com.kingxt.j2swift.ast.*;
+import com.kingxt.j2swift.util.BindingUtil;
 
 /**
  * Generator java implement to Swift
@@ -42,6 +44,9 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		} else if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
 			syncLineNumbers(typeNode.getName()); // avoid doc-comment
+			if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
+				print("public ");
+			} 
 			String superClass = getSuperTypeName();
 			if (superClass != null) {
 				printf("class %s : %s {", typeNode.getName(), superClass);
