@@ -57,6 +57,5 @@ public class TestBaseClass {
 	}
 	
 	public void testSwitchStatment() {
-		Object o;
 	}
 }
