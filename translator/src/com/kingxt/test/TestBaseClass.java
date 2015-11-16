@@ -1,12 +1,28 @@
 package com.kingxt.test;
 
+enum Color {
+	Red, Black
+}
+
 public class TestBaseClass {
 	public static final String testFinalField = "1";
 	public String username;
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
+	
+	public void testSwitchStatment() {
+		Color color = Color.Red;
+		switch (color) {
+		case Red:
+			break;
+		case Black:
+			break;
 
+		default:
+			break;
+		}
+	}
 	public String test(String username, String password) {
 		testForStatement();
 		testIfStatement("22");
@@ -54,8 +70,5 @@ public class TestBaseClass {
 		do {
 			i--;
 		} while (i > 0);
-	}
-	
-	public void testSwitchStatment() {
 	}
 }

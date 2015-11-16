@@ -22,15 +22,19 @@ import com.kingxt.j2swift.ast.FunctionInvocation;
 import com.kingxt.j2swift.ast.IfStatement;
 import com.kingxt.j2swift.ast.InfixExpression;
 import com.kingxt.j2swift.ast.MethodInvocation;
+import com.kingxt.j2swift.ast.Name;
 import com.kingxt.j2swift.ast.NullLiteral;
 import com.kingxt.j2swift.ast.NumberLiteral;
 import com.kingxt.j2swift.ast.PostfixExpression;
 import com.kingxt.j2swift.ast.PrefixExpression;
+import com.kingxt.j2swift.ast.QualifiedName;
 import com.kingxt.j2swift.ast.ReturnStatement;
 import com.kingxt.j2swift.ast.SimpleName;
 import com.kingxt.j2swift.ast.Statement;
 import com.kingxt.j2swift.ast.StringLiteral;
 import com.kingxt.j2swift.ast.SuperMethodInvocation;
+import com.kingxt.j2swift.ast.SwitchCase;
+import com.kingxt.j2swift.ast.SwitchStatement;
 import com.kingxt.j2swift.ast.TreeNode;
 import com.kingxt.j2swift.ast.TreeUtil;
 import com.kingxt.j2swift.ast.TreeVisitor;
@@ -176,6 +180,27 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(QualifiedName node) {
+		IBinding binding = node.getBinding();
+		if (binding instanceof IVariableBinding) {
+			IVariableBinding var = (IVariableBinding) binding;
+			if (BindingUtil.isGlobalVar(var)) {
+				buffer.append(nameTable.getVariableQualifiedName(var));
+				return false;
+			}
+		}
+		if (binding instanceof ITypeBinding) {
+			buffer.append(nameTable.getFullName((ITypeBinding) binding));
+			return false;
+		}
+		Name qualifier = node.getQualifier();
+		qualifier.accept(this);
+		buffer.append("->");
+		node.getName().accept(this);
+		return false;
+	}
+
+	@Override
 	public boolean visit(Assignment node) {
 		node.getLeftHandSide().accept(this);
 		buffer.append(' ');
@@ -310,6 +335,58 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append(" while (");
 		node.getExpression().accept(this);
 		buffer.append(")\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SwitchStatement node) {
+		Expression expr = node.getExpression();
+		ITypeBinding exprType = expr.getTypeBinding();
+		if (typeEnv.isJavaStringType(exprType)) {
+			// printStringSwitchStatement(node);
+			return false;
+		}
+		buffer.append("switch (");
+		expr.accept(this);
+		buffer.append(") ");
+		buffer.append("{\n");
+		List<Statement> stmts = node.getStatements();
+		for (Statement stmt : stmts) {
+			stmt.accept(this);
+		}
+		if (!stmts.isEmpty()
+				&& stmts.get(stmts.size() - 1) instanceof SwitchCase) {
+			// Last switch case doesn't have an associated statement, so add
+			// an empty one.
+			buffer.append(";\n");
+		}
+		buffer.append("}\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SwitchCase node) {
+		if (node.isDefault()) {
+			buffer.append("  default:\n");
+		} else {
+			buffer.append("  case ");
+			Expression expr = node.getExpression();
+			boolean isEnumConstant = expr.getTypeBinding().isEnum();
+			if (isEnumConstant) {
+				String typeName = nameTable.getFullName(expr.getTypeBinding());
+				String bareTypeName = typeName.endsWith("Enum") ? typeName
+						.substring(0, typeName.length() - 4) : typeName;
+				buffer.append(bareTypeName).append(".");
+			}
+			if (isEnumConstant && expr instanceof SimpleName) {
+				buffer.append(((SimpleName) expr).getIdentifier());
+			} else if (isEnumConstant && expr instanceof QualifiedName) {
+				buffer.append(((QualifiedName) expr).getName().getIdentifier());
+			} else {
+				expr.accept(this);
+			}
+			buffer.append(":\n");
+		}
 		return false;
 	}
 

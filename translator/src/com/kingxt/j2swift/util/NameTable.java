@@ -382,7 +382,7 @@ public class NameTable {
   public String getVariableQualifiedName(IVariableBinding var) {
     String shortName = getVariableShortName(var);
     if (BindingUtil.isGlobalVar(var)) {
-      return getFullName(var.getDeclaringClass()) + '_' + shortName;
+      return getFullName(var.getDeclaringClass()) + '.' + shortName;
     }
     return shortName;
   }
@@ -891,7 +891,7 @@ public class NameTable {
    */
   public String getFullName(ITypeBinding binding) {
     String name = getFullNameInner(binding);
-    return binding.isEnum() ? (name + "Enum") : name;
+    return name;
   }
 
   private String getFullNameInner(ITypeBinding binding) {
