@@ -19,6 +19,7 @@ package com.kingxt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Enumeration;
@@ -36,6 +37,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.io.Resources;
 import com.kingxt.j2swift.util.ErrorUtil;
 import com.kingxt.j2swift.util.HeaderMap;
 import com.kingxt.j2swift.util.PackagePrefixes;
@@ -59,7 +61,6 @@ public class Options {
   private List<String> processorPathEntries = Lists.newArrayList();
   private File outputDirectory = new File(".");
   private OutputStyleOption outputStyle = OutputStyleOption.PACKAGE;
-  private OutputLanguageOption language = OutputLanguageOption.OBJECTIVE_C;
   private MemoryManagementOption memoryManagementOption = null;
   private boolean emitLineDirectives = false;
   private boolean warningsAsErrors = false;
@@ -119,6 +120,17 @@ public class Options {
   private static String bootclasspath = System.getProperty("sun.boot.class.path");
   private static final String BATCH_PROCESSING_MAX_FLAG = "--batch-translate-max=";
 
+  static {
+	    // Load string resources.
+	    URL propertiesUrl = Resources.getResource(J2Swift.class, "JrePrefixesFile.properties");
+	    Properties properties = new Properties();
+	    try {
+	      properties.load(propertiesUrl.openStream());
+	    } catch (IOException e) {
+	    	System.out.println(e.getStackTrace());
+	    }
+	    instance.packagePrefixes.addPrefixProperties(properties);
+  }
 
   /**
    * Types of memory management to be used by translated code.
@@ -144,24 +156,6 @@ public class Options {
   }
   public static final OutputStyleOption DEFAULT_OUTPUT_STYLE_OPTION =
       OutputStyleOption.PACKAGE;
-
-  /**
-   * What languages can be generated.
-   */
-  public static enum OutputLanguageOption {
-    OBJECTIVE_C(".m"),
-    OBJECTIVE_CPLUSPLUS(".mm");
-
-    private String suffix;
-
-    OutputLanguageOption(String suffix) {
-      this.suffix = suffix;
-    }
-
-    public String suffix() {
-      return suffix;
-    }
-  }
 
   /**
    * Set all log handlers in this package with a common level.
@@ -418,15 +412,6 @@ public class Options {
   @VisibleForTesting
   public static void setOutputStyle(OutputStyleOption style) {
     instance.outputStyle = style;
-  }
-
-  public static OutputLanguageOption getLanguage() {
-    return instance.language;
-  }
-
-  @VisibleForTesting
-  public static void setOutputLanguage(OutputLanguageOption language) {
-    instance.language = language;
   }
 
   public static boolean useReferenceCounting() {
