@@ -86,17 +86,8 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		List<EnumConstantDeclaration> constants = ((EnumDeclaration) typeNode)
 				.getEnumConstants();
 
-		// Strip enum type suffix.
-		// String bareTypeName = typeName.endsWith("Enum") ?
-		// typeName.substring(0,
-		// typeName.length() - 4) : typeName;
-
-		// C doesn't allow empty enum declarations. Java does, so we skip the
-		// C enum declaration and generate the type declaration.
 		if (!constants.isEmpty()) {
 			newline();
-			// printf("typedef NS_ENUM(NSUInteger, %s) {\n", bareTypeName);
-
 			// Print C enum typedef.
 			indent();
 			for (EnumConstantDeclaration constant : constants) {
