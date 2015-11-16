@@ -3,6 +3,7 @@ package com.kingxt.j2swift.gen;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
@@ -34,19 +35,29 @@ public class TypeImplementationGenerator extends TypeGenerator {
 	private void generate() {
 		syncFilename(compilationUnit.getSourceFilePath());
 
-		if (typeBinding.isEnum()) {//enum
+		if (typeBinding.isEnum()) {// enum
+			newline();
 			syncLineNumbers(typeNode.getName());
-			printf("enum %s : Int {",typeNode.getName());
+			String enumExtendName = "";
+			IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
+			for (IMethodBinding declaredMethod : declaredMethods) {
+				if (declaredMethod.isConstructor()) {
+					ITypeBinding[] type = declaredMethod.getParameterTypes();
+					if (type.length == 1) {
+						enumExtendName = ": " + type[0].getName();
+					}		
+				}
+			}
+			printf("enum %s %s {", typeNode.getName(), enumExtendName);
 			printNativeEnum();
-//			VariablesDeclarationGenerator.generate(this.getBuilder(),this.typeNode);
-//			printInnerDeclarations();
 			printf("}");
+			newline();
 		} else if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
 			syncLineNumbers(typeNode.getName()); // avoid doc-comment
 			if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
 				print("public ");
-			} 
+			}
 			String superClass = getSuperTypeName();
 			if (superClass != null) {
 				printf("class %s : %s {", typeNode.getName(), superClass);
@@ -55,7 +66,6 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			}
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
-			printNativeEnum();
 			printStaticAccessors();
 			printInnerDeclarations();
 			// printAnnotationImplementation();
@@ -77,22 +87,28 @@ public class TypeImplementationGenerator extends TypeGenerator {
 				.getEnumConstants();
 
 		// Strip enum type suffix.
-		String bareTypeName = typeName.endsWith("Enum") ? typeName.substring(0,
-				typeName.length() - 4) : typeName;
+//		String bareTypeName = typeName.endsWith("Enum") ? typeName.substring(0,
+//				typeName.length() - 4) : typeName;
 
 		// C doesn't allow empty enum declarations. Java does, so we skip the
 		// C enum declaration and generate the type declaration.
 		if (!constants.isEmpty()) {
 			newline();
-//			printf("typedef NS_ENUM(NSUInteger, %s) {\n", bareTypeName);
+			// printf("typedef NS_ENUM(NSUInteger, %s) {\n", bareTypeName);
 
 			// Print C enum typedef.
 			indent();
-			int ordinal = 0;
 			for (EnumConstantDeclaration constant : constants) {
 				printIndent();
-				printf("case %s_%s = %d\n", bareTypeName, constant.getName()
-						.getIdentifier(), ordinal++);
+				List<Expression> expressions = constant.getArguments();
+				if (expressions != null && expressions.size() >= 1) {
+					Expression e = expressions.get(0); 
+					printf("case %s = %s\n", constant.getName(), generateExpression(e));
+				} else {
+					printf("case %s\n", constant.getName());
+				}
+				// printf("case %s_%s = %d\n", bareTypeName, constant.getName()
+				// .getIdentifier(), 1);
 			}
 			unindent();
 		}
@@ -134,4 +150,7 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	}
 
+	protected String generateExpression(Expression expr) {
+		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
+	}
 }

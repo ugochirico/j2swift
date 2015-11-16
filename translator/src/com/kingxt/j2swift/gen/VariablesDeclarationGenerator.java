@@ -192,8 +192,4 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		// TODO Auto-generated method stub
 
 	}
-
-	protected String generateExpression(Expression expr) {
-		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
-	}
 }
