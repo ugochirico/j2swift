@@ -27,11 +27,29 @@ public class TestBaseClass
 		String a = "23";
 		String b = null, c = "45", d = b;
 		int aLength = a.length();
-		for (int i = 0; i < aLength; i = i+1*2) {
-			b = c = d = String.valueOf(i);
-		}
+		
 		a = b + c + d + "123";
 		return "";
+	}
+	
+	public String testForStatement() {
+		for (int i = 0; i < 10; i = i+1*2) {
+		}
+		return "testIfStatement";
+	}
+	
+	public boolean testIfStatement(String condition) {
+		if (condition.equals("22")) {
+			return true; 
+		}
+		return false;
+	}
+	
+	public void testWhileStatement () {
+		int i = 10;
+		while (i > 0) {
+			i--;
+		}
 	}
 
 	public void test1(String username) {
