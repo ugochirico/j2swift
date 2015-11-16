@@ -367,7 +367,7 @@ public class StatementGenerator extends TreeVisitor {
 			// buffer.append(LiteralGenerator.fixNumberToken(token,
 			// node.getTypeBinding()));
 		} else {
-			// buffer.append(LiteralGenerator.generate(node.getValue()));
+			 buffer.append(LiteralGenerator.generate(node.getValue()));
 		}
 		return false;
 	}

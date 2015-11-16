@@ -14,7 +14,7 @@ public class TestBaseClass
 		}
 		test1("my name");
 		test2();
-		
+		int uninitValue;
 		String a = "23";
 		String b = null, c = "45", d = b;
 		int aLength = a.length();
