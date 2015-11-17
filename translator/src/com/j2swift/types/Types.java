@@ -57,7 +57,7 @@ public class Types {
   private final IOSTypeBinding NSObject;
   private final IOSTypeBinding NSNumber;
   private final IOSTypeBinding NSString;
-  private final IOSTypeBinding IOSClass;
+  private final IOSTypeBinding JavaClass;
 
   private IOSTypeBinding IOSObjectArray;
 
@@ -95,7 +95,7 @@ public class Types {
     NSObject = mapIOSType(IOSTypeBinding.newClass("JavaObject", javaObjectType));
     NSNumber = mapIOSType(IOSTypeBinding.newClass("NSNumber", javaNumberType, NSObject));
     NSString = mapIOSType(IOSTypeBinding.newClass("String", javaStringType, NSObject));
-    IOSClass = mapIOSType(IOSTypeBinding.newUnmappedClass("IOSClass"));
+    JavaClass = mapIOSType(IOSTypeBinding.newUnmappedClass("JavaClass"));
     mapIOSType(IOSTypeBinding.newUnmappedClass("NSZone"));
     idType = mapIOSType(IOSTypeBinding.newUnmappedClass("id"));
 
@@ -141,7 +141,7 @@ public class Types {
    */
   private void initializeTypeMap() {
     typeMap.put(javaObjectType, NSObject);
-    typeMap.put(javaClassType, IOSClass);
+    typeMap.put(javaClassType, JavaClass);
     typeMap.put(javaCloneableType, NSCopying);
     typeMap.put(javaStringType, NSString);
     typeMap.put(javaNumberType, NSNumber);
@@ -280,7 +280,7 @@ public class Types {
   }
 
   public ITypeBinding getIOSClass() {
-    return IOSClass;
+    return JavaClass;
   }
 
   public ITypeBinding getIdType() {
