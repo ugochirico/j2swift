@@ -10,7 +10,7 @@ public class TestBaseClass {
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
-	
+
 	public String testForStatement() {
 		for (int i = 0; i < 10; i = i + 1 * 2) {
 		}
@@ -22,13 +22,12 @@ public class TestBaseClass {
 		}
 		return "testIfStatement";
 	}
-	
+
 	public void test2SwitchStatement() {
 		int color = 1;
 		int b = 4;
 		switch (color) {
-		case 1:
-		{
+		case 1: {
 			{
 				b += 5;
 			}
@@ -39,6 +38,7 @@ public class TestBaseClass {
 			break;
 		}
 	}
+
 	public void testSwitchStatement() {
 		Color color = Color.Red;
 		switch (color) {
@@ -51,14 +51,14 @@ public class TestBaseClass {
 			break;
 		}
 	}
-	
+
 	public String test(String username, String password) {
 		testForStatement();
 		testIfStatement("22");
 		testWhileStatement();
 
 		int intShotType;
-		// char cShotType;
+		char cShotType;
 		long longShotType;
 		float floatShotType;
 		double doubleShotType;

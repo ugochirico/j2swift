@@ -11,7 +11,7 @@
 		0F042A8C1BF595EE00690F83 /* JreEmulation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F042A811BF595EE00690F83 /* JreEmulation.framework */; };
 		0F042A911BF595EE00690F83 /* JreEmulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A901BF595EE00690F83 /* JreEmulationTests.swift */; };
 		0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */; };
-		0F043FC41BF5CC7F00690F83 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC31BF5CC7F00690F83 /* Class.swift */; };
+		0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC31BF5CC7F00690F83 /* JavaClass.swift */; };
 		0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC51BF5CC8900690F83 /* JavaObject.swift */; };
 		0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */; };
 /* End PBXBuildFile section */
@@ -34,7 +34,7 @@
 		0F042A901BF595EE00690F83 /* JreEmulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JreEmulationTests.swift; sourceTree = "<group>"; };
 		0F042A921BF595EE00690F83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaStringExtension.swift; sourceTree = "<group>"; };
-		0F043FC31BF5CC7F00690F83 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
+		0F043FC31BF5CC7F00690F83 /* JavaClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaClass.swift; sourceTree = "<group>"; };
 		0F043FC51BF5CC8900690F83 /* JavaObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaObject.swift; sourceTree = "<group>"; };
 		0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = J2SwiftHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,7 +82,7 @@
 				0F042A841BF595EE00690F83 /* JreEmulation.h */,
 				0F042A861BF595EE00690F83 /* Info.plist */,
 				0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */,
-				0F043FC31BF5CC7F00690F83 /* Class.swift */,
+				0F043FC31BF5CC7F00690F83 /* JavaClass.swift */,
 				0F043FC51BF5CC8900690F83 /* JavaObject.swift */,
 				0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */,
 			);
@@ -207,7 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,
-				0F043FC41BF5CC7F00690F83 /* Class.swift in Sources */,
+				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
 				0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */,
 				0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */,
 			);

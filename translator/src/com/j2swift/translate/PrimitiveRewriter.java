@@ -30,8 +30,8 @@ public class PrimitiveRewriter extends TreeVisitor {
 					NumberLiteral number = NumberLiteral.newIntLiteral(0, typeEnv); 
 					node.setInitializer(number);
 				} else if (type == 'C') {
-//					NumberLiteral number = new NumberLiteral(new Char(0.0), typeEnv); 
-//					node.setInitializer(number);
+					NumberLiteral number = new NumberLiteral(0, typeEnv); 
+					node.setInitializer(number);
 				} if (type == 'J') {
 					NumberLiteral number = new NumberLiteral(new Long(0), typeEnv);
 					node.setInitializer(number);
