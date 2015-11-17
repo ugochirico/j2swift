@@ -9,5 +9,7 @@
 import Foundation
 
 public class JavaObject {
-    
+    public static func getClass() -> JavaClass {
+        return JavaClass()
+    }
 }

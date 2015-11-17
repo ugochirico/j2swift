@@ -4,5 +4,7 @@ public class ClassTypeTest {
 
 	public void test() {
 		Class clazz = ClassTypeTest.class;
+		ClassTypeTest test = new ClassTypeTest();
+	
 	}
 }

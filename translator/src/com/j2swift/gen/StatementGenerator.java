@@ -11,11 +11,9 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import com.j2swift.Options;
 import com.j2swift.ast.Assignment;
 import com.j2swift.ast.Block;
-import com.j2swift.ast.BlockComment;
 import com.j2swift.ast.BooleanLiteral;
 import com.j2swift.ast.BreakStatement;
 import com.j2swift.ast.CStringLiteral;
-import com.j2swift.ast.CastExpression;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.Expression;
@@ -24,6 +22,7 @@ import com.j2swift.ast.ForStatement;
 import com.j2swift.ast.FunctionInvocation;
 import com.j2swift.ast.IfStatement;
 import com.j2swift.ast.InfixExpression;
+import com.j2swift.ast.LabeledStatement;
 import com.j2swift.ast.MethodInvocation;
 import com.j2swift.ast.Name;
 import com.j2swift.ast.NullLiteral;
@@ -33,6 +32,7 @@ import com.j2swift.ast.PrefixExpression;
 import com.j2swift.ast.QualifiedName;
 import com.j2swift.ast.ReturnStatement;
 import com.j2swift.ast.SimpleName;
+import com.j2swift.ast.SimpleType;
 import com.j2swift.ast.Statement;
 import com.j2swift.ast.StringLiteral;
 import com.j2swift.ast.SuperMethodInvocation;
@@ -41,6 +41,7 @@ import com.j2swift.ast.SwitchStatement;
 import com.j2swift.ast.TreeNode;
 import com.j2swift.ast.TreeUtil;
 import com.j2swift.ast.TreeVisitor;
+import com.j2swift.ast.TypeLiteral;
 import com.j2swift.ast.VariableDeclarationFragment;
 import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
@@ -116,7 +117,8 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("{\n");
 		printStatements(node.getStatements());
 		buffer.append("}");
-		if (node.getParent() != null && (node.getParent() instanceof Block || node.getParent() instanceof SwitchStatement)) {
+		if (node.getParent() != null
+				&& (node.getParent() instanceof Block || node.getParent() instanceof SwitchStatement)) {
 			buffer.append("();");
 		}
 		buffer.append("\n");
@@ -206,6 +208,37 @@ public class StatementGenerator extends TreeVisitor {
 		node.getName().accept(this);
 		return false;
 	}
+
+	@Override
+	public boolean visit(LabeledStatement node) {
+		node.getLabel().accept(this);
+		buffer.append(": ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(SimpleType node) {
+		ITypeBinding binding = node.getTypeBinding();
+		if (binding != null) {
+			String name = nameTable.getFullName(binding);
+			buffer.append(name);
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	  public boolean visit(TypeLiteral node) {
+	    ITypeBinding type = node.getType().getTypeBinding();
+	    if (type.isPrimitive()) {
+	      buffer.append(String.format("[IOSClass %sClass]", type.getName()));
+	    } else {
+	      buffer.append(nameTable.getFullName(type));
+	      buffer.append(".getClass()");
+	    }
+	    return false;
+	  }
 
 	@Override
 	public boolean visit(Assignment node) {
