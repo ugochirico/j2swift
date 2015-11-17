@@ -57,15 +57,8 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
 				print("public ");
 			}
-			String superClass;// = getSuperTypeName();
-			boolean hasSuperClass = false;
-			// if (superClass != null) {
-			// printf("protocol %s : %s", typeName, superClass);
-			hasSuperClass = true;
-			// } else {
 			printf("protocol %s ", typeName);
-			// }
-			// printImplementedProtocols(hasSuperClass);
+			printImplementedProtocols(false);
 
 			printf(" {\n");
 
@@ -117,7 +110,7 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		if (!interfaces.isEmpty()) {
 			boolean isFirst = !hasSuperClass;
 			if (isFirst) {
-				print(":");
+				print(": ");
 			}
 			for (String name : interfaces) {
 				if (!isFirst) {
@@ -236,8 +229,8 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			names.remove("NSCopying");
 			names.add(0, "NSCopying");
 		} else if (isInterfaceType()) {
-			names.add("NSObject");
-			names.add("JavaObject");
+			// names.add("NSObject");
+			// names.add("JavaObject");
 		}
 		return names;
 	}
