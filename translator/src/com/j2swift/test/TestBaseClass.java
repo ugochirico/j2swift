@@ -1,4 +1,4 @@
-package com.kingxt.test;
+package com.j2swift.test;
 
 enum Color {
 	Red, Black
