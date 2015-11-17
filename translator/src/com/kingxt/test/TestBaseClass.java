@@ -11,12 +11,29 @@ public class TestBaseClass {
 	public int uId = 1000;
 	public String info1, info2 = "1";
 	
+	public String testForStatement() {
+		for (int i = 0; i < 10; i = i + 1 * 2) {
+		}
+		{
+			int a = 4;
+		}
+		{
+			int a = 5;
+		}
+		return "testIfStatement";
+	}
+	
 	public void test2SwitchStatement() {
 		int color = 1;
 		int b = 4;
 		switch (color) {
 		case 1:
+		{
+			{
+				b += 5;
+			}
 			b += 5;
+		}
 			break;
 		default:
 			break;
@@ -55,12 +72,6 @@ public class TestBaseClass {
 
 		a = b + c + d + "123";
 		return "";
-	}
-
-	public String testForStatement() {
-		for (int i = 0; i < 10; i = i + 1 * 2) {
-		}
-		return "testIfStatement";
 	}
 
 	public boolean testIfStatement(String condition) {

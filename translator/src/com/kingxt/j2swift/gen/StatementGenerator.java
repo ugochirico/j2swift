@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import com.kingxt.Options;
 import com.kingxt.j2swift.ast.Assignment;
 import com.kingxt.j2swift.ast.Block;
+import com.kingxt.j2swift.ast.BlockComment;
 import com.kingxt.j2swift.ast.BooleanLiteral;
 import com.kingxt.j2swift.ast.BreakStatement;
 import com.kingxt.j2swift.ast.CStringLiteral;
@@ -114,7 +115,11 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(Block node) {
 		buffer.append("{\n");
 		printStatements(node.getStatements());
-		buffer.append("}\n");
+		buffer.append("}");
+		if (node.getParent() != null && (node.getParent() instanceof Block || node.getParent() instanceof SwitchStatement)) {
+			buffer.append("();");
+		}
+		buffer.append("\n");
 		return false;
 	}
 
@@ -349,6 +354,7 @@ public class StatementGenerator extends TreeVisitor {
 			return false;
 		}
 		buffer.append("switch (");
+		expr.setNeedUnwarpOptional(true);
 		expr.accept(this);
 		buffer.append(") ");
 		buffer.append("{\n");
