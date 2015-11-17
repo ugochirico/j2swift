@@ -9,5 +9,7 @@
 import Foundation
 
 public class JavaClass {
-    
+    public func getName() -> String {
+        return Utility.classNameAsString(self);
+    }
 }
