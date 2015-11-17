@@ -51,6 +51,34 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			printIndent();
 			printf("}");
 			newline();
+		} else if (typeBinding.isInterface()) {
+			newline();
+			printIndent();
+			if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
+				print("public ");
+			}
+			String superClass;// = getSuperTypeName();
+			boolean hasSuperClass = false;
+			// if (superClass != null) {
+			// printf("protocol %s : %s", typeName, superClass);
+			hasSuperClass = true;
+			// } else {
+			printf("protocol %s ", typeName);
+			// }
+			// printImplementedProtocols(hasSuperClass);
+
+			printf(" {\n");
+
+			VariablesDeclarationGenerator.generate(this.getBuilder(),
+					this.typeNode);
+			printStaticAccessors();
+			printInnerDeclarations();
+			// printAnnotationImplementation();
+			// printInitializeMethod();
+			// printReflectionMethods();
+			newline();
+			printIndent();
+			println("}");
 		} else if (!typeBinding.isInterface() || needsCompanionClass()) {
 			newline();
 			printIndent();
@@ -68,7 +96,7 @@ public class TypeImplementationGenerator extends TypeGenerator {
 			printImplementedProtocols(hasSuperClass);
 
 			printf(" {\n");
-			
+
 			VariablesDeclarationGenerator.generate(this.getBuilder(),
 					this.typeNode);
 			printStaticAccessors();
@@ -142,7 +170,16 @@ public class TypeImplementationGenerator extends TypeGenerator {
 
 	@Override
 	protected void printMethodDeclaration(MethodDeclaration m) {
-		if (typeBinding.isInterface() || Modifier.isAbstract(m.getModifiers())) {
+		if (typeBinding.isInterface()) {
+			indent();
+			syncLineNumbers(m.getName()); // avoid doc-comment
+			printIndent();
+			print(getMethodSignature(m));
+			unindent();
+			newline();
+			return;
+		}
+		if (Modifier.isAbstract(m.getModifiers())) {
 			return;
 		}
 		syncLineNumbers(m.getName()); // avoid doc-comment
