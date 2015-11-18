@@ -37,6 +37,7 @@ import com.j2swift.ast.SimpleName;
 import com.j2swift.ast.SimpleType;
 import com.j2swift.ast.Statement;
 import com.j2swift.ast.StringLiteral;
+import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SwitchCase;
 import com.j2swift.ast.SwitchStatement;
@@ -112,6 +113,18 @@ public class StatementGenerator extends TreeVisitor {
 		printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
 		buffer.append(')');
 		return false;
+	}
+	
+	@Override
+	public boolean visit(SuperConstructorInvocation node) {
+		IMethodBinding binding = node.getMethodBinding();
+//	    assert node.getQualifier() == null
+//	        : "Qualifiers expected to be handled by SuperMethodInvocationRewriter.";
+//	    assert !BindingUtil.isStatic(binding) : "Static invocations are rewritten by Functionizer.";
+	    buffer.append("super.init(");
+	    printMethodInvocationNameAndArgs(nameTable.getMethodSelector(binding), node.getArguments());
+	    buffer.append(")");
+	    return false;
 	}
 
 	@Override

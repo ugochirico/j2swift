@@ -19,48 +19,52 @@ package com.j2swift.test;
 //	public int doTest(String s);
 //}
 
-//class TestDyalnBalseClass {
-//	public void methodTodo() {
-//
-//	}
-//
-//	TestDyalnBalseClass() {
-//		int i = 0;
-//	}
-//	
-//	TestDyalnBalseClass(int i) {
-//		
-//	}
-//}
-//
-//class TestDylanOneClass extends TestDyalnBalseClass {
-//	int i = 0;
-//	public void methodTodo(int i) {
-//
-//	}
-//
-//	public void methodTodo(String s, int i) {
-//
-//	}
-//	
-//	TestDylanOneClass() {
-//		super();
-//		i = 1;
-//	}
-//	
-//	TestDylanOneClass(String s) {
-//		
-//	}
-//}
+class TestDyalnBalseClass {
+	public void methodTodo() {
 
-public class TestDylanClass {//extends TestDylanOneClass {
+	}
+
+	TestDyalnBalseClass() {
+		int i = 0;
+	}
 	
-//	TestDylanClass() {
-////		super();
-//	}
+	TestDyalnBalseClass(int i) {
+		
+	}
+}
+
+class TestDylanOneClass extends TestDyalnBalseClass {
+	int i = 0;
+	public void methodTodo(int i) {
+
+	}
+
+	public void methodTodo(String s, int i) {
+
+	}
+	
+	TestDylanOneClass() {
+		super();
+		i = 1;
+	}
+	
+	TestDylanOneClass(String s) {
+		
+	}
+	
+	TestDylanOneClass (String s, int i) {
+		
+	}
+}
+
+public class TestDylanClass extends TestDylanOneClass {
+	
+	TestDylanClass() {
+		super("sdf" ,1);
+	}
 	
 	TestDylanClass(String s) {
-		
+//		super();
 	}
 	
 //	TestDylanClass(int i) {
