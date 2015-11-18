@@ -1,61 +1,83 @@
 package com.j2swift.test;
 
-interface BaseInterface {
+//interface BaseInterface {
+//
+//	/**
+//	 * @return
+//	 */
+//	String getIt();
+//}
+//
+//interface DylanInterface extends BaseInterface {
+//	
+//	String getContactNamePinyin();
+//
+//	public void doTest();
+//
+//	public void doTest(int i);
+//
+//	public int doTest(String s);
+//}
 
-	/**
-	 * @return
-	 */
-	String getIt();
-}
+class TestDyalnBalseClass {
+	public void methodTodo() {
 
-interface DylanInterface extends BaseInterface {
-	
-	String getContactNamePinyin();
+	}
 
-	public void doTest();
-
-	public void doTest(int i);
-
-	public int doTest(String s);
-}
-
-public class TestDylanClass implements DylanInterface {
-
-	public TestDylanClass() {
+	TestDyalnBalseClass() {
 		
 	}
 	
-	public TestDylanClass(int i) {
+	TestDyalnBalseClass(int i) {
+		
+	}
+}
+
+class TestDylanOneClass extends TestDyalnBalseClass {
+	public void methodTodo(int i) {
+
+	}
+
+	public void methodTodo(String s, int i) {
+
+	}
+	
+	TestDylanOneClass() {
 		
 	}
 	
-	@Override
-	public void doTest() {
-		// TODO Auto-generated method stub
+	TestDylanOneClass(String s) {
+		
+	}
+}
 
+class TestDylanClass extends TestDylanOneClass {
+	
+	TestDylanClass() {
+		
+	}
+	
+	TestDylanClass(int i) {
+		
+	}
+	
+	TestDylanClass(String s) {
+		
 	}
 
 	@Override
-	public void doTest(int i) {
+	public void methodTodo() {
 		// TODO Auto-generated method stub
-
+		super.methodTodo();
 	}
 
 	@Override
-	public int doTest(String s) {
+	public void methodTodo(int i) {
 		// TODO Auto-generated method stub
-		return 0;
+//		super.methodTodo(i);
 	}
 
-	@Override
-	public String getContactNamePinyin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void methodTodo(int i, String s) {
 
-	@Override
-	public String getIt() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -1,9 +1,19 @@
 package com.j2swift.gen.type;
 
-import org.eclipse.jdt.core.dom.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+
+import com.google.common.base.Strings;
 import com.j2swift.ast.AbstractTypeDeclaration;
+import com.j2swift.ast.Annotation;
 import com.j2swift.ast.MethodDeclaration;
+import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.gen.SourceBuilder;
 import com.j2swift.gen.VariablesDeclarationGenerator;
 import com.j2swift.util.BindingUtil;
@@ -51,7 +61,80 @@ public class ClassImplementationGenerator extends
 		printIndent();
 		println("}");
 	}
-	
+
+	/**
+	 * Create an Objective-C method signature string.
+	 */
+	protected String getMethodSignature(MethodDeclaration m) {
+		StringBuilder sb = new StringBuilder();
+		IMethodBinding binding = m.getMethodBinding();
+
+		// public
+		if (Modifier.isPublic(m.getModifiers())) {
+			sb.append("public ");
+		}
+		// static
+		if (Modifier.isStatic(m.getModifiers())) {
+			sb.append("static ");
+		}
+
+		List<SingleVariableDeclaration> params = m.getParameters();
+		if (m.isConstructor()) {
+			if (params.isEmpty() || params.size() == 0) {// for
+															// "override init()"
+				sb.append("override ");
+			} else if (isConstructorOvrrided(this.typeBinding, m)) {
+				sb.append("override ");
+			}
+		} else if (isMehothodOvrrided(this.typeBinding, m)) {
+			sb.append("override ");
+		}
+
+		String returnType = nameTable.getObjCType(binding.getReturnType());
+		String selector = binding.getName();
+		if (m.isConstructor()) {
+			returnType = null;
+			selector = "init";
+		} else {
+			sb.append("func ");
+		}
+
+		if (selector.equals("hash")) {
+			// Explicitly test hashCode() because of NSObject's hash return
+			// value.
+			returnType = "NSUInteger";
+		}
+		sb.append(selector);
+
+		if (params.isEmpty() || params.size() == 0) {
+			sb.append("()");
+		} else {
+			for (int i = 0; i < params.size(); i++) {
+				if (i == 0) {
+					sb.append("(_ ");
+				}
+				if (i != 0) {
+					sb.append(", _ ");
+				}
+				IVariableBinding var = params.get(i).getVariableBinding();
+				String typeName = nameTable.getSpecificObjCType(var.getType());
+				sb.append(String.format("%s:%s?",
+						nameTable.getVariableShortName(var), typeName));
+				if (i == params.size() - 1) {
+					sb.append(")");
+				}
+			}
+		}
+		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
+			sb.append(" ->").append(returnType);
+			ITypeBinding type = binding.getReturnType();
+			if (!type.isPrimitive()) {
+				sb.append("?");
+			}
+		}
+		return sb.toString();
+	}
+
 	@Override
 	protected void printMethodDeclaration(MethodDeclaration m) {
 		if (Modifier.isAbstract(m.getModifiers())) {
@@ -61,5 +144,68 @@ public class ClassImplementationGenerator extends
 		String methodBody = generateStatement(m.getBody());
 		print(getMethodSignature(m) + " " + reindent(methodBody) + "\n");
 		newline();
+	}
+
+	private boolean isMehothodOvrrided(ITypeBinding binding, MethodDeclaration m) {
+		ITypeBinding superClass = binding.getSuperclass();
+		if (superClass == null) {
+			return false;
+		}
+		// String... par
+		String[] paramArray;
+		paramArray = new String[] {};
+		List<SingleVariableDeclaration> params = m.getParameters();
+		if (params == null || params.size() <= 0) {
+
+		} else {
+			List<String> typeNames = new ArrayList<String>();
+			for (int i = 0; i < params.size(); i++) {
+				IVariableBinding var = params.get(i).getVariableBinding();
+				String typeName = var.getType().getQualifiedName();
+				typeNames.add(typeName);
+			}
+			paramArray = typeNames.toArray(new String[typeNames.size()]);
+		}
+		IMethodBinding overrideMethod = BindingUtil.findDeclaredMethod(
+				superClass, m.getMethodBinding().getName(), paramArray);
+		if (overrideMethod != null) {
+			return true;
+		}
+		if (nameTable.getFullName(superClass).equals("JavaObject")) {
+			return false;
+		} else {
+			return isMehothodOvrrided(superClass, m);
+		}
+	}
+
+	private boolean isConstructorOvrrided(ITypeBinding binding,
+			MethodDeclaration m) {
+		ITypeBinding superClass = binding.getSuperclass();
+		if (superClass == null) {
+			return false;
+		}
+		List<SingleVariableDeclaration> params = m.getParameters();
+		outer: for (IMethodBinding method : superClass.getDeclaredMethods()) {
+			if (method.isConstructor()) {
+				ITypeBinding[] foundParamTypes = method.getParameterTypes();
+				if (foundParamTypes.length == params.size()) {
+					for (int i = 0; i < foundParamTypes.length; i++) {
+						String foundParam = foundParamTypes[i]
+								.getQualifiedName();
+						String paramName = params.get(i).getVariableBinding()
+								.getType().getQualifiedName();
+						if (!foundParam.equals(paramName)) {
+							continue outer;
+						}
+					}
+					return true;
+				}
+			}
+		}
+		if (nameTable.getFullName(superClass).equals("JavaObject")) {
+			return false;
+		} else {
+			return isMehothodOvrrided(superClass, m);
+		}
 	}
 }
