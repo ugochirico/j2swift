@@ -4,7 +4,7 @@ enum Color {
 	Red, Black
 }
 
-public class TestBaseClass {
+public class TestEventControlAndTypeDeclaration {
 	public static final String testFinalField = "1";
 	public String username;
 	public String password;
