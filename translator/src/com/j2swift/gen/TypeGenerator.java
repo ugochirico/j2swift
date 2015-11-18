@@ -349,6 +349,14 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 		}
 		return sb.toString();
 	}
+	
+	protected String getSuperTypeName() {
+		ITypeBinding superclass = typeBinding.getSuperclass();
+		if (superclass == null) {
+			return null;
+		}
+		return nameTable.getFullName(superclass);
+	}
 
 	protected String generateExpression(Expression expr) {
 		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
