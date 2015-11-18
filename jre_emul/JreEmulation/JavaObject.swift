@@ -9,6 +9,10 @@
 import Foundation
 
 public class JavaObject {
+    
+    public init() {
+    }
+    
     public static func getClass() -> JavaClass {
         let type: Mirror = Mirror(reflecting: self)
         return JavaClass(mirror: type)
