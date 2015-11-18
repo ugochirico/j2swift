@@ -23,6 +23,7 @@ import com.j2swift.Options;
 import com.j2swift.ast.CompilationUnit;
 import com.j2swift.gen.GenerationUnit;
 import com.j2swift.gen.SwiftImplementationGenerator;
+import com.j2swift.translate.Functionizer;
 import com.j2swift.translate.OperatorRewriter;
 import com.j2swift.translate.PrimitiveRewriter;
 import com.j2swift.translate.Rewriter;
@@ -194,6 +195,9 @@ public class TranslationProcessor extends FileProcessor {
     
     new PrimitiveRewriter().run(unit);
     ticker.tick("PrimitiveRewriter");
+    
+    new Functionizer().run(unit);
+    ticker.tick("Functionizer");
 //
 //    // After: OperatorRewriter - Static load rewriting needs to happen after
 //    //   operator rewriting.
