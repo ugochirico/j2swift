@@ -254,55 +254,6 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 		}
 	}
 
-	/**
-	 * Create an Objective-C method signature string.
-	 */
-	protected String getMethodSignature(MethodDeclaration m) {
-		StringBuilder sb = new StringBuilder();
-		IMethodBinding binding = m.getMethodBinding();
-		String prefix = Modifier.isStatic(m.getModifiers()) ? "static " : "";
-		String returnType = nameTable.getObjCType(binding.getReturnType());
-		String selector = binding.getName();
-		if (m.isConstructor()) {
-			returnType = null;
-//			returnType = "instancetype";
-		} else if (selector.equals("hash")) {
-			// Explicitly test hashCode() because of NSObject's hash return
-			// value.
-			returnType = "NSUInteger";
-		}
-		sb.append(String.format("%sfunc %s", prefix, selector));
-
-		List<SingleVariableDeclaration> params = m.getParameters();
-		if (params.isEmpty() || params.size() == 0) {
-			sb.append("()");
-		} else {
-			for (int i = 0; i < params.size(); i++) {
-				if (i == 0) {
-					sb.append("(");
-				}
-				if (i != 0) {
-					sb.append(", _ ");
-				}
-				IVariableBinding var = params.get(i).getVariableBinding();
-				String typeName = nameTable.getSpecificObjCType(var.getType());
-				sb.append(String.format("%s:%s?",
-						nameTable.getVariableShortName(var), typeName));
-				if (i == params.size() - 1) {
-					sb.append(")");
-				}
-			}
-		}
-		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
-			sb.append(" ->").append(returnType);
-			ITypeBinding type = binding.getReturnType();
-			if (!type.isPrimitive()) {
-				sb.append("?");
-			}
-		}
-		return sb.toString();
-	}
-
 	protected String getFunctionSignature(FunctionDeclaration function) {
 		StringBuilder sb = new StringBuilder();
 		String returnType = nameTable.getObjCType(function.getReturnType()

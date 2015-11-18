@@ -9,6 +9,7 @@ interface BaseInterface {
 }
 
 interface DylanInterface extends BaseInterface {
+	
 	String getContactNamePinyin();
 
 	public void doTest();
@@ -20,6 +21,14 @@ interface DylanInterface extends BaseInterface {
 
 public class TestDylanClass implements DylanInterface {
 
+	public TestDylanClass() {
+		
+	}
+	
+	public TestDylanClass(int i) {
+		
+	}
+	
 	@Override
 	public void doTest() {
 		// TODO Auto-generated method stub
