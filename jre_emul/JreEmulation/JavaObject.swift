@@ -17,4 +17,9 @@ public class JavaObject {
         let type: Mirror = Mirror(reflecting: self)
         return JavaClass(mirror: type)
     }
+    
+    public func getClass() -> JavaClass {
+        let type: Mirror = Mirror(reflecting: self)
+        return JavaClass(mirror: type)
+    }
 }

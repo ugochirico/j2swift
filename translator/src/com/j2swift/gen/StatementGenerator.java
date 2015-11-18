@@ -15,6 +15,8 @@ import com.j2swift.ast.BooleanLiteral;
 import com.j2swift.ast.BreakStatement;
 import com.j2swift.ast.CStringLiteral;
 import com.j2swift.ast.CharacterLiteral;
+import com.j2swift.ast.ClassInstanceCreation;
+import com.j2swift.ast.ConstructorInvocation;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.ExpressionStatement;
@@ -147,6 +149,17 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		buffer.append("\n");
 		return false;
+	}
+	
+	@Override
+	public boolean visit(ClassInstanceCreation node) {
+		IMethodBinding binding = node.getMethodBinding();
+	    ITypeBinding type = binding.getDeclaringClass();
+	    String constructorName = nameTable.getFullName(binding.getDeclaringClass());
+	    buffer.append(constructorName);
+	    buffer.append("(");
+	    buffer.append(")");
+	    return false;
 	}
 
 	@Override
