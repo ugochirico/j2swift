@@ -12,7 +12,7 @@ public class TestClassType {
 
 	public void test() {
 		Class clazz = TestClassType.class;
-		TestClassType test = new TestClassType();
+		TestClassType test = new TestClassType("123");
 		test.getClass();
 	}
 }

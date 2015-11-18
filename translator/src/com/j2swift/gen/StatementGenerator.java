@@ -154,10 +154,10 @@ public class StatementGenerator extends TreeVisitor {
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		IMethodBinding binding = node.getMethodBinding();
-	    ITypeBinding type = binding.getDeclaringClass();
 	    String constructorName = nameTable.getFullName(binding.getDeclaringClass());
 	    buffer.append(constructorName);
 	    buffer.append("(");
+	    printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
 	    buffer.append(")");
 	    return false;
 	}
