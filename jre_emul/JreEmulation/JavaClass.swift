@@ -9,7 +9,18 @@
 import Foundation
 
 public class JavaClass {
+    
+    let mirror:Mirror
+    
+    init(mirror:Mirror) {
+        self.mirror = mirror;
+    }
+    
     public func getName() -> String {
-        return Utility.classNameAsString(self);
+        return "\(mirror.subjectType)"
+    }
+    
+    public func newInstance() -> AnyObject? {
+        return nil
     }
 }
