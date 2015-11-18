@@ -9,6 +9,9 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.j2swift.Options;
+import com.j2swift.ast.ArrayCreation;
+import com.j2swift.ast.ArrayInitializer;
+import com.j2swift.ast.ArrayType;
 import com.j2swift.ast.Assignment;
 import com.j2swift.ast.Block;
 import com.j2swift.ast.BooleanLiteral;
@@ -16,8 +19,8 @@ import com.j2swift.ast.BreakStatement;
 import com.j2swift.ast.CStringLiteral;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
-import com.j2swift.ast.ConstructorInvocation;
 import com.j2swift.ast.DoStatement;
+import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.ExpressionStatement;
 import com.j2swift.ast.ForStatement;
@@ -35,6 +38,7 @@ import com.j2swift.ast.QualifiedName;
 import com.j2swift.ast.ReturnStatement;
 import com.j2swift.ast.SimpleName;
 import com.j2swift.ast.SimpleType;
+import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.ast.Statement;
 import com.j2swift.ast.StringLiteral;
 import com.j2swift.ast.SuperMethodInvocation;
@@ -113,6 +117,58 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append(')');
 		return false;
 	}
+	
+	@Override
+	public boolean visit(ArrayInitializer node) {
+		// TODO Auto-generated method stub
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(ArrayType node) {
+		ITypeBinding binding = typeEnv.mapType(node.getTypeBinding());
+	    if (binding instanceof IOSTypeBinding) {
+	      buffer.append(binding.getName());
+	    } else {
+	      node.getComponentType().accept(this);
+	      buffer.append("[]");
+	    }
+	    return false;
+	}
+
+	@Override
+	public boolean visit(ArrayCreation node) {
+		ITypeBinding arrayType = node.getTypeBinding();
+		ArrayInitializer initializer = node.getInitializer();
+	    if (initializer != null) {
+	      return newInitializedArrayInvocation(arrayType, initializer.getExpressions());
+	    } else {
+	      List<Expression> dimensions = node.getDimensions();
+	      if (dimensions.size() == 1) {
+	        return newSingleDimensionArrayInvocation(arrayType, dimensions.get(0));
+	      } else {
+	        return newMultiDimensionArrayInvocation(arrayType, dimensions);
+	      }
+	    }
+	}
+
+	private boolean newInitializedArrayInvocation(ITypeBinding arrayType,
+			List<Expression> expressions) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean newMultiDimensionArrayInvocation(ITypeBinding arrayType,
+			List<Expression> dimensions) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean newSingleDimensionArrayInvocation(ITypeBinding arrayType,
+			Expression expression) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	public boolean visit(Block node) {
@@ -150,16 +206,17 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("\n");
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		IMethodBinding binding = node.getMethodBinding();
-	    String constructorName = nameTable.getFullName(binding.getDeclaringClass());
-	    buffer.append(constructorName);
-	    buffer.append("(");
-	    printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
-	    buffer.append(")");
-	    return false;
+		String constructorName = nameTable.getFullName(binding
+				.getDeclaringClass());
+		buffer.append(constructorName);
+		buffer.append("(");
+		printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
+		buffer.append(")");
+		return false;
 	}
 
 	@Override
@@ -197,6 +254,28 @@ public class StatementGenerator extends TreeVisitor {
 				&& !BindingUtil.isPrimitive((IVariableBinding) node
 						.getBinding())) {
 			buffer.append("!");
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(SingleVariableDeclaration node) {
+
+		if (node.isVarargs()) {
+			buffer.append("...");
+		}
+		if (buffer.charAt(buffer.length() - 1) != '*') {
+			buffer.append(" ");
+		}
+		node.getName().accept(this);
+		buffer.append(":");
+		buffer.append(nameTable.getSpecificObjCType(node.getVariableBinding()));
+		for (int i = 0; i < node.getExtraDimensions(); i++) {
+			buffer.append("[]");
+		}
+		if (node.getInitializer() != null) {
+			buffer.append(" = ");
+			node.getInitializer().accept(this);
 		}
 		return false;
 	}
@@ -240,18 +319,18 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		return true;
 	}
-	
+
 	@Override
-	  public boolean visit(TypeLiteral node) {
-	    ITypeBinding type = node.getType().getTypeBinding();
-	    if (type.isPrimitive()) {
-	      buffer.append(String.format("[IOSClass %sClass]", type.getName()));
-	    } else {
-	      buffer.append(nameTable.getFullName(type));
-	      buffer.append(".getClass()");
-	    }
-	    return false;
-	  }
+	public boolean visit(TypeLiteral node) {
+		ITypeBinding type = node.getType().getTypeBinding();
+		if (type.isPrimitive()) {
+			buffer.append(String.format("[IOSClass %sClass]", type.getName()));
+		} else {
+			buffer.append(nameTable.getFullName(type));
+			buffer.append(".getClass()");
+		}
+		return false;
+	}
 
 	@Override
 	public boolean visit(Assignment node) {
@@ -368,6 +447,16 @@ public class StatementGenerator extends TreeVisitor {
 			}
 		}
 		buffer.append(") ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(EnhancedForStatement node) {
+		buffer.append("for");
+		node.getParameter().accept(this);
+		buffer.append(" in ");
+		node.getExpression().accept(this);
 		node.getBody().accept(this);
 		return false;
 	}

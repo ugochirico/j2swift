@@ -22,7 +22,7 @@ public class EnumImplementationGenerator extends DefaultImplementationGenerator 
 
 	public static void generate(SourceBuilder builder,
 			AbstractTypeDeclaration node) {
-		new ClassImplementationGenerator(builder, node).generate();
+		new EnumImplementationGenerator(builder, node).generate();
 	}
 	
 	@Override

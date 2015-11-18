@@ -20,7 +20,15 @@ public class TestEventControlAndTypeDeclaration {
 		{
 			int a = 5;
 		}
-		return "testIfStatement";
+		return "testForStatement";
+	}
+	
+	public String testForStatement2() {
+		String [][]a1 = new String[][]{{"1", "2"}};
+ 		String []a2 = new String[]{"1", "2", "3"};
+		for (String item : a2) {
+		}
+		return "testForStatement2";
 	}
 
 	public void test2SwitchStatement() {
