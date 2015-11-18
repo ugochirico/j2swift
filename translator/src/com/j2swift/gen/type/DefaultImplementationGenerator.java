@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.j2swift.ast.AbstractTypeDeclaration;
+import com.j2swift.ast.Annotation;
 import com.j2swift.ast.EnumDeclaration;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.FunctionDeclaration;
@@ -75,42 +76,65 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 
 	@Override
 	protected void printMethodDeclaration(MethodDeclaration m) {
-//		if (typeBinding.isInterface()) {
-//			indent();
-//			syncLineNumbers(m.getName()); // avoid doc-comment
-//			printIndent();
-//			print(getMethodSignature(m));
-//			unindent();
-//			newline();
-//			return;
-//		}
-//		if (Modifier.isAbstract(m.getModifiers())) {
-//			return;
-//		}
-//		syncLineNumbers(m.getName()); // avoid doc-comment
-//		String methodBody = generateStatement(m.getBody());
-//		print(getMethodSignature(m) + " " + reindent(methodBody) + "\n");
-//		newline();
+		// if (typeBinding.isInterface()) {
+		// indent();
+		// syncLineNumbers(m.getName()); // avoid doc-comment
+		// printIndent();
+		// print(getMethodSignature(m));
+		// unindent();
+		// newline();
+		// return;
+		// }
+		// if (Modifier.isAbstract(m.getModifiers())) {
+		// return;
+		// }
+		// syncLineNumbers(m.getName()); // avoid doc-comment
+		// String methodBody = generateStatement(m.getBody());
+		// print(getMethodSignature(m) + " " + reindent(methodBody) + "\n");
+		// newline();
 	}
-	
+
 	/**
 	 * Create an Objective-C method signature string.
 	 */
 	protected String getMethodSignature(MethodDeclaration m) {
 		StringBuilder sb = new StringBuilder();
 		IMethodBinding binding = m.getMethodBinding();
-		String prefix = Modifier.isStatic(m.getModifiers()) ? "static " : "";
+		
+		//public
+		if (Modifier.isPublic(m.getModifiers())) {
+			sb.append("public ");
+		}
+		//static
+		if (Modifier.isStatic(m.getModifiers())) {
+			sb.append("static ");
+		}
+		//Override
+		List<Annotation> annotations = m.getAnnotations();
+		if (annotations != null && annotations.size() > 0) {
+			for (Annotation annotation : annotations) {
+				String annotationName = annotation.getAnnotationBinding().getName();
+				if (annotationName != null && annotationName.equals("Override")) {
+					sb.append("override ");	
+				}
+			}
+		}
+		
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
 		if (m.isConstructor()) {
 			returnType = null;
 			selector = "init";
-		} else if (selector.equals("hash")) {
+		} else {
+			sb.append("func ");
+		}
+		
+		if (selector.equals("hash")) {
 			// Explicitly test hashCode() because of NSObject's hash return
 			// value.
 			returnType = "NSUInteger";
 		}
-		sb.append(String.format("%sfunc %s", prefix, selector));
+		sb.append(selector);
 
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (params.isEmpty() || params.size() == 0) {

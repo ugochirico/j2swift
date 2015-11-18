@@ -28,13 +28,14 @@ public class TypeImplementationGenerator extends TypeGenerator {
 		if (typeBinding.isEnum()) {// enum
 			EnumImplementationGenerator.generate(this.getBuilder(),
 					this.typeNode);
-		} else if (typeBinding.isInterface()) {//interface
+		} else if (typeBinding.isInterface()) {// interface
 			InterfaceImplementationGenerator.generate(this.getBuilder(),
 					this.typeNode);
-		} else if (typeBinding.isClass()) {//class
-			/* for Objc use 
-			 * if (!typeBinding.isInterface() || needsCompanionClass()) {
-			 * */
+		} else if (typeBinding.isClass()) {// class
+			/*
+			 * for Objc use if (!typeBinding.isInterface() ||
+			 * needsCompanionClass()) {
+			 */
 			ClassImplementationGenerator.generate(this.getBuilder(),
 					this.typeNode);
 		}

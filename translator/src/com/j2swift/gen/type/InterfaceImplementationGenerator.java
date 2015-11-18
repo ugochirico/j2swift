@@ -5,7 +5,6 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Strings;
 import com.j2swift.ast.AbstractTypeDeclaration;
