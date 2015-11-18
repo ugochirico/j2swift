@@ -1,6 +1,10 @@
 package com.j2swift.test;
 
 interface BaseInterface {
+
+	/**
+	 * @return
+	 */
 	String getIt();
 }
 

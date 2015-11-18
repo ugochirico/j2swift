@@ -264,7 +264,8 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
 		if (m.isConstructor()) {
-			returnType = "instancetype";
+			returnType = null;
+//			returnType = "instancetype";
 		} else if (selector.equals("hash")) {
 			// Explicitly test hashCode() because of NSObject's hash return
 			// value.
@@ -273,7 +274,7 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 		sb.append(String.format("%sfunc %s", prefix, selector));
 
 		List<SingleVariableDeclaration> params = m.getParameters();
-		if (params.isEmpty()) {
+		if (params.isEmpty() || params.size() == 0) {
 			sb.append("()");
 		} else {
 			for (int i = 0; i < params.size(); i++) {
@@ -294,6 +295,10 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 		}
 		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
 			sb.append(" ->").append(returnType);
+			ITypeBinding type = binding.getReturnType();
+			if (!type.isPrimitive()) {
+				sb.append("?");
+			}
 		}
 		return sb.toString();
 	}
