@@ -12,6 +12,14 @@ public class TestEventControlAndTypeDeclaration {
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
+	
+	public synchronized void testSynchronizedFunction() {
+	}
+	
+	public void testSynchronizedBlock() {
+		synchronized (this) {
+		}
+	}
 
 	public void testThrowStatement() throws Exception {
 		throw new Exception("123");

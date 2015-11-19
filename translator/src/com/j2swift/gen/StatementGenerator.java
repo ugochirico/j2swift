@@ -31,6 +31,7 @@ import com.j2swift.ast.InfixExpression;
 import com.j2swift.ast.LabeledStatement;
 import com.j2swift.ast.MethodInvocation;
 import com.j2swift.ast.Name;
+import com.j2swift.ast.NativeStatement;
 import com.j2swift.ast.NullLiteral;
 import com.j2swift.ast.NumberLiteral;
 import com.j2swift.ast.PostfixExpression;
@@ -46,6 +47,7 @@ import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SwitchCase;
 import com.j2swift.ast.SwitchStatement;
+import com.j2swift.ast.SynchronizedStatement;
 import com.j2swift.ast.ThisExpression;
 import com.j2swift.ast.ThrowStatement;
 import com.j2swift.ast.TreeNode;
@@ -207,6 +209,25 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("\n");
 		return false;
 	}
+	
+	@Override
+	public boolean visit(SynchronizedStatement node) {
+		buffer.append("objc_sync_enter(");
+	    node.getExpression().accept(this);
+	    buffer.append(")\n");
+	    node.getBody().accept(this);
+	    buffer.append("\nobjc_sync_exit(");
+	    node.getExpression().accept(this);
+	    buffer.append(")\n");
+	    return false;
+	}
+	
+	@Override
+	public boolean visit(NativeStatement node) {
+		buffer.append(node.getCode());
+	    buffer.append('\n');
+	    return false;
+	}
 
 	@Override
 	public boolean visit(ThisExpression node) {
@@ -304,9 +325,14 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(Block node) {
-		buffer.append("{\n");
+		boolean needAppendBlock = !(node.getParent() instanceof  SynchronizedStatement);
+		if (needAppendBlock) {
+			buffer.append("{\n");
+		}
 		printStatements(node.getStatements());
-		buffer.append("}");
+		if (needAppendBlock) {
+			buffer.append("}");
+		}
 		if (node.getParent() != null
 				&& (node.getParent() instanceof Block || node.getParent() instanceof SwitchStatement)) {
 			buffer.append("();");

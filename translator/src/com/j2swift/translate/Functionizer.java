@@ -1,21 +1,19 @@
 package com.j2swift.translate;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
-import com.google.common.collect.Sets;
 import com.j2swift.ast.AnnotationTypeDeclaration;
 import com.j2swift.ast.BodyDeclaration;
 import com.j2swift.ast.CompilationUnit;
 import com.j2swift.ast.MethodDeclaration;
-import com.j2swift.ast.MethodInvocation;
+import com.j2swift.ast.NativeStatement;
 import com.j2swift.ast.NormalAnnotation;
 import com.j2swift.ast.SingleMemberAnnotation;
 import com.j2swift.ast.Statement;
-import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.TreeNode.Kind;
 import com.j2swift.ast.TreeUtil;
@@ -77,9 +75,15 @@ public class Functionizer extends TreeVisitor {
 				}
 				if (isNeedAddSuperInit) {
 					SuperConstructorInvocation superInitStatement = new SuperConstructorInvocation(binding);
-					statements.add(superInitStatement);
+					statements.add(0, superInitStatement);
 				}
 			}
+		}
+		
+		if (Modifier.isSynchronized(binding.getModifiers())) {
+			List<Statement> statements = node.getBody().getStatements();
+			NativeStatement syntheticInvocation = new NativeStatement("objc_sync_enter(self)\n defer { objc_sync_exit(self) }\n");
+			statements.add(0, syntheticInvocation);
 		}
 	}
 }
