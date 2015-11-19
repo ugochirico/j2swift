@@ -11,7 +11,18 @@ public class TestEventControlAndTypeDeclaration {
 	public int uId = 1000;
 	public String info1, info2 = "1";
 	
-	public String testForStatement2() {
+	public void testThrowStatement() throws Exception {
+		throw new Exception("123");
+	}
+	
+	public void testTryBlockStatement() {
+		try {
+			int a = 4;
+		} catch (Exception e) {
+		}
+	}
+	
+	public String testEnhancedForStatement() {
 		String [][]a1 = new String[][]{{"1", "2"},{"1", "2"}};
  		String []a2 = new String[]{"1", "2", "3"};
  		String []a3 = null;
@@ -32,7 +43,7 @@ public class TestEventControlAndTypeDeclaration {
 		return "testForStatement";
 	}
 
-	public void test2SwitchStatement() {
+	public void testSwitchStatement() {
 		int color = 1;
 		int b = 4;
 		switch (color) {
@@ -48,7 +59,7 @@ public class TestEventControlAndTypeDeclaration {
 		}
 	}
 
-	public void testSwitchStatement() {
+	public void testEnumSwitchStatement() {
 		Color color = Color.Red;
 		switch (color) {
 		case Red:

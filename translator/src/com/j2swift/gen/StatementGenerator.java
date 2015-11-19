@@ -45,6 +45,7 @@ import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SwitchCase;
 import com.j2swift.ast.SwitchStatement;
+import com.j2swift.ast.ThrowStatement;
 import com.j2swift.ast.TreeNode;
 import com.j2swift.ast.TreeUtil;
 import com.j2swift.ast.TreeVisitor;
@@ -135,6 +136,14 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(ThrowStatement node) {
+		buffer.append("throw ");
+		node.getExpression().accept(this);
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
 	public boolean visit(ArrayInitializer node) {
 		// TODO Auto-generated method stub
 		return super.visit(node);
@@ -173,7 +182,8 @@ public class StatementGenerator extends TreeVisitor {
 	private boolean newInitializedArrayInvocation(ITypeBinding arrayType,
 			List<Expression> elements) {
 		ITypeBinding componentType = arrayType.getComponentType();
-		ITypeBinding elementType = componentType.getDimensions() == 0 ? componentType : null;
+		ITypeBinding elementType = componentType.getDimensions() == 0 ? componentType
+				: null;
 		while (elementType == null) {
 			componentType = componentType.getComponentType();
 			if (componentType.getDimensions() == 0) {
@@ -182,16 +192,18 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		StringBuilder result = new StringBuilder("");
 		appendArrayExpression(elements, result, elementType);
-	    buffer.append(result.toString());
-	    return false;
+		buffer.append(result.toString());
+		return false;
 	}
-	
-	private void appendArrayExpression(List<Expression> elements, StringBuilder result, ITypeBinding type) {
+
+	private void appendArrayExpression(List<Expression> elements,
+			StringBuilder result, ITypeBinding type) {
 		result.append("[");
 		int i = 0;
 		for (Expression exp : elements) {
 			if (exp instanceof ArrayInitializer) {
-				appendArrayExpression(((ArrayInitializer)exp).getExpressions(), result, type);
+				appendArrayExpression(
+						((ArrayInitializer) exp).getExpressions(), result, type);
 			} else {
 				if (exp instanceof StringLiteral) {
 					result.append("\"").append(exp).append("\"");
@@ -301,7 +313,7 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		if (node.isNeedUnwarpOptional()
 				&& !BindingUtil.isPrimitive((IVariableBinding) node
-						.getBinding())) {
+						.getBinding()) && !BindingUtil.isFinal(binding)) {
 			buffer.append("!");
 		}
 		return false;

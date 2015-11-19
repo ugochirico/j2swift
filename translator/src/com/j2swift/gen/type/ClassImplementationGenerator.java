@@ -125,6 +125,9 @@ public class ClassImplementationGenerator extends
 				}
 			}
 		}
+		if (binding.getExceptionTypes().length > 0) {
+			sb.append(" throws");
+		}
 		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
 			sb.append(" ->").append(returnType);
 			ITypeBinding type = binding.getReturnType();
