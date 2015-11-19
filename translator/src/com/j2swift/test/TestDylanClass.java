@@ -27,14 +27,15 @@ class TestDyalnBalseClass {
 	TestDyalnBalseClass() {
 		int i = 0;
 	}
-	
+
 	TestDyalnBalseClass(int i) {
-		
+
 	}
 }
 
 class TestDylanOneClass extends TestDyalnBalseClass {
 	int i = 0;
+
 	public void methodTodo(int i) {
 
 	}
@@ -42,57 +43,74 @@ class TestDylanOneClass extends TestDyalnBalseClass {
 	public void methodTodo(String s, int i) {
 
 	}
-	
+
 	TestDylanOneClass() {
 		super();
 		i = 1;
+		int j = 2;
 	}
-	
+
 	TestDylanOneClass(String s) {
-		
+
 	}
-	
-	TestDylanOneClass (String s, int i) {
-		
+
+	TestDylanOneClass(String s, int i) {
+
+	}
+
+	public TestDylanOneClass(String s, int i, int j) {
+
 	}
 }
 
-public class TestDylanClass extends TestDylanOneClass {
-	
+class TestDylanClass extends TestDylanOneClass {
+
 	TestDylanClass() {
-		super("sdf" ,1);
+		super("sdf", 1);
 	}
-	
+
 	TestDylanClass(String s) {
-//		super();
+		// super();
 	}
 	
-//	TestDylanClass(int i) {
-//		System.out.println(123);
-//	}
-//	
-//	TestDylanClass(String s) {
-//		
-//	}
-//
-//	@Override
-//	public void methodTodo() {
-//		// TODO Auto-generated method stub
-//		super.methodTodo();
-//	}
-//
-//	@Override
-//	public void methodTodo(int i) {
-//		// TODO Auto-generated method stub
-////		super.methodTodo(i);
-//	}
-//
-//	public void methodTodo(int i, String s) {
-//
-//	}
-//	
-//	public static void main(String[] args) {
-//		TestDylanClass c = new TestDylanClass();
-//		System.out.println(c.i);
-//	}
+	public void testMethod() {
+		System.out.println("hello world");
+	}
+	
+	public void testMethod(int i) {
+		System.out.println(i);
+		
+	}
+
+	public String testMethod(String s) {
+		return s;
+	}
+	// TestDylanClass(int i) {
+	// System.out.println(123);
+	// }
+	//
+	// TestDylanClass(String s) {
+	//
+	// }
+	//
+	// @Override
+	// public void methodTodo() {
+	// // TODO Auto-generated method stub
+	// super.methodTodo();
+	// }
+	//
+	// @Override
+	// public void methodTodo(int i) {
+	// // TODO Auto-generated method stub
+	// // super.methodTodo(i);
+	// }
+	//
+	// public void methodTodo(int i, String s) {
+	//
+	// }
+	//
+	// public static void main(String[] args) {
+	// TestDylanClass c = new TestDylanClass();
+	// System.out.println(c.i);
+	// }
 }

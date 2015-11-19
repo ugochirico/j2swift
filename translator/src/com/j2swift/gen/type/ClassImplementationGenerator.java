@@ -145,7 +145,10 @@ public class ClassImplementationGenerator extends
 		}
 		syncLineNumbers(m.getName()); // avoid doc-comment
 		String methodBody = generateStatement(m.getBody());
-		print(getMethodSignature(m) + " " + reindent(methodBody) + "\n");
+		indent();
+		printIndent();
+		print(getMethodSignature(m) + reindent(methodBody) + "\n");
+		unindent();
 		newline();
 	}
 

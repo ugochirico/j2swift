@@ -132,6 +132,7 @@ public class StatementGenerator extends TreeVisitor {
 		printMethodInvocationNameAndArgs(nameTable.getMethodSelector(binding),
 				node.getArguments());
 		buffer.append(")");
+		buffer.append("\n");
 		return false;
 	}
 
@@ -468,6 +469,9 @@ public class StatementGenerator extends TreeVisitor {
 			List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {
 			args.get(i).accept(this);
+			if (i != args.size() - 1) {
+				buffer.append(",");
+			}
 		}
 	}
 
