@@ -1,5 +1,7 @@
 package com.j2swift.test;
 
+import java.io.IOException;
+
 enum Color {
 	Red, Black
 }
@@ -10,27 +12,29 @@ public class TestEventControlAndTypeDeclaration {
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
-	
+
 	public void testThrowStatement() throws Exception {
 		throw new Exception("123");
 	}
-	
+
 	public void testTryBlockStatement() {
 		try {
 			int a = 4;
 		} catch (Exception e) {
+		} finally {
+
 		}
 	}
-	
+
 	public String testEnhancedForStatement() {
-		String [][]a1 = new String[][]{{"1", "2"},{"1", "2"}};
- 		String []a2 = new String[]{"1", "2", "3"};
- 		String []a3 = null;
+		String[][] a1 = new String[][] { { "1", "2" }, { "1", "2" } };
+		String[] a2 = new String[] { "1", "2", "3" };
+		String[] a3 = null;
 		for (String item : a2) {
 		}
 		return "testForStatement2";
 	}
-	
+
 	public String testForStatement() {
 		for (int i = 0; i < 10; i = i + 1 * 2) {
 		}

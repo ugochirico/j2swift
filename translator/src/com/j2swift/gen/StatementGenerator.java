@@ -17,6 +17,7 @@ import com.j2swift.ast.Block;
 import com.j2swift.ast.BooleanLiteral;
 import com.j2swift.ast.BreakStatement;
 import com.j2swift.ast.CStringLiteral;
+import com.j2swift.ast.CatchClause;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
 import com.j2swift.ast.DoStatement;
@@ -45,11 +46,16 @@ import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SwitchCase;
 import com.j2swift.ast.SwitchStatement;
+import com.j2swift.ast.ThisExpression;
 import com.j2swift.ast.ThrowStatement;
 import com.j2swift.ast.TreeNode;
 import com.j2swift.ast.TreeUtil;
 import com.j2swift.ast.TreeVisitor;
+import com.j2swift.ast.TryStatement;
+import com.j2swift.ast.Type;
 import com.j2swift.ast.TypeLiteral;
+import com.j2swift.ast.UnionType;
+import com.j2swift.ast.VariableDeclarationExpression;
 import com.j2swift.ast.VariableDeclarationFragment;
 import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
@@ -137,10 +143,72 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(TryStatement node) {
+		List<VariableDeclarationExpression> resources = node.getResources();
+		boolean hasResources = !resources.isEmpty();
+		boolean extendedTryWithResources = hasResources
+				&& (!node.getCatchClauses().isEmpty() || node.getFinally() != null);
+
+		if (hasResources && !extendedTryWithResources) {
+			// printBasicTryWithResources(node.getBody(), resources);
+			return false;
+		}
+
+		buffer.append("do ");
+		if (extendedTryWithResources) {
+			// Put resources inside the body of this statement (JSL 14.20.3.2).
+			// printBasicTryWithResources(node.getBody(), resources);
+		} else {
+			node.getBody().accept(this);
+		}
+		buffer.append(' ');
+
+		for (CatchClause cc : node.getCatchClauses()) {
+			if (cc.getException().getType() instanceof UnionType) {
+				 printMultiCatch(cc);
+			}
+			buffer.append("catch (let ");
+			buffer.append(cc.getException().getName().toString());
+			buffer.append(" as ");
+			cc.getException().getType().accept(this);
+			buffer.append(") {\n");
+			printStatements(cc.getBody().getStatements());
+			buffer.append("}\n");
+		}
+		buffer.append(" catch {}\n");
+
+		if (node.getFinally() != null) {
+			buffer.append("defer {\n");
+			printStatements(node.getFinally().getStatements());
+			buffer.append("}\n");
+		}
+		return false;
+	}
+
+	private void printMultiCatch(CatchClause node) {
+		SingleVariableDeclaration exception = node.getException();
+		for (Type exceptionType : ((UnionType) exception.getType()).getTypes()) {
+			buffer.append("catch (let ");
+			buffer.append(exception.getName().toString());
+			buffer.append(" as ");
+			exceptionType.accept(this);
+			buffer.append(") {\n");
+			printStatements(node.getBody().getStatements());
+			buffer.append("}\n");
+		}
+	}
+
+	@Override
 	public boolean visit(ThrowStatement node) {
 		buffer.append("throw ");
 		node.getExpression().accept(this);
 		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(ThisExpression node) {
+		buffer.append("self");
 		return false;
 	}
 

@@ -9,6 +9,7 @@
 import Foundation
 
 public class JavaException : JavaThrowable {
+    
     public override init() {
         super.init()
     }
