@@ -55,6 +55,10 @@ public final class BindingUtil {
   public static boolean isStatic(IBinding binding) {
     return Modifier.isStatic(binding.getModifiers());
   }
+  
+  public static boolean isThrowsExeception(IMethodBinding binding) {
+	  return binding.getExceptionTypes().length > 0;
+  }
 
   public static boolean isFinal(IBinding binding) {
     return Modifier.isFinal(binding.getModifiers());

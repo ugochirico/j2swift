@@ -19,10 +19,9 @@ public class TestEventControlAndTypeDeclaration {
 
 	public void testTryBlockStatement() {
 		try {
-			int a = 4;
+			testThrowStatement();
 		} catch (Exception e) {
 		} finally {
-
 		}
 	}
 

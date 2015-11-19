@@ -105,7 +105,9 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(MethodInvocation node) {
 		IMethodBinding binding = node.getMethodBinding();
 		assert binding != null;
-
+		if (BindingUtil.isThrowsExeception(binding)) {
+			buffer.append("try ");
+		}
 		// Object receiving the message, or null if it's a method in this class.
 		Expression receiver = node.getExpression();
 		if (receiver != null) {
