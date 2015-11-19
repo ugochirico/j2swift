@@ -41,6 +41,7 @@ import com.j2swift.ast.SimpleType;
 import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.ast.Statement;
 import com.j2swift.ast.StringLiteral;
+import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.SuperMethodInvocation;
 import com.j2swift.ast.SwitchCase;
 import com.j2swift.ast.SwitchStatement;
@@ -51,7 +52,6 @@ import com.j2swift.ast.TypeLiteral;
 import com.j2swift.ast.VariableDeclarationFragment;
 import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
-import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
 
@@ -171,9 +171,40 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	private boolean newInitializedArrayInvocation(ITypeBinding arrayType,
-			List<Expression> expressions) {
-		// TODO Auto-generated method stub
-		return false;
+			List<Expression> elements) {
+		ITypeBinding componentType = arrayType.getComponentType();
+		ITypeBinding elementType = componentType.getDimensions() == 0 ? componentType : null;
+		while (elementType == null) {
+			componentType = componentType.getComponentType();
+			if (componentType.getDimensions() == 0) {
+				elementType = componentType;
+			}
+		}
+		StringBuilder result = new StringBuilder("");
+		appendArrayExpression(elements, result, elementType);
+	    buffer.append(result.toString());
+	    return false;
+	}
+	
+	private void appendArrayExpression(List<Expression> elements, StringBuilder result, ITypeBinding type) {
+		result.append("[");
+		int i = 0;
+		for (Expression exp : elements) {
+			if (exp instanceof ArrayInitializer) {
+				appendArrayExpression(((ArrayInitializer)exp).getExpressions(), result, type);
+			} else {
+				if (exp instanceof StringLiteral) {
+					result.append("\"").append(exp).append("\"");
+				} else {
+					result.append(exp);
+				}
+			}
+			if (i != elements.size() - 1) {
+				result.append(",");
+			}
+			i++;
+		}
+		result.append("]");
 	}
 
 	private boolean newMultiDimensionArrayInvocation(ITypeBinding arrayType,
@@ -474,7 +505,9 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("for");
 		node.getParameter().accept(this);
 		buffer.append(" in ");
+		node.getExpression().setNeedUnwarpOptional(true);
 		node.getExpression().accept(this);
+		buffer.append(" ");
 		node.getBody().accept(this);
 		return false;
 	}

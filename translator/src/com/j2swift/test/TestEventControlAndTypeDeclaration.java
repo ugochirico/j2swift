@@ -14,6 +14,7 @@ public class TestEventControlAndTypeDeclaration {
 	public String testForStatement2() {
 		String [][]a1 = new String[][]{{"1", "2"},{"1", "2"}};
  		String []a2 = new String[]{"1", "2", "3"};
+ 		String []a3 = null;
 		for (String item : a2) {
 		}
 		return "testForStatement2";
