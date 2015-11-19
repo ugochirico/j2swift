@@ -62,9 +62,7 @@ public class ClassImplementationGenerator extends
 		println("}");
 	}
 
-	/**
-	 * Create an Objective-C method signature string.
-	 */
+	@Override
 	protected String getMethodSignature(MethodDeclaration m) {
 		StringBuilder sb = new StringBuilder();
 		IMethodBinding binding = m.getMethodBinding();
@@ -111,7 +109,11 @@ public class ClassImplementationGenerator extends
 		} else {
 			for (int i = 0; i < params.size(); i++) {
 				if (i == 0) {
-					sb.append("(_ ");
+					if (m.isConstructor()) {
+						sb.append("(_ ");
+					}else {
+						sb.append("(");
+					}
 				}
 				if (i != 0) {
 					sb.append(", _ ");

@@ -94,76 +94,74 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 		// newline();
 	}
 
-	/**
-	 * Create an Objective-C method signature string.
-	 */
 	protected String getMethodSignature(MethodDeclaration m) {
-		StringBuilder sb = new StringBuilder();
-		IMethodBinding binding = m.getMethodBinding();
-		
-		//public
-		if (Modifier.isPublic(m.getModifiers())) {
-			sb.append("public ");
-		}
-		//static
-		if (Modifier.isStatic(m.getModifiers())) {
-			sb.append("static ");
-		}
-		//Override
-		List<Annotation> annotations = m.getAnnotations();
-		if (annotations != null && annotations.size() > 0) {
-			for (Annotation annotation : annotations) {
-				String annotationName = annotation.getAnnotationBinding().getName();
-				if (annotationName != null && annotationName.equals("Override")) {
-					sb.append("override ");	
-				}
-			}
-		}
-		
-		String returnType = nameTable.getObjCType(binding.getReturnType());
-		String selector = binding.getName();
-		if (m.isConstructor()) {
-			returnType = null;
-			selector = "init";
-		} else {
-			sb.append("func ");
-		}
-		
-		if (selector.equals("hash")) {
-			// Explicitly test hashCode() because of NSObject's hash return
-			// value.
-			returnType = "NSUInteger";
-		}
-		sb.append(selector);
-
-		List<SingleVariableDeclaration> params = m.getParameters();
-		if (params.isEmpty() || params.size() == 0) {
-			sb.append("()");
-		} else {
-			for (int i = 0; i < params.size(); i++) {
-				if (i == 0) {
-					sb.append("(");
-				}
-				if (i != 0) {
-					sb.append(", _ ");
-				}
-				IVariableBinding var = params.get(i).getVariableBinding();
-				String typeName = nameTable.getSpecificObjCType(var.getType());
-				sb.append(String.format("%s:%s?",
-						nameTable.getVariableShortName(var), typeName));
-				if (i == params.size() - 1) {
-					sb.append(")");
-				}
-			}
-		}
-		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
-			sb.append(" ->").append(returnType);
-			ITypeBinding type = binding.getReturnType();
-			if (!type.isPrimitive()) {
-				sb.append("?");
-			}
-		}
-		return sb.toString();
+//		StringBuilder sb = new StringBuilder();
+//		IMethodBinding binding = m.getMethodBinding();
+//		
+//		//public
+//		if (Modifier.isPublic(m.getModifiers())) {
+//			sb.append("public ");
+//		}
+//		//static
+//		if (Modifier.isStatic(m.getModifiers())) {
+//			sb.append("static ");
+//		}
+//		//Override
+//		List<Annotation> annotations = m.getAnnotations();
+//		if (annotations != null && annotations.size() > 0) {
+//			for (Annotation annotation : annotations) {
+//				String annotationName = annotation.getAnnotationBinding().getName();
+//				if (annotationName != null && annotationName.equals("Override")) {
+//					sb.append("override ");	
+//				}
+//			}
+//		}
+//		
+//		String returnType = nameTable.getObjCType(binding.getReturnType());
+//		String selector = binding.getName();
+//		if (m.isConstructor()) {
+//			returnType = null;
+//			selector = "init";
+//		} else {
+//			sb.append("func ");
+//		}
+//		
+//		if (selector.equals("hash")) {
+//			// Explicitly test hashCode() because of NSObject's hash return
+//			// value.
+//			returnType = "NSUInteger";
+//		}
+//		sb.append(selector);
+//
+//		List<SingleVariableDeclaration> params = m.getParameters();
+//		if (params.isEmpty() || params.size() == 0) {
+//			sb.append("()");
+//		} else {
+//			for (int i = 0; i < params.size(); i++) {
+//				if (i == 0) {
+//					sb.append("(");
+//				}
+//				if (i != 0) {
+//					sb.append(", _ ");
+//				}
+//				IVariableBinding var = params.get(i).getVariableBinding();
+//				String typeName = nameTable.getSpecificObjCType(var.getType());
+//				sb.append(String.format("%s:%s?",
+//						nameTable.getVariableShortName(var), typeName));
+//				if (i == params.size() - 1) {
+//					sb.append(")");
+//				}
+//			}
+//		}
+//		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
+//			sb.append(" ->").append(returnType);
+//			ITypeBinding type = binding.getReturnType();
+//			if (!type.isPrimitive()) {
+//				sb.append("?");
+//			}
+//		}
+//		return sb.toString();
+		return "";
 	}
 
 	@Override

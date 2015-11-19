@@ -1,23 +1,23 @@
 package com.j2swift.test;
 
-//interface BaseInterface {
-//
-//	/**
-//	 * @return
-//	 */
-//	String getIt();
-//}
-//
-//interface DylanInterface extends BaseInterface {
-//	
-//	String getContactNamePinyin();
-//
-//	public void doTest();
-//
-//	public void doTest(int i);
-//
-//	public int doTest(String s);
-//}
+interface BaseInterface {
+
+	/**
+	 * @return
+	 */
+	String getIt();
+}
+
+interface DylanInterface extends BaseInterface {
+	
+	String getContactNamePinyin();
+
+	public void doTest();
+
+	public void doTest(int i);
+
+	public int doTest(String s);
+}
 
 class TestDyalnBalseClass {
 	public void methodTodo() {
@@ -36,7 +36,10 @@ class TestDyalnBalseClass {
 class TestDylanOneClass extends TestDyalnBalseClass {
 	int i = 0;
 
+	public int k;
+	
 	public void methodTodo(int i) {
+		this.k = 1;
 
 	}
 
@@ -46,8 +49,7 @@ class TestDylanOneClass extends TestDyalnBalseClass {
 
 	TestDylanOneClass() {
 		super();
-		i = 1;
-		int j = 2;
+		this.k = 2;
 	}
 
 	TestDylanOneClass(String s) {
@@ -61,12 +63,19 @@ class TestDylanOneClass extends TestDyalnBalseClass {
 	public TestDylanOneClass(String s, int i, int j) {
 
 	}
+	
+	public void logK() {
+		System.out.println(this.k);
+	}
 }
 
 class TestDylanClass extends TestDylanOneClass {
+	
+//	public int k;
 
 	TestDylanClass() {
-		super("sdf", 1);
+		super();
+		this.k = 1;
 	}
 
 	TestDylanClass(String s) {
@@ -74,43 +83,25 @@ class TestDylanClass extends TestDylanOneClass {
 	}
 	
 	public void testMethod() {
-		System.out.println("hello world");
+//		System.out.println("hello world");
 	}
 	
 	public void testMethod(int i) {
-		System.out.println(i);
+//		System.out.println(i);
 		
 	}
 
 	public String testMethod(String s) {
 		return s;
 	}
-	// TestDylanClass(int i) {
-	// System.out.println(123);
-	// }
-	//
-	// TestDylanClass(String s) {
-	//
-	// }
-	//
-	// @Override
-	// public void methodTodo() {
-	// // TODO Auto-generated method stub
-	// super.methodTodo();
-	// }
-	//
-	// @Override
-	// public void methodTodo(int i) {
-	// // TODO Auto-generated method stub
-	// // super.methodTodo(i);
-	// }
-	//
-	// public void methodTodo(int i, String s) {
-	//
-	// }
-	//
-	// public static void main(String[] args) {
-	// TestDylanClass c = new TestDylanClass();
-	// System.out.println(c.i);
-	// }
+	
+	public void logK() {
+		super.logK();
+		System.out.println(this.k);
+	}
+	
+//	public static void main(String[] args) {
+//		TestDylanClass c = new TestDylanClass();
+//	}
 }
+

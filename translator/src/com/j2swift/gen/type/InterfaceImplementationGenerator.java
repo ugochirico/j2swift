@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Strings;
 import com.j2swift.ast.AbstractTypeDeclaration;
@@ -62,35 +63,40 @@ public class InterfaceImplementationGenerator extends
 		return;
 	}
 	
-	/**
-	 * Create an Objective-C method signature string.
-	 */
 	@Override
 	protected String getMethodSignature(MethodDeclaration m) {
 		StringBuilder sb = new StringBuilder();
 		IMethodBinding binding = m.getMethodBinding();
-		// String prefix = Modifier.isStatic(m.getModifiers()) ? "static " : "";
+
+		// public
+		if (Modifier.isPublic(m.getModifiers())) {
+			sb.append("public ");
+		}
+		// static
+		if (Modifier.isStatic(m.getModifiers())) {
+			sb.append("static ");
+		}
+
+		List<SingleVariableDeclaration> params = m.getParameters();
+
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
-		// if (m.isConstructor()) {
-		// returnType = null;
-		// returnType = "instancetype";
-		// } else
+
+		sb.append("func ");
+
 		if (selector.equals("hash")) {
 			// Explicitly test hashCode() because of NSObject's hash return
 			// value.
 			returnType = "NSUInteger";
 		}
-		sb.append("func ");
 		sb.append(selector);
 
-		List<SingleVariableDeclaration> params = m.getParameters();
 		if (params.isEmpty() || params.size() == 0) {
 			sb.append("()");
 		} else {
 			for (int i = 0; i < params.size(); i++) {
 				if (i == 0) {
-					sb.append("(");
+					sb.append("(_ ");
 				}
 				if (i != 0) {
 					sb.append(", _ ");
@@ -104,6 +110,9 @@ public class InterfaceImplementationGenerator extends
 				}
 			}
 		}
+		if (binding.getExceptionTypes().length > 0) {
+			sb.append(" throws");
+		}
 		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
 			sb.append(" ->").append(returnType);
 			ITypeBinding type = binding.getReturnType();
@@ -113,4 +122,5 @@ public class InterfaceImplementationGenerator extends
 		}
 		return sb.toString();
 	}
+
 }
