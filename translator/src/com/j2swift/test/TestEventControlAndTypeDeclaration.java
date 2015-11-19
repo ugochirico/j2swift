@@ -10,7 +10,15 @@ public class TestEventControlAndTypeDeclaration {
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
-
+	
+	public String testForStatement2() {
+		String [][]a1 = new String[][]{{"1", "2"},{"1", "2"}};
+ 		String []a2 = new String[]{"1", "2", "3"};
+		for (String item : a2) {
+		}
+		return "testForStatement2";
+	}
+	
 	public String testForStatement() {
 		for (int i = 0; i < 10; i = i + 1 * 2) {
 		}
@@ -21,14 +29,6 @@ public class TestEventControlAndTypeDeclaration {
 			int a = 5;
 		}
 		return "testForStatement";
-	}
-	
-	public String testForStatement2() {
-		String [][]a1 = new String[][]{{"1", "2"}};
- 		String []a2 = new String[]{"1", "2", "3"};
-		for (String item : a2) {
-		}
-		return "testForStatement2";
 	}
 
 	public void test2SwitchStatement() {
