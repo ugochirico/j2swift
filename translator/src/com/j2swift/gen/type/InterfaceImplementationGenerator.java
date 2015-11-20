@@ -36,7 +36,11 @@ public class InterfaceImplementationGenerator extends
 		printImplementedProtocols(false);
 
 		printf(" {\n");
-
+		if (typeBinding.isGenericType()) {
+			newline();
+			print("  typealias T");
+			newline();
+		}
 		VariablesDeclarationGenerator
 				.generate(this.getBuilder(), this.typeNode);
 		// printStaticAccessors();

@@ -79,7 +79,7 @@ public class NameTable {
 	// converted to self during generation.
 	public static final String SELF_NAME = "$$self$$";
 
-	public static final String ID_TYPE = "id";
+	public static final String ID_TYPE = "AnyObject";
 	// This is syntactic sugar for blocks. All block are typed as ids, but we
 	// add a block_type typedef
 	// for source clarity.
@@ -1163,7 +1163,7 @@ public class NameTable {
 	 */
 	public static String getPrimitiveObjCType(ITypeBinding type) {
 		return type.isPrimitive() ? (BindingUtil.isVoid(type) ? "void" : "j"
-				+ type.getName()) : "id";
+				+ type.getName()) : "AnyObject";
 	}
 
 	/**
