@@ -122,16 +122,7 @@ public class LiteralGenerator {
       if (token.startsWith("0x")) {
         token = "(jlong) " + token;  // Ensure constant is treated as signed.
       }
-      int pos = token.length() - 1;
-      int numLs = 0;
-      while (pos > 0 && token.charAt(pos) == 'L') {
-        numLs++;
-        pos--;
-      }
-
-      if (numLs == 1) {
-        token += 'L';
-      }
+      token = token.replace("L", "");
     }
     return token;
   }

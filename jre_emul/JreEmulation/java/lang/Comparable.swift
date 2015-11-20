@@ -6,7 +6,6 @@
 import Foundation
 
 public protocol JavaComparable  {
-
   typealias T
   func compareTo(another:AnyObject?) ->jint
 
