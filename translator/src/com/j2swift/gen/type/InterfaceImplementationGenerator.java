@@ -67,11 +67,6 @@ public class InterfaceImplementationGenerator extends
 	protected String getMethodSignature(MethodDeclaration m) {
 		StringBuilder sb = new StringBuilder();
 		IMethodBinding binding = m.getMethodBinding();
-
-		// public
-		if (Modifier.isPublic(m.getModifiers())) {
-			sb.append("public ");
-		}
 		// static
 		if (Modifier.isStatic(m.getModifiers())) {
 			sb.append("static ");

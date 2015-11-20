@@ -22,7 +22,10 @@ import com.j2swift.util.ProGuardUsageParser;
 public class J2Swift {
 
 	public static void main(String[] args) {
-		
+		translate(args);
+	}
+	
+	public static void translate(String[] args) { 
 		if (args.length == 0) {
 			Options.help(true);
 		}
