@@ -37,7 +37,6 @@ public class InterfaceImplementationGenerator extends
 
 		printf(" {\n");
 		if (typeBinding.isGenericType()) {
-			newline();
 			print("  typealias T");
 			newline();
 		}
