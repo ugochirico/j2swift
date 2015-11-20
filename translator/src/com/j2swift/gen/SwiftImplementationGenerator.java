@@ -35,8 +35,8 @@ public class SwiftImplementationGenerator extends SwiftSourceFileGenerator {
 	private void printImports() {
 		printf("import Foundation");
 		if (!Options.isJreTranslation()) {
-			printf("import JreEmulation");
 			newline();
+			printf("import JreEmulation");
 		}		
 	}
 

@@ -222,4 +222,12 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 		}
 		return sb.toString();
 	}
+	
+	protected String getClassName() {
+		String className = typeName;
+		if (typeBinding.isGenericType()) {
+			className += "<T>";
+		}
+		return className;
+	}
 }

@@ -38,12 +38,14 @@ public class ClassImplementationGenerator extends
 		}
 		String superClass = getSuperTypeName();
 		boolean hasSuperClass = false;
+		String className = getClassName();
 		if (superClass != null) {
-			printf("class %s : %s", typeName, superClass);
+			printf("class %s : %s", className, superClass);
 			hasSuperClass = true;
 		} else {
-			printf("class %s ", typeName);
+			printf("class %s ", className);
 		}
+		
 		printImplementedProtocols(hasSuperClass);
 
 		printf(" {\n");

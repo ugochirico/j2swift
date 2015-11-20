@@ -31,7 +31,8 @@ public class InterfaceImplementationGenerator extends
 		if (BindingUtil.isPublic(this.typeNode.getTypeBinding())) {
 			print("public ");
 		}
-		printf("protocol %s ", typeName);
+		String className = typeName;
+		printf("protocol %s ", className);
 		printImplementedProtocols(false);
 
 		printf(" {\n");
