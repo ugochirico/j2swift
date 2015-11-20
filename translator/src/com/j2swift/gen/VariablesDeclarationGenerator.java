@@ -61,12 +61,6 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 	 * Prints the list of instance variables in a type.
 	 */
 	protected void printInstanceVariables() {
-		Iterable<VariableDeclarationFragment> fields = getInstanceFields();
-		if (Iterables.isEmpty(fields)) {
-			newline();
-			return;
-		}
-
 		indent();
 		// Prints static field
 		Boolean needStaticDeclarationLine = false;
@@ -76,6 +70,13 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		}
 		if (needStaticDeclarationLine) {
 			newline();
+		}
+		
+		Iterable<VariableDeclarationFragment> fields = getInstanceFields();
+		if (Iterables.isEmpty(fields)) {
+			newline();
+			unindent();
+			return;
 		}
 		
 		Boolean needDeclarationLine = false;

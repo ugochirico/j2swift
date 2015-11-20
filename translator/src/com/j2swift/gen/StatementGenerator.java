@@ -169,7 +169,7 @@ public class StatementGenerator extends TreeVisitor {
 
 		for (CatchClause cc : node.getCatchClauses()) {
 			if (cc.getException().getType() instanceof UnionType) {
-				 printMultiCatch(cc);
+				printMultiCatch(cc);
 			}
 			buffer.append("catch (let ");
 			buffer.append(cc.getException().getName().toString());
@@ -209,24 +209,24 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("\n");
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(SynchronizedStatement node) {
 		buffer.append("objc_sync_enter(");
-	    node.getExpression().accept(this);
-	    buffer.append(")\n");
-	    node.getBody().accept(this);
-	    buffer.append("\nobjc_sync_exit(");
-	    node.getExpression().accept(this);
-	    buffer.append(")\n");
-	    return false;
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		node.getBody().accept(this);
+		buffer.append("\nobjc_sync_exit(");
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		return false;
 	}
-	
+
 	@Override
 	public boolean visit(NativeStatement node) {
 		buffer.append(node.getCode());
-	    buffer.append('\n');
-	    return false;
+		buffer.append('\n');
+		return false;
 	}
 
 	@Override
@@ -325,7 +325,7 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(Block node) {
-		boolean needAppendBlock = !(node.getParent() instanceof  SynchronizedStatement);
+		boolean needAppendBlock = !(node.getParent() instanceof SynchronizedStatement);
 		if (needAppendBlock) {
 			buffer.append("{\n");
 		}
@@ -773,10 +773,8 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(NumberLiteral node) {
 		String token = node.getToken();
 		if (token != null) {
-			buffer.append(token);
-			// TODO: to fix typeBingding
-			// buffer.append(LiteralGenerator.fixNumberToken(token,
-			// node.getTypeBinding()));
+			buffer.append(LiteralGenerator.fixNumberToken(token,
+					node.getTypeBinding()));
 		} else {
 			buffer.append(LiteralGenerator.generate(node.getValue()));
 		}
