@@ -4,7 +4,7 @@ public class JreEmulationTransfer {
 	
 	public static void main(String[] args) {
 		String[] fileList = new String[]{
-				"java/lang/Runnable.java", "java/lang/Exception.java", "java/lang/RuntimeException.java"};
+				"java/lang/Runnable.java", "java/lang/Exception.java", "java/lang/RuntimeException.java", "java/lang/Comparable.java"};
 		new JreEmulationTransfer().run(fileList);
 	}
 	

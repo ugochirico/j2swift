@@ -103,33 +103,7 @@ public class ClassImplementationGenerator extends
 			returnType = "NSUInteger";
 		}
 		sb.append(selector);
-
-		if (params.isEmpty() || params.size() == 0) {
-			sb.append("()");
-		} else {
-			for (int i = 0; i < params.size(); i++) {
-				if (i == 0) {
-					if (m.isConstructor()) {
-						sb.append("(_ ");
-					}else {
-						sb.append("(");
-					}
-				}
-				if (i != 0) {
-					sb.append(", _ ");
-				}
-				IVariableBinding var = params.get(i).getVariableBinding();
-				String typeName = nameTable.getSpecificObjCType(var.getType());
-				sb.append(String.format("%s:%s",
-						nameTable.getVariableShortName(var), typeName));
-				if (!BindingUtil.isPrimitive(var)) {
-					sb.append("?");
-				}
-				if (i == params.size() - 1) {
-					sb.append(")");
-				}
-			}
-		}
+		sb.append(printMethodParameter(m));
 		if (binding.getExceptionTypes().length > 0) {
 			sb.append(" throws");
 		}
