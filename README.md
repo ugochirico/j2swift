@@ -74,13 +74,5 @@ override init(_ message:String?, _ cause:JavaThrowable?, _ enableSuppression:jbo
 * Anonymous class support
   
 * Translate JDK to swift
-  
   ​
-  
-  ​
-  
-  ​
-  
-  ​
-  
-  ​
+    ​
