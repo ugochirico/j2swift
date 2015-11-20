@@ -14,10 +14,10 @@
 		0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC31BF5CC7F00690F83 /* JavaClass.swift */; };
 		0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC51BF5CC8900690F83 /* JavaObject.swift */; };
 		0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */; };
-		0F99208F1BFD93F300803CC6 /* JavaException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F99208E1BFD93F300803CC6 /* JavaException.swift */; };
 		0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */; };
 		0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */; };
 		0FBE636A1BFF1A7A00BC4D3A /* RuntimeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */; };
+		0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE636B1BFF1DC500BC4D3A /* Exception.swift */; };
 		6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFD25011BFB73FB0061F7BE /* Utility.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,10 +42,10 @@
 		0F043FC31BF5CC7F00690F83 /* JavaClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaClass.swift; sourceTree = "<group>"; };
 		0F043FC51BF5CC8900690F83 /* JavaObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaObject.swift; sourceTree = "<group>"; };
 		0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaThrowable.swift; sourceTree = "<group>"; };
-		0F99208E1BFD93F300803CC6 /* JavaException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaException.swift; sourceTree = "<group>"; };
 		0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = J2SwiftHeader.swift; sourceTree = "<group>"; };
 		0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Runnable.swift; sourceTree = "<group>"; };
 		0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuntimeException.swift; sourceTree = "<group>"; };
+		0FBE636B1BFF1DC500BC4D3A /* Exception.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Exception.swift; sourceTree = "<group>"; };
 		6BFD25011BFB73FB0061F7BE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,7 +98,6 @@
 				0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */,
 				6BFD25011BFB73FB0061F7BE /* Utility.swift */,
 				0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */,
-				0F99208E1BFD93F300803CC6 /* JavaException.swift */,
 			);
 			path = JreEmulation;
 			sourceTree = "<group>";
@@ -123,6 +122,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				0FBE636B1BFF1DC500BC4D3A /* Exception.swift */,
 				0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */,
 				0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */,
 			);
@@ -238,7 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */,
-				0F99208F1BFD93F300803CC6 /* JavaException.swift in Sources */,
+				0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */,
 				0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */,
 				6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */,
 				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,

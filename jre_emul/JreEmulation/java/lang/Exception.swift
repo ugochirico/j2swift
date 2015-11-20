@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class JavaRuntimeException : JavaException {
+public class JavaException : JavaThrowable {
 
 
   public override init()  {

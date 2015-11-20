@@ -120,8 +120,11 @@ public class ClassImplementationGenerator extends
 				}
 				IVariableBinding var = params.get(i).getVariableBinding();
 				String typeName = nameTable.getSpecificObjCType(var.getType());
-				sb.append(String.format("%s:%s?",
+				sb.append(String.format("%s:%s",
 						nameTable.getVariableShortName(var), typeName));
+				if (!BindingUtil.isPrimitive(var)) {
+					sb.append("?");
+				}
 				if (i == params.size() - 1) {
 					sb.append(")");
 				}
