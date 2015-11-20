@@ -1,17 +1,15 @@
 package com.j2swift.gen.type;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 
 import com.google.common.base.Strings;
 import com.j2swift.ast.AbstractTypeDeclaration;
-import com.j2swift.ast.Annotation;
 import com.j2swift.ast.MethodDeclaration;
 import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.gen.SourceBuilder;

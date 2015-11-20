@@ -2,15 +2,11 @@ package com.j2swift.gen.type;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.Modifier;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.j2swift.ast.AbstractTypeDeclaration;
-import com.j2swift.ast.Annotation;
 import com.j2swift.ast.EnumDeclaration;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.FunctionDeclaration;

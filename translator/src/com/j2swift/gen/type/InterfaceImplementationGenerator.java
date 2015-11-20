@@ -1,16 +1,12 @@
 package com.j2swift.gen.type;
 
-import java.util.List;
-
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 
 import com.google.common.base.Strings;
 import com.j2swift.ast.AbstractTypeDeclaration;
 import com.j2swift.ast.MethodDeclaration;
-import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.gen.SourceBuilder;
 import com.j2swift.gen.VariablesDeclarationGenerator;
 import com.j2swift.util.BindingUtil;
@@ -71,9 +67,6 @@ public class InterfaceImplementationGenerator extends
 		if (Modifier.isStatic(m.getModifiers())) {
 			sb.append("static ");
 		}
-
-		List<SingleVariableDeclaration> params = m.getParameters();
-
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
 
