@@ -1212,6 +1212,9 @@ public class NameTable {
 	private String getObjCTypeInner(ITypeBinding type, String qualifiers,
 			boolean expandBounds) {
 		String objCType;
+		if (type.isGenericType() || type.isTypeVariable()) {
+			return "T";
+		}
 		if (type instanceof PointerTypeBinding) {
 			String pointeeQualifiers = null;
 			if (qualifiers != null) {
