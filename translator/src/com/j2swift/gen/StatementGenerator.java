@@ -132,7 +132,7 @@ public class StatementGenerator extends TreeVisitor {
 		}
 		buffer.append(binding.getName());
 		buffer.append('(');
-		printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
+		printMethodInvocationNameAndArgs(node.getArguments());
 		buffer.append(')');
 		return false;
 	}
@@ -149,10 +149,17 @@ public class StatementGenerator extends TreeVisitor {
 			buffer.append("\n");
 		}
 		buffer.append("super.init(");
-		printMethodInvocationNameAndArgs(nameTable.getMethodSelector(binding),
-				node.getArguments());
+		printMethodInvocationNameAndArgs(node.getArguments());
 		buffer.append(")");
 		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(ConstructorInvocation node) {
+		buffer.append("self.init(");
+		printMethodInvocationNameAndArgs(node.getArguments());
+		buffer.append(")\n");
 		return false;
 	}
 
@@ -382,7 +389,7 @@ public class StatementGenerator extends TreeVisitor {
 				.getDeclaringClass());
 		buffer.append(constructorName);
 		buffer.append("(");
-		printMethodInvocationNameAndArgs(binding.getName(), node.getArguments());
+		printMethodInvocationNameAndArgs(node.getArguments());
 		buffer.append(")");
 		return false;
 	}
@@ -613,8 +620,7 @@ public class StatementGenerator extends TreeVisitor {
 		return false;
 	}
 
-	private void printMethodInvocationNameAndArgs(String selector,
-			List<Expression> args) {
+	private void printMethodInvocationNameAndArgs(List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {
 			args.get(i).accept(this);
 			if (i != args.size() - 1) {
@@ -867,7 +873,7 @@ public class StatementGenerator extends TreeVisitor {
 		node.getExpression().accept(this);
 		ITypeBinding castTypeBinding = node.getExpression().getTypeBinding();
 		String typeName = nameTable.getSpecificObjCType(type);
-		String castTypeName = nameTable.getSpecificObjCType(castTypeBinding); 
+		String castTypeName = nameTable.getSpecificObjCType(castTypeBinding);
 		boolean needCast = true;
 		if (typeName.equals(castTypeName)) {
 			needCast = false;
@@ -882,7 +888,7 @@ public class StatementGenerator extends TreeVisitor {
 			if (!BindingUtil.variableShouldBeOptional(type)) {
 				buffer.append("?");
 			}
-		} 
+		}
 		buffer.append(")");
 		return false;
 	}

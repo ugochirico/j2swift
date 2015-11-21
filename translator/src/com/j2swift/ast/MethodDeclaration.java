@@ -23,100 +23,111 @@ import java.util.List;
  */
 public class MethodDeclaration extends BodyDeclaration {
 
-  private IMethodBinding methodBinding = null;
-  private boolean isConstructor = false;
-  private ChildLink<Type> returnType = ChildLink.create(Type.class, this);
-  private ChildLink<SimpleName> name = ChildLink.create(SimpleName.class, this);
-  private ChildList<SingleVariableDeclaration> parameters =
-      ChildList.create(SingleVariableDeclaration.class, this);
-  private ChildLink<Block> body = ChildLink.create(Block.class, this);
+	private IMethodBinding methodBinding = null;
+	private boolean isConstructor = false;
+	private ChildLink<Type> returnType = ChildLink.create(Type.class, this);
+	private ChildLink<SimpleName> name = ChildLink.create(SimpleName.class,
+			this);
+	private ChildList<SingleVariableDeclaration> parameters = ChildList.create(
+			SingleVariableDeclaration.class, this);
+	private ChildLink<Block> body = ChildLink.create(Block.class, this);
+	private boolean isConvenienceConstructor = false;
 
-  public MethodDeclaration(org.eclipse.jdt.core.dom.MethodDeclaration jdtNode) {
-    super(jdtNode);
-    methodBinding = jdtNode.resolveBinding();
-    isConstructor = jdtNode.isConstructor();
-    returnType.set((Type) TreeConverter.convert(jdtNode.getReturnType2()));
-    name.set((SimpleName) TreeConverter.convert(jdtNode.getName()));
-    for (Object param : jdtNode.parameters()) {
-      parameters.add((SingleVariableDeclaration) TreeConverter.convert(param));
-    }
-    body.set((Block) TreeConverter.convert(jdtNode.getBody()));
-  }
+	public MethodDeclaration(org.eclipse.jdt.core.dom.MethodDeclaration jdtNode) {
+		super(jdtNode);
+		methodBinding = jdtNode.resolveBinding();
+		isConstructor = jdtNode.isConstructor();
+		returnType.set((Type) TreeConverter.convert(jdtNode.getReturnType2()));
+		name.set((SimpleName) TreeConverter.convert(jdtNode.getName()));
+		for (Object param : jdtNode.parameters()) {
+			parameters.add((SingleVariableDeclaration) TreeConverter
+					.convert(param));
+		}
+		body.set((Block) TreeConverter.convert(jdtNode.getBody()));
+	}
 
-  public MethodDeclaration(MethodDeclaration other) {
-    super(other);
-    methodBinding = other.getMethodBinding();
-    isConstructor = other.isConstructor();
-    returnType.copyFrom(other.getReturnType());
-    name.copyFrom(other.getName());
-    parameters.copyFrom(other.getParameters());
-    body.copyFrom(other.getBody());
-  }
+	public MethodDeclaration(MethodDeclaration other) {
+		super(other);
+		methodBinding = other.getMethodBinding();
+		isConstructor = other.isConstructor();
+		returnType.copyFrom(other.getReturnType());
+		name.copyFrom(other.getName());
+		parameters.copyFrom(other.getParameters());
+		body.copyFrom(other.getBody());
+	}
 
-  public MethodDeclaration(IMethodBinding methodBinding) {
-    super(methodBinding);
-    this.methodBinding = methodBinding;
-    isConstructor = methodBinding.isConstructor();
-    returnType.set(Type.newType(methodBinding.getReturnType()));
-    name.set(new SimpleName(methodBinding));
-  }
+	public MethodDeclaration(IMethodBinding methodBinding) {
+		super(methodBinding);
+		this.methodBinding = methodBinding;
+		isConstructor = methodBinding.isConstructor();
+		returnType.set(Type.newType(methodBinding.getReturnType()));
+		name.set(new SimpleName(methodBinding));
+	}
 
-  @Override
-  public Kind getKind() {
-    return Kind.METHOD_DECLARATION;
-  }
+	@Override
+	public Kind getKind() {
+		return Kind.METHOD_DECLARATION;
+	}
 
-  public IMethodBinding getMethodBinding() {
-    return methodBinding;
-  }
+	public IMethodBinding getMethodBinding() {
+		return methodBinding;
+	}
 
-  public void setMethodBinding(IMethodBinding newMethodBinding) {
-    methodBinding = newMethodBinding;
-  }
+	public void setMethodBinding(IMethodBinding newMethodBinding) {
+		methodBinding = newMethodBinding;
+	}
 
-  public boolean isConstructor() {
-    return isConstructor;
-  }
+	public boolean isConstructor() {
+		return isConstructor;
+	}
 
-  public Type getReturnType() {
-    return returnType.get();
-  }
+	public Type getReturnType() {
+		return returnType.get();
+	}
 
-  public SimpleName getName() {
-    return name.get();
-  }
+	public SimpleName getName() {
+		return name.get();
+	}
 
-  public void setName(SimpleName newName) {
-    name.set(newName);
-  }
+	public void setName(SimpleName newName) {
+		name.set(newName);
+	}
 
-  public List<SingleVariableDeclaration> getParameters() {
-    return parameters;
-  }
+	public List<SingleVariableDeclaration> getParameters() {
+		return parameters;
+	}
 
-  public Block getBody() {
-    return body.get();
-  }
+	public Block getBody() {
+		return body.get();
+	}
 
-  public void setBody(Block newBody) {
-    body.set(newBody);
-  }
+	public void setBody(Block newBody) {
+		body.set(newBody);
+	}
 
-  @Override
-  protected void acceptInner(TreeVisitor visitor) {
-    if (visitor.visit(this)) {
-      javadoc.accept(visitor);
-      annotations.accept(visitor);
-      returnType.accept(visitor);
-      name.accept(visitor);
-      parameters.accept(visitor);
-      body.accept(visitor);
-    }
-    visitor.endVisit(this);
-  }
+	@Override
+	protected void acceptInner(TreeVisitor visitor) {
+		if (visitor.visit(this)) {
+			javadoc.accept(visitor);
+			annotations.accept(visitor);
+			returnType.accept(visitor);
+			name.accept(visitor);
+			parameters.accept(visitor);
+			body.accept(visitor);
+		}
+		visitor.endVisit(this);
+	}
 
-  @Override
-  public MethodDeclaration copy() {
-    return new MethodDeclaration(this);
-  }
+	@Override
+	public MethodDeclaration copy() {
+		return new MethodDeclaration(this);
+	}
+
+	public boolean isConvenienceConstructor() {
+		return isConvenienceConstructor;
+	}
+
+	public void setConvenienceConstructor(boolean isConvenienceConstructor) {
+		this.isConvenienceConstructor = isConvenienceConstructor;
+	}
 }

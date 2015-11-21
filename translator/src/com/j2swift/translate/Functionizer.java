@@ -27,7 +27,7 @@ public class Functionizer extends TreeVisitor {
 		// functionizableMethods = determineFunctionizableMethods(node);
 		return true;
 	}
-	
+
 	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
 		return false;
@@ -52,7 +52,10 @@ public class Functionizer extends TreeVisitor {
 		List<String> extraSelectors = nameTable.getExtraSelectors(binding);
 		if (BindingUtil.isStatic(binding) || binding.isConstructor()
 		/* || Modifier.isNative(node.getModifiers()) */
-		/*|| functionizableMethods.contains(binding) || !extraSelectors.isEmpty()*/) {
+		/*
+		 * || functionizableMethods.contains(binding) ||
+		 * !extraSelectors.isEmpty()
+		 */) {
 			ITypeBinding declaringClass = binding.getDeclaringClass();
 			// function = makeFunction(node);
 			/*
@@ -66,22 +69,28 @@ public class Functionizer extends TreeVisitor {
 				boolean isNeedAddSuperInit = false;
 				if (statements != null && statements.size() > 0) {
 					Statement firstStatemnt = statements.get(0);
-					if (firstStatemnt.getKind() != Kind.SUPER_CONSTRUCTOR_INVOCATION) {
+					if (firstStatemnt.getKind() != Kind.SUPER_CONSTRUCTOR_INVOCATION
+							&& firstStatemnt.getKind() != Kind.CONSTRUCTOR_INVOCATION) {
 						isNeedAddSuperInit = true;
+					}
+					if (firstStatemnt.getKind() == Kind.CONSTRUCTOR_INVOCATION) {
+						node.setConvenienceConstructor(true);
 					}
 				} else {
 					isNeedAddSuperInit = true;
 				}
 				if (isNeedAddSuperInit) {
-					SuperConstructorInvocation superInitStatement = new SuperConstructorInvocation(binding);
+					SuperConstructorInvocation superInitStatement = new SuperConstructorInvocation(
+							binding);
 					statements.add(superInitStatement);
 				}
 			}
 		}
-		
+
 		if (Modifier.isSynchronized(binding.getModifiers())) {
 			List<Statement> statements = node.getBody().getStatements();
-			NativeStatement syntheticInvocation = new NativeStatement("objc_sync_enter(self)\n defer { objc_sync_exit(self) }\n");
+			NativeStatement syntheticInvocation = new NativeStatement(
+					"objc_sync_enter(self)\n defer { objc_sync_exit(self) }\n");
 			statements.add(0, syntheticInvocation);
 		}
 	}

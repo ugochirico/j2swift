@@ -14,9 +14,8 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   private let value:jboolean
 
-  public init(_ string:String?)  {
-    JavaBoolean.parseBoolean(string)
-    super.init()
+  public convenience init(_ string:String?)  {
+    self.init(JavaBoolean.parseBoolean(string))
   }
 
   public init(_ value:jboolean)  {

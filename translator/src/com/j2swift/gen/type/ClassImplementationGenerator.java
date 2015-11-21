@@ -75,7 +75,7 @@ public class ClassImplementationGenerator extends
 		if (Modifier.isStatic(m.getModifiers())) {
 			sb.append("static ");
 		}
-
+		
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (m.isConstructor()) {
 			if (params.isEmpty() || params.size() == 0) {// for
@@ -87,7 +87,9 @@ public class ClassImplementationGenerator extends
 		} else if (isMehothodOvrrided(this.typeBinding, m)) {
 			sb.append("override ");
 		}
-
+		if (m.isConvenienceConstructor()) {
+			sb.append("convenience ");
+		}
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
 		if (m.isConstructor()) {
