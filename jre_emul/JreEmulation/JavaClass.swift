@@ -23,4 +23,8 @@ public class JavaClass {
     public func newInstance() -> AnyObject? {
         return nil
     }
+    
+    public func getComponentType() -> JavaClass? {
+        return nil;
+    }
 }

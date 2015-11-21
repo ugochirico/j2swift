@@ -24,15 +24,15 @@ public class JavaObject : Equatable, AnyObject {
     }
     
     public func toString() -> String? {
-        return ""//TODO
+        return "\(self)@\(self.hashCode())"
     }
     
     public func hashCode() ->jint {
-        return 0; //TODO
+        return ObjectIdentifier(self).hashValue as jint
     }
     
     public func equals(o:JavaObject?) ->jboolean  {
-        return false //TODO
+        return self == o
     }
     
 }

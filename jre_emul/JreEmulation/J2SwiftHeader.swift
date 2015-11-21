@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias jint = Int32
+public typealias jint = Int
 public typealias jshort = CShort
 public typealias jbyte = CSignedChar
 public typealias jchar = CUnsignedShort

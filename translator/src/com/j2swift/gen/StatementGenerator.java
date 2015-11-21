@@ -22,9 +22,11 @@ import com.j2swift.ast.CatchClause;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
 import com.j2swift.ast.ConditionalExpression;
+import com.j2swift.ast.ConstructorInvocation;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
+import com.j2swift.ast.ExpressionMethodReference;
 import com.j2swift.ast.ExpressionStatement;
 import com.j2swift.ast.FieldAccess;
 import com.j2swift.ast.ForStatement;
@@ -582,8 +584,8 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(VariableDeclarationStatement node) {
 		List<VariableDeclarationFragment> vars = node.getFragments();
 		assert !vars.isEmpty();
-//		IVariableBinding binding = vars.get(0).getVariableBinding();s
-//		String swiftType = nameTable.getSpecificObjCType(binding);
+		// IVariableBinding binding = vars.get(0).getVariableBinding();s
+		// String swiftType = nameTable.getSpecificObjCType(binding);
 		// buffer.append(swiftType);
 		for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it
 				.hasNext();) {
@@ -606,7 +608,7 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(CharacterLiteral node) {
-//		char c = node.charValue();
+		// char c = node.charValue();
 		buffer.append(node.charValue());
 		return false;
 	}
@@ -822,7 +824,7 @@ public class StatementGenerator extends TreeVisitor {
 			} else {
 				operand.setNeedUnwarpOptional(needUnwarpOptional);
 			}
-			
+
 			if (!isFirst) {
 				buffer.append(opStr);
 			}
@@ -849,31 +851,31 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append(node.booleanValue() ? "true" : "false");
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(InstanceofExpression node) {
 		node.getLeftOperand().accept(this);
-	      buffer.append(" is ");
-	      node.getRightOperand().accept(this);
-	    return false;
+		buffer.append(" is ");
+		node.getRightOperand().accept(this);
+		return false;
 	}
-	
+
 	@Override
 	public boolean visit(CastExpression node) {
 		ITypeBinding type = node.getType().getTypeBinding();
-	    buffer.append("(");
-	    node.getExpression().accept(this);
-	    buffer.append(" as! ");
-	    buffer.append(nameTable.getSpecificObjCType(type));
-	    buffer.append(")");
-	    return false;
+		buffer.append("(");
+		node.getExpression().accept(this);
+		buffer.append(" as! ");
+		buffer.append(nameTable.getSpecificObjCType(type));
+		buffer.append(")");
+		return false;
 	}
-	
+
 	@Override
-	  public boolean visit(FieldAccess node) {
-	    node.getExpression().accept(this);
-	    buffer.append(".");
-	    node.getName().accept(this);
-	    return false;
-	  }
+	public boolean visit(FieldAccess node) {
+		node.getExpression().accept(this);
+		buffer.append(".");
+		node.getName().accept(this);
+		return false;
+	}
 }

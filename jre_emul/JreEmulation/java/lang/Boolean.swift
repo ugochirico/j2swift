@@ -8,15 +8,14 @@ import Foundation
 public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   private static let serialVersionUID:jlong = -3665804199014368530
-  public static let TYPE:JavaClass = ([jboolean].getClass().getComponentType() as! JavaClass)
+
   public static let TRUE_:JavaBoolean = JavaBoolean(true)
   public static let FALSE_:JavaBoolean = JavaBoolean(false)
 
   private let value:jboolean
 
-  public init(_ string:String?)  {
-    JavaBoolean.parseBoolean(string)
-    super.init()
+  public convenience init(_ string:String?)  {
+    self.init(JavaBoolean.parseBoolean(string))
   }
 
   public init(_ value:jboolean)  {
