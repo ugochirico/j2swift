@@ -17,6 +17,7 @@ public class JreEmulationTransfer {
 	}
 
 	private void run(String[] jreListFile) {
+		boolean a = null == null;
 		String currentDirectory = System.getProperty("user.dir") + "/";
 		String outputDirectory = currentDirectory + "../jre_emul/JreEmulation";
 		String commandPrefix = "-jre -d " + outputDirectory;

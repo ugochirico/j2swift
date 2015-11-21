@@ -8,7 +8,7 @@ import Foundation
 public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   private static let serialVersionUID:jlong = -3665804199014368530
-  public static let TYPE:JavaClass = JavaClass[jboolean].getClass().getComponentType()
+  public static let TYPE:JavaClass = ([jboolean].getClass().getComponentType() as! JavaClass)
   public static let TRUE_:JavaBoolean = JavaBoolean(true)
   public static let FALSE_:JavaBoolean = JavaBoolean(false)
 
@@ -20,15 +20,15 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   public init(_ value:jboolean)  {
     super.init()
-    selfvalue = value
+    self.value = value
   }
 
   public func booleanValue() ->jboolean  {
     return value
   }
 
-  public override func equals(o:AnyObject?) ->jboolean  {
-    return o == self || o is JavaBoolean && (o as JavaBoolean).value == value
+  public override func equals(o:JavaObject?) ->jboolean  {
+    return o == self || o is JavaBoolean && (o as! JavaBoolean).value == value
   }
 
   public func compareTo(that:JavaBoolean?) ->jint  {

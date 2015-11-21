@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class JavaObject {
+public class JavaObject : Equatable, AnyObject {
     
     public init() {
     }
@@ -30,4 +30,30 @@ public class JavaObject {
     public func hashCode() ->jint {
         return 0; //TODO
     }
+    
+    public func equals(o:JavaObject?) ->jboolean  {
+        return false //TODO
+    }
+    
+}
+
+public func == (lhs: JavaObject, rhs: JavaObject) -> jboolean {
+    if ObjectIdentifier(lhs) == ObjectIdentifier(rhs) {
+        return true
+    } else {
+        return false
+    }
+}
+
+public func == (lhs: JavaObject?, rhs: JavaObject?) -> jboolean {
+    if lhs == nil && rhs == nil {
+        return true
+    }
+    if lhs == nil && rhs != nil {
+        return false
+    }
+    if lhs != nil && rhs == nil {
+        return false
+    }
+    return lhs! == rhs!
 }

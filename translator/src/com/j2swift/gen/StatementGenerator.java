@@ -17,6 +17,7 @@ import com.j2swift.ast.Block;
 import com.j2swift.ast.BooleanLiteral;
 import com.j2swift.ast.BreakStatement;
 import com.j2swift.ast.CStringLiteral;
+import com.j2swift.ast.CastExpression;
 import com.j2swift.ast.CatchClause;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
@@ -25,6 +26,7 @@ import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.ExpressionStatement;
+import com.j2swift.ast.FieldAccess;
 import com.j2swift.ast.ForStatement;
 import com.j2swift.ast.FunctionInvocation;
 import com.j2swift.ast.IfStatement;
@@ -851,4 +853,23 @@ public class StatementGenerator extends TreeVisitor {
 	      node.getRightOperand().accept(this);
 	    return false;
 	}
+	
+	@Override
+	public boolean visit(CastExpression node) {
+		ITypeBinding type = node.getType().getTypeBinding();
+	    buffer.append("(");
+	    node.getExpression().accept(this);
+	    buffer.append(" as! ");
+	    buffer.append(nameTable.getSpecificObjCType(type));
+	    buffer.append(")");
+	    return false;
+	}
+	
+	@Override
+	  public boolean visit(FieldAccess node) {
+	    node.getExpression().accept(this);
+	    buffer.append(".");
+	    node.getName().accept(this);
+	    return false;
+	  }
 }

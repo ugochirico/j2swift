@@ -79,7 +79,7 @@ public class NameTable {
 	// converted to self during generation.
 	public static final String SELF_NAME = "$$self$$";
 
-	public static final String ID_TYPE = "AnyObject";
+	public static final String ID_TYPE = "JavaObject";
 	// This is syntactic sugar for blocks. All block are typed as ids, but we
 	// add a block_type typedef
 	// for source clarity.

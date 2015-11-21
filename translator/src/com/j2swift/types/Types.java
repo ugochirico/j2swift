@@ -97,7 +97,7 @@ public class Types {
     NSString = mapIOSType(IOSTypeBinding.newClass("String", javaStringType, NSObject));
     JavaClass = mapIOSType(IOSTypeBinding.newUnmappedClass("JavaClass"));
     mapIOSType(IOSTypeBinding.newUnmappedClass("NSZone"));
-    idType = mapIOSType(IOSTypeBinding.newUnmappedClass("AnyObject"));
+    idType = mapIOSType(IOSTypeBinding.newUnmappedClass("JavaObject"));
 
     initializeArrayTypes();
     initializeTypeMap();
