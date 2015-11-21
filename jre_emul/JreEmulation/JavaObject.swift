@@ -24,6 +24,10 @@ public class JavaObject {
     }
     
     public func toString() -> String? {
-        return ""
+        return ""//TODO
+    }
+    
+    public func hasCode() ->jint {
+        return 0; //TODO
     }
 }

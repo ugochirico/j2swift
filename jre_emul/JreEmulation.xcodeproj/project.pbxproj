@@ -23,6 +23,7 @@
 		6BBFC9F61C003415006955E2 /* IOException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F51C003415006955E2 /* IOException.swift */; };
 		6BBFC9F81C0043A9006955E2 /* InvalidObjectException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F71C0043A9006955E2 /* InvalidObjectException.swift */; };
 		6BBFC9FA1C0043F0006955E2 /* ObjectStreamException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F91C0043F0006955E2 /* ObjectStreamException.swift */; };
+		6BBFC9FC1C00470D006955E2 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9FB1C00470D006955E2 /* Boolean.swift */; };
 		6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFD25011BFB73FB0061F7BE /* Utility.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		6BBFC9F51C003415006955E2 /* IOException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOException.swift; sourceTree = "<group>"; };
 		6BBFC9F71C0043A9006955E2 /* InvalidObjectException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidObjectException.swift; sourceTree = "<group>"; };
 		6BBFC9F91C0043F0006955E2 /* ObjectStreamException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectStreamException.swift; sourceTree = "<group>"; };
+		6BBFC9FB1C00470D006955E2 /* Boolean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boolean.swift; sourceTree = "<group>"; };
 		6BFD25011BFB73FB0061F7BE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +135,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				6BBFC9FB1C00470D006955E2 /* Boolean.swift */,
 				0FBE636D1BFF243800BC4D3A /* Comparable.swift */,
 				0FBE636B1BFF1DC500BC4D3A /* Exception.swift */,
 				0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */,
@@ -273,6 +276,7 @@
 				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
 				0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */,
 				6BBFC9FA1C0043F0006955E2 /* ObjectStreamException.swift in Sources */,
+				6BBFC9FC1C00470D006955E2 /* Boolean.swift in Sources */,
 				0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

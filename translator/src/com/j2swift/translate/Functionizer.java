@@ -61,8 +61,7 @@ public class Functionizer extends TreeVisitor {
 			 * }
 			 */
 			// declarationList.add(function);
-			if (binding.isConstructor()
-					&& !BindingUtil.isAbstract(declaringClass)) {
+			if (binding.isConstructor()) {
 				List<Statement> statements = node.getBody().getStatements();
 				boolean isNeedAddSuperInit = false;
 				if (statements != null && statements.size() > 0) {

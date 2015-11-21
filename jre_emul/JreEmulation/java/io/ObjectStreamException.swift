@@ -11,6 +11,7 @@ public class JavaObjectStreamException : JavaIOException {
 
 
   override init()  {
+    super.init()
   }
 
   override init(_ detailMessage:String?)  {

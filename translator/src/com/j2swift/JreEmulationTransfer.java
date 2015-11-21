@@ -4,6 +4,7 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/lang/Boolean.java",
 				"java/io/ObjectStreamException.java",
 				"java/io/InvalidObjectException.java",
 				"java/io/IOException.java", 
