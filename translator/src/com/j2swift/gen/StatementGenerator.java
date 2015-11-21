@@ -20,6 +20,7 @@ import com.j2swift.ast.CStringLiteral;
 import com.j2swift.ast.CatchClause;
 import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
+import com.j2swift.ast.ConditionalExpression;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
@@ -439,6 +440,47 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(ConditionalExpression node) {
+		boolean castNeeded = false;
+		ITypeBinding thenType = node.getThenExpression().getTypeBinding();
+		ITypeBinding elseType = node.getElseExpression().getTypeBinding();
+
+		if (!thenType.equals(elseType)
+				&& !(node.getThenExpression() instanceof NullLiteral)
+				&& !(node.getElseExpression() instanceof NullLiteral)) {
+			// gcc fails to compile a conditional expression where the two
+			// clauses of
+			// the expression have different type. So cast any interface type
+			// down to
+			// "id" to make the compiler happy. Concrete object types all have a
+			// common ancestor of NSObject, so they don't need a cast.
+			castNeeded = true;
+		}
+
+		node.getExpression().accept(this);
+
+		buffer.append(" ? ");
+		if (castNeeded && thenType.isInterface()) {
+			buffer.append("((id) ");
+		}
+		node.getThenExpression().accept(this);
+		if (castNeeded && thenType.isInterface()) {
+			buffer.append(')');
+		}
+
+		buffer.append(" : ");
+		if (castNeeded && elseType.isInterface()) {
+			buffer.append("((id) ");
+		}
+		node.getElseExpression().accept(this);
+		if (castNeeded && elseType.isInterface()) {
+			buffer.append(')');
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean visit(QualifiedName node) {
 		IBinding binding = node.getBinding();
 		if (binding instanceof IVariableBinding) {
@@ -734,8 +776,12 @@ public class StatementGenerator extends TreeVisitor {
 		InfixExpression.Operator op = node.getOperator();
 		List<Expression> operands = node.getOperands();
 		assert operands.size() >= 2;
+		boolean equalsOrNotEqualsOp = false;
 		if ((op.equals(InfixExpression.Operator.EQUALS) || op
 				.equals(InfixExpression.Operator.NOT_EQUALS))) {
+			equalsOrNotEqualsOp = true;
+		}
+		if (equalsOrNotEqualsOp) {
 			Expression lhs = operands.get(0);
 			Expression rhs = operands.get(1);
 			// TODO
@@ -759,7 +805,16 @@ public class StatementGenerator extends TreeVisitor {
 		// TODO
 		boolean needUnwarpOptional = operands.size() > 1;
 		for (Expression operand : operands) {
-			operand.setNeedUnwarpOptional(needUnwarpOptional);
+			if (isFirst) {
+				if (equalsOrNotEqualsOp && operand instanceof SimpleName) {
+					operand.setNeedUnwarpOptional(false);
+				} else {
+					operand.setNeedUnwarpOptional(needUnwarpOptional);
+				}
+			} else {
+				operand.setNeedUnwarpOptional(needUnwarpOptional);
+			}
+			
 			if (!isFirst) {
 				buffer.append(opStr);
 			}
