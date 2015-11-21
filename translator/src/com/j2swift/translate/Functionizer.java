@@ -74,7 +74,7 @@ public class Functionizer extends TreeVisitor {
 				}
 				if (isNeedAddSuperInit) {
 					SuperConstructorInvocation superInitStatement = new SuperConstructorInvocation(binding);
-					statements.add(0, superInitStatement);
+					statements.add(superInitStatement);
 				}
 			}
 		}
