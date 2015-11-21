@@ -71,6 +71,7 @@ import com.j2swift.util.BindingUtil;
 public class StatementGenerator extends TreeVisitor {
 
 	private final SourceBuilder buffer;
+	@SuppressWarnings("unused")
 	private final boolean useReferenceCounting;
 
 	public static String generate(TreeNode node, int currentLine) {
@@ -142,6 +143,9 @@ public class StatementGenerator extends TreeVisitor {
 		// "Qualifiers expected to be handled by SuperMethodInvocationRewriter.";
 		// assert !BindingUtil.isStatic(binding) :
 		// "Static invocations are rewritten by Functionizer.";
+		if (!buffer.toString().trim().endsWith("\n")) {
+			buffer.append("\n");
+		}
 		buffer.append("super.init(");
 		printMethodInvocationNameAndArgs(nameTable.getMethodSelector(binding),
 				node.getArguments());
@@ -578,8 +582,8 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(VariableDeclarationStatement node) {
 		List<VariableDeclarationFragment> vars = node.getFragments();
 		assert !vars.isEmpty();
-		IVariableBinding binding = vars.get(0).getVariableBinding();
-		String swiftType = nameTable.getSpecificObjCType(binding);
+//		IVariableBinding binding = vars.get(0).getVariableBinding();s
+//		String swiftType = nameTable.getSpecificObjCType(binding);
 		// buffer.append(swiftType);
 		for (Iterator<VariableDeclarationFragment> it = vars.iterator(); it
 				.hasNext();) {
@@ -602,7 +606,7 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(CharacterLiteral node) {
-		char c = node.charValue();
+//		char c = node.charValue();
 		buffer.append(node.charValue());
 		return false;
 	}

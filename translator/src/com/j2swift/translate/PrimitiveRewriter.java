@@ -21,7 +21,7 @@ public class PrimitiveRewriter extends TreeVisitor {
 	@Override
 	public void endVisit(VariableDeclarationFragment node) {
 		IVariableBinding binding = node.getVariableBinding();
-		if (BindingUtil.isPrimitive(binding)) {
+		if (BindingUtil.isPrimitive(binding) && !BindingUtil.isFinal(binding)) {
 			Expression initializer = node.getInitializer();
 			if (initializer == null) {
 				char type = binding.getType().getBinaryName().charAt(0);

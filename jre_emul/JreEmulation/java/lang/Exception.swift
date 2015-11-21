@@ -11,22 +11,27 @@ public class JavaException : JavaThrowable {
 
 
   public override init()  {
+    
     super.init()
   }
 
   public override init(_ detailMessage:String?)  {
+    
     super.init(detailMessage)
   }
 
   public override init(_ detailMessage:String?, _ throwable:JavaThrowable?)  {
+    
     super.init(detailMessage,throwable)
   }
 
   public override init(_ throwable:JavaThrowable?)  {
+    
     super.init(throwable)
   }
 
   override init(_ message:String?, _ cause:JavaThrowable?, _ enableSuppression:jboolean, _ writableStackTrace:jboolean)  {
+    
     super.init(message,cause,enableSuppression,writableStackTrace)
   }
 

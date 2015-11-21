@@ -11,6 +11,7 @@ public class JavaInvalidObjectException : JavaObjectStreamException {
 
 
   public override init(_ detailMessage:String?)  {
+    
     super.init(detailMessage)
   }
 

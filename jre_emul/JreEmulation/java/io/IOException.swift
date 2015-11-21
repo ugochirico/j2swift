@@ -11,18 +11,22 @@ public class JavaIOException : JavaException {
 
 
   public override init()  {
+    
     super.init()
   }
 
   public override init(_ detailMessage:String?)  {
+    
     super.init(detailMessage)
   }
 
   public override init(_ message:String?, _ cause:JavaThrowable?)  {
+    
     super.init(message,cause)
   }
 
   public override init(_ cause:JavaThrowable?)  {
+    
     super.init(cause == nil ? nil : cause!.toString(),cause)
   }
 
