@@ -16,7 +16,7 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   public init(_ string:String?)  {
     super.init()
-    JavaBooleanparseBoolean(string)}
+    JavaBoolean.parseBoolean(string)}
 
   public init(_ value:jboolean)  {
     super.init()
@@ -28,11 +28,11 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public override func equals(o:AnyObject?) ->jboolean  {
-    return o == self || oJavaBoolean && JavaBooleanovalue == value
+    return o == self || o is JavaBoolean && (o as JavaBoolean).value == value
   }
 
   public func compareTo(that:JavaBoolean?) ->jint  {
-    return JavaBoolean.compare(value,that.value)
+    return JavaBoolean.compare(value,that!.value)
   }
 
   public static func compare(lhs:jboolean, _ rhs:jboolean) ->jint  {
@@ -51,7 +51,7 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
     if (string == nil || string!.length() == 0) {
       return false
     }
-    return JavaBooleanparseBoolean(JavaSystem.getProperty(string))
+    return JavaBoolean.parseBoolean(JavaSystem.getProperty(string))
   }
 
   public static func parseBoolean(s:String?) ->jboolean  {
@@ -63,7 +63,7 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func valueOf(string:String?) ->JavaBoolean?  {
-    return JavaBooleanparseBoolean(string) ? JavaBoolean.TRUE_ : JavaBoolean.FALSE_
+    return JavaBoolean.parseBoolean(string) ? JavaBoolean.TRUE_ : JavaBoolean.FALSE_
   }
 
   public static func valueOf(b:jboolean) ->JavaBoolean?  {

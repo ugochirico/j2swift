@@ -27,7 +27,7 @@ public class JavaObject {
         return ""//TODO
     }
     
-    public func hasCode() ->jint {
+    public func hashCode() ->jint {
         return 0; //TODO
     }
 }

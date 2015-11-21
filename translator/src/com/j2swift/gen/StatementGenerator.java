@@ -29,6 +29,7 @@ import com.j2swift.ast.ForStatement;
 import com.j2swift.ast.FunctionInvocation;
 import com.j2swift.ast.IfStatement;
 import com.j2swift.ast.InfixExpression;
+import com.j2swift.ast.InstanceofExpression;
 import com.j2swift.ast.LabeledStatement;
 import com.j2swift.ast.MethodInvocation;
 import com.j2swift.ast.Name;
@@ -121,7 +122,7 @@ public class StatementGenerator extends TreeVisitor {
 		} else if (receiver != null) {
 			receiver.accept(this);
 		}
-		if (receiver != null) {
+		if (receiver != null || BindingUtil.isStatic(binding)) {
 			buffer.append(".");
 		}
 		buffer.append(binding.getName());
@@ -495,8 +496,9 @@ public class StatementGenerator extends TreeVisitor {
 			return false;
 		}
 		Name qualifier = node.getQualifier();
+		qualifier.setNeedUnwarpOptional(true);
 		qualifier.accept(this);
-		buffer.append("->");
+		buffer.append(".");
 		node.getName().accept(this);
 		return false;
 	}
@@ -840,5 +842,13 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(BooleanLiteral node) {
 		buffer.append(node.booleanValue() ? "true" : "false");
 		return false;
+	}
+	
+	@Override
+	public boolean visit(InstanceofExpression node) {
+		node.getLeftOperand().accept(this);
+	      buffer.append(" is ");
+	      node.getRightOperand().accept(this);
+	    return false;
 	}
 }
