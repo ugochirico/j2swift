@@ -26,6 +26,19 @@
 		6BBFC9FC1C00470D006955E2 /* Boolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9FB1C00470D006955E2 /* Boolean.swift */; };
 		6BBFC9FE1C004BF8006955E2 /* JavaSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9FD1C004BF8006955E2 /* JavaSystem.swift */; };
 		6BBFCA041C00721D006955E2 /* JavaArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA031C00721D006955E2 /* JavaArrayExtension.swift */; };
+		6BBFCA061C00BA6F006955E2 /* ReflectiveOperationException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA051C00BA6F006955E2 /* ReflectiveOperationException.swift */; };
+		6BBFCA081C00BB39006955E2 /* IllegalArgumentException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA071C00BB39006955E2 /* IllegalArgumentException.swift */; };
+		6BBFCA0A1C00BB6D006955E2 /* NumberFormatException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA091C00BB6D006955E2 /* NumberFormatException.swift */; };
+		6BBFCA0C1C00BBB2006955E2 /* NoSuchFieldException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA0B1C00BBB2006955E2 /* NoSuchFieldException.swift */; };
+		6BBFCA161C00BCA4006955E2 /* UnsupportedOperationException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA0D1C00BCA4006955E2 /* UnsupportedOperationException.swift */; };
+		6BBFCA171C00BCA4006955E2 /* TypeNotPresentException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA0E1C00BCA4006955E2 /* TypeNotPresentException.swift */; };
+		6BBFCA181C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA0F1C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift */; };
+		6BBFCA191C00BCA4006955E2 /* SecurityException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA101C00BCA4006955E2 /* SecurityException.swift */; };
+		6BBFCA1A1C00BCA4006955E2 /* NegativeArraySizeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA111C00BCA4006955E2 /* NegativeArraySizeException.swift */; };
+		6BBFCA1B1C00BCA4006955E2 /* IndexOutOfBoundsException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA121C00BCA4006955E2 /* IndexOutOfBoundsException.swift */; };
+		6BBFCA1C1C00BCA4006955E2 /* ClassCastException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA131C00BCA4006955E2 /* ClassCastException.swift */; };
+		6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */; };
+		6BBFCA1E1C00BCA4006955E2 /* ArithmeticException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */; };
 		6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFD25011BFB73FB0061F7BE /* Utility.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +75,19 @@
 		6BBFC9FB1C00470D006955E2 /* Boolean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boolean.swift; sourceTree = "<group>"; };
 		6BBFC9FD1C004BF8006955E2 /* JavaSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaSystem.swift; sourceTree = "<group>"; };
 		6BBFCA031C00721D006955E2 /* JavaArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaArrayExtension.swift; sourceTree = "<group>"; };
+		6BBFCA051C00BA6F006955E2 /* ReflectiveOperationException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReflectiveOperationException.swift; sourceTree = "<group>"; };
+		6BBFCA071C00BB39006955E2 /* IllegalArgumentException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IllegalArgumentException.swift; sourceTree = "<group>"; };
+		6BBFCA091C00BB6D006955E2 /* NumberFormatException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberFormatException.swift; sourceTree = "<group>"; };
+		6BBFCA0B1C00BBB2006955E2 /* NoSuchFieldException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSuchFieldException.swift; sourceTree = "<group>"; };
+		6BBFCA0D1C00BCA4006955E2 /* UnsupportedOperationException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsupportedOperationException.swift; sourceTree = "<group>"; };
+		6BBFCA0E1C00BCA4006955E2 /* TypeNotPresentException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNotPresentException.swift; sourceTree = "<group>"; };
+		6BBFCA0F1C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringIndexOutOfBoundsException.swift; sourceTree = "<group>"; };
+		6BBFCA101C00BCA4006955E2 /* SecurityException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurityException.swift; sourceTree = "<group>"; };
+		6BBFCA111C00BCA4006955E2 /* NegativeArraySizeException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NegativeArraySizeException.swift; sourceTree = "<group>"; };
+		6BBFCA121C00BCA4006955E2 /* IndexOutOfBoundsException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexOutOfBoundsException.swift; sourceTree = "<group>"; };
+		6BBFCA131C00BCA4006955E2 /* ClassCastException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassCastException.swift; sourceTree = "<group>"; };
+		6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayIndexOutOfBoundsException.swift; sourceTree = "<group>"; };
+		6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArithmeticException.swift; sourceTree = "<group>"; };
 		6BFD25011BFB73FB0061F7BE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +167,19 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				6BBFCA0D1C00BCA4006955E2 /* UnsupportedOperationException.swift */,
+				6BBFCA0E1C00BCA4006955E2 /* TypeNotPresentException.swift */,
+				6BBFCA0F1C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift */,
+				6BBFCA101C00BCA4006955E2 /* SecurityException.swift */,
+				6BBFCA111C00BCA4006955E2 /* NegativeArraySizeException.swift */,
+				6BBFCA121C00BCA4006955E2 /* IndexOutOfBoundsException.swift */,
+				6BBFCA131C00BCA4006955E2 /* ClassCastException.swift */,
+				6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */,
+				6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */,
+				6BBFCA0B1C00BBB2006955E2 /* NoSuchFieldException.swift */,
+				6BBFCA091C00BB6D006955E2 /* NumberFormatException.swift */,
+				6BBFCA071C00BB39006955E2 /* IllegalArgumentException.swift */,
+				6BBFCA051C00BA6F006955E2 /* ReflectiveOperationException.swift */,
 				6BBFC9FB1C00470D006955E2 /* Boolean.swift */,
 				0FBE636D1BFF243800BC4D3A /* Comparable.swift */,
 				0FBE636B1BFF1DC500BC4D3A /* Exception.swift */,
@@ -269,22 +308,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BBFCA171C00BCA4006955E2 /* TypeNotPresentException.swift in Sources */,
+				6BBFCA061C00BA6F006955E2 /* ReflectiveOperationException.swift in Sources */,
+				6BBFCA161C00BCA4006955E2 /* UnsupportedOperationException.swift in Sources */,
+				6BBFCA1B1C00BCA4006955E2 /* IndexOutOfBoundsException.swift in Sources */,
 				0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */,
 				0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */,
 				6BBFC9FE1C004BF8006955E2 /* JavaSystem.swift in Sources */,
 				6BBFC9F81C0043A9006955E2 /* InvalidObjectException.swift in Sources */,
 				0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */,
 				0FBE636E1BFF243800BC4D3A /* Comparable.swift in Sources */,
+				6BBFCA081C00BB39006955E2 /* IllegalArgumentException.swift in Sources */,
+				6BBFCA1E1C00BCA4006955E2 /* ArithmeticException.swift in Sources */,
 				6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */,
 				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,
 				6BBFCA041C00721D006955E2 /* JavaArrayExtension.swift in Sources */,
 				6BBFC9F41C00338C006955E2 /* Serializable.swift in Sources */,
+				6BBFCA1C1C00BCA4006955E2 /* ClassCastException.swift in Sources */,
+				6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */,
 				6BBFC9F61C003415006955E2 /* IOException.swift in Sources */,
+				6BBFCA0C1C00BBB2006955E2 /* NoSuchFieldException.swift in Sources */,
 				0FBE636A1BFF1A7A00BC4D3A /* RuntimeException.swift in Sources */,
 				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
+				6BBFCA0A1C00BB6D006955E2 /* NumberFormatException.swift in Sources */,
 				0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */,
 				6BBFC9FA1C0043F0006955E2 /* ObjectStreamException.swift in Sources */,
 				6BBFC9FC1C00470D006955E2 /* Boolean.swift in Sources */,
+				6BBFCA1A1C00BCA4006955E2 /* NegativeArraySizeException.swift in Sources */,
+				6BBFCA191C00BCA4006955E2 /* SecurityException.swift in Sources */,
+				6BBFCA181C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift in Sources */,
 				0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
