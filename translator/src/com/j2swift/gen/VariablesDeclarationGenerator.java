@@ -125,7 +125,7 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		print(':');
 		String swiftType = getDeclarationType(varBinding);
 		print(swiftType);
-		if (!BindingUtil.isFinal(varBinding)) {
+		if (variableShouldBeOptional(fragment.getVariableBinding().getType())) {
 			print("?");
 		}
 
@@ -168,7 +168,7 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		Expression initializer = fragment.getInitializer();
 		printIndent();
 		print("" + baseDeclaration);
-		if (!BindingUtil.isFinal(fragment.getVariableBinding())) {
+		if (variableShouldBeOptional(fragment.getVariableBinding().getType())) {
 			print("?");
 		}
 		if (initializer != null) {

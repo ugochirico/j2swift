@@ -13,4 +13,12 @@ extension Array {
         let type: Mirror = Mirror(reflecting: self)
         return JavaClass(mirror: type)
     }
+    
+    
+}
+
+extension SequenceType where Generator.Element == Int {
+    var sum: Int {
+        return reduce(0) { $0 + $1 }
+    }
 }

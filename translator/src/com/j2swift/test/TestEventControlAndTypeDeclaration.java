@@ -1,13 +1,12 @@
 package com.j2swift.test;
 
-import java.io.IOException;
 
 enum Color {
 	Red, Black
 }
 
 public class TestEventControlAndTypeDeclaration {
-	public static final String testFinalField = "1";
+
 	public String username;
 	public String password;
 	public int uId = 1000;

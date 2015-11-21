@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
@@ -311,5 +312,9 @@ public abstract class TypeGenerator extends AbstractSourceGenerator {
 
 	protected String generateExpression(Expression expr) {
 		return StatementGenerator.generate(expr, getBuilder().getCurrentLine());
+	}
+	
+	protected boolean variableShouldBeOptional(ITypeBinding typeBinding) {
+		return BindingUtil.variableShouldBeOptional(typeBinding);
 	}
 }

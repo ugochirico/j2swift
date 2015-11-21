@@ -865,8 +865,24 @@ public class StatementGenerator extends TreeVisitor {
 		ITypeBinding type = node.getType().getTypeBinding();
 		buffer.append("(");
 		node.getExpression().accept(this);
-		buffer.append(" as! ");
-		buffer.append(nameTable.getSpecificObjCType(type));
+		ITypeBinding castTypeBinding = node.getExpression().getTypeBinding();
+		String typeName = nameTable.getSpecificObjCType(type);
+		String castTypeName = nameTable.getSpecificObjCType(castTypeBinding); 
+		boolean needCast = true;
+		if (typeName.equals(castTypeName)) {
+			needCast = false;
+		}
+		if (needCast) {
+			if (!BindingUtil.variableShouldBeOptional(type)) {
+				buffer.append(" as ");
+			} else {
+				buffer.append(" as! ");
+			}
+			buffer.append(typeName);
+			if (!BindingUtil.variableShouldBeOptional(type)) {
+				buffer.append("?");
+			}
+		} 
 		buffer.append(")");
 		return false;
 	}
