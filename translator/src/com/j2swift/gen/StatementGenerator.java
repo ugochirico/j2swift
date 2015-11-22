@@ -404,7 +404,7 @@ public class StatementGenerator extends TreeVisitor {
 				.getDeclaringClass());
 		buffer.append(constructorName);
 		buffer.append("(");
-		printMethodInvocationNameAndArgs(node.getArguments());
+		printConstructorInvocationArgs(node.getArguments());
 		buffer.append(")");
 		return false;
 	}
