@@ -37,6 +37,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -1283,9 +1284,17 @@ public class NameTable {
 				classType = getFullName(type);
 			}
 		}
-		String protocols = interfaces.isEmpty() ? "" : "<"
-				+ Joiner.on(", ").join(interfaces) + ">";
-		return classType == null ? ID_TYPE + protocols : classType + protocols;
+		
+		 if (!interfaces.isEmpty()) {
+			return interfaces.get(0);
+		}
+		 else if (!Strings.isNullOrEmpty(classType)) {
+			return classType;
+		}
+		 else {
+			 return ID_TYPE;
+		 }
+		 
 	}
 
 	/**
@@ -1353,7 +1362,7 @@ public class NameTable {
 
     ITypeBinding outerBinding = binding.getDeclaringClass();
     if (outerBinding != null) {
-      return /*getFullNameInner(outerBinding) + '_' +*/ getTypeSubName(binding);
+      return getFullNameInner(outerBinding) + '_' + getTypeSubName(binding);
     }
     String name = binding.getQualifiedName();
 

@@ -9,9 +9,9 @@ interface BaseInterface {
 }
 
 abstract class TestBaseClass {
-	public abstract void testMethod();
-	public abstract String testMehodString();
-	protected abstract int testMethodInt();
+//	public abstract void testMethod();
+//	public abstract String testMehodString();
+//	protected abstract int testMethodInt();
 }
 
 
@@ -19,6 +19,7 @@ class TestDylanClass extends TestBaseClass  {
 	static final long serialVersionUID = -7034897190745766939L;
 	
 	private int i;
+	private BaseInterface bb;
 	
 	TestDylanClass() {
 		i = 10;
@@ -31,7 +32,7 @@ class TestDylanClass extends TestBaseClass  {
 			
 			@Override
 			public String getIt() {
-				System.out.println(i);
+//				System.out.println(i);
 				i = 11;
 				return null;
 			}
@@ -43,40 +44,40 @@ class TestDylanClass extends TestBaseClass  {
 //		System.out.println(i);
 	}
 	
-	void doTest(String s) {
-		s = "qweqwe";
+//	void doTest(String s) {
+//		s = "qweqwe";
 //		System.out.println(s);
-	}
+//	}
 	
-	public static void main(String[] args) {
-		TestDylanClass c = new TestDylanClass();
-		c.logK();
-		String s = "123";
-		c.doTest(s);
+//	public static void main(String[] args) {
+//		TestDylanClass c = new TestDylanClass();
+//		c.logK();
+//		String s = "123";
+//		c.doTest(s);
 //		System.out.println(s);
-	}
+//	}
 
 
 
-	@Override
-	public void testMethod() {
-		// TODO Auto-generated method stub
-	}
-
-
-
-	@Override
-	public String testMehodString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	protected int testMethodInt() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+//	@Override
+//	public void testMethod() {
+//		// TODO Auto-generated method stub
+//	}
+//
+//
+//
+//	@Override
+//	public String testMehodString() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//
+//
+//	@Override
+//	protected int testMethodInt() {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 }
 

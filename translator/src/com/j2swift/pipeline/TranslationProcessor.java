@@ -24,6 +24,7 @@ import com.j2swift.ast.CompilationUnit;
 import com.j2swift.gen.GenerationUnit;
 import com.j2swift.gen.SwiftImplementationGenerator;
 import com.j2swift.translate.AbstractMethodRewriter;
+import com.j2swift.translate.AnonymousClassConverter;
 import com.j2swift.translate.Functionizer;
 import com.j2swift.translate.OperatorRewriter;
 import com.j2swift.translate.PrimitiveRewriter;
@@ -124,9 +125,9 @@ public class TranslationProcessor extends FileProcessor {
 //    new Autoboxer().run(unit);
 //    ticker.tick("Autoboxer");
 //
-//    // Extract inner and anonymous classes
-//    new AnonymousClassConverter().run(unit);
-//    ticker.tick("AnonymousClassConverter");
+    // Extract inner and anonymous classes
+    new AnonymousClassConverter().run(unit);
+    ticker.tick("AnonymousClassConverter");
 //
 //    new InnerClassExtractor(outerResolver, unit).run(unit);
 //    ticker.tick("InnerClassExtractor");
