@@ -4,6 +4,8 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/lang/Number.java",
+				"java/lang/Error.java",
 				"java/lang/Boolean.java",
 				"java/lang/RuntimeException.java",
 				"java/lang/ReflectiveOperationException.java",
