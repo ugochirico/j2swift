@@ -60,6 +60,9 @@ public class ClassImplementationGenerator extends
 		newline();
 		printIndent();
 		println("}");
+		
+	    printOuterDeclarations();
+//	    printTypeLiteralImplementation();
 	}
 
 	@Override

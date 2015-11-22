@@ -2,7 +2,7 @@
 
 
 
-### 1.java中的类中属性的定义
+### 1.java中的类中字段的定义
 
 java 中的如下代码：
 
@@ -61,3 +61,4 @@ class B : A {
 Authored by Dylan
 
 2015.11.20
+

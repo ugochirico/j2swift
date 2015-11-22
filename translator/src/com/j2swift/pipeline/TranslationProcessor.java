@@ -23,6 +23,7 @@ import com.j2swift.Options;
 import com.j2swift.ast.CompilationUnit;
 import com.j2swift.gen.GenerationUnit;
 import com.j2swift.gen.SwiftImplementationGenerator;
+import com.j2swift.translate.AbstractMethodRewriter;
 import com.j2swift.translate.Functionizer;
 import com.j2swift.translate.OperatorRewriter;
 import com.j2swift.translate.PrimitiveRewriter;
@@ -108,10 +109,10 @@ public class TranslationProcessor extends FileProcessor {
     new Rewriter().run(unit);
     ticker.tick("Rewriter");
 
-//    // Add abstract method stubs.
-//    new AbstractMethodRewriter(unit).run(unit);
-//    ticker.tick("AbstractMethodRewriter");
-//
+    // Add abstract method stubs.
+    new AbstractMethodRewriter(unit).run(unit);
+    ticker.tick("AbstractMethodRewriter");
+
 //    new VariableRenamer().run(unit);
 //    ticker.tick("VariableRenamer");
 //

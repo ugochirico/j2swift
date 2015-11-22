@@ -1,110 +1,82 @@
 package com.j2swift.test;
 
-//interface BaseInterface {
-//
-//	/**
-//	 * @return
-//	 */
-//	String getIt();
-//}
-//
-//interface DylanInterface extends BaseInterface {
-//	
-//	String getContactNamePinyin();
-//
-//	public void doTest();
-//
-//	public void doTest(int i);
-//
-//	public int doTest(String s);
-//}
-//
-//class TestDyalnBalseClass {
-//	public void methodTodo() {
-//
-//	}
-//
-//	TestDyalnBalseClass() {
-//		int i = 0;
-//	}
-//
-//	TestDyalnBalseClass(int i) {
-//
-//	}
-//}
-//
-//class TestDylanOneClass extends TestDyalnBalseClass {
-//	int i = 0;
-//
-//	public int k;
-//	
-//	public void methodTodo(int i) {
-//		this.k = 1;
-//
-//	}
-//
-//	public void methodTodo(String s, int i) {
-//
-//	}
-//
-//	TestDylanOneClass() {
-//		super();
-//		this.k = 2;
-//	}
-//
-//	TestDylanOneClass(String s) {
-//
-//	}
-//
-//	TestDylanOneClass(String s, int i) {
-//
-//	}
-//
-//	public TestDylanOneClass(String s, int i, int j) {
-//
-//	}
-//	
-//	public void logK() {
-//		System.out.println(this.k);
-//	}
-//}
+interface BaseInterface {
 
-class TestDylanClass  {
+	/**
+	 * @return
+	 */
+	String getIt();
+}
+
+abstract class TestBaseClass {
+	public abstract void testMethod();
+	public abstract String testMehodString();
+	protected abstract int testMethodInt();
+}
+
+
+class TestDylanClass extends TestBaseClass  {
 	static final long serialVersionUID = -7034897190745766939L;
 	
-//	public static final long testId = 1000;
-//	public int testK;
-//	public int k;
-
+	private int i;
+	
 	TestDylanClass() {
-		super();
-		
+		i = 10;
 	}
 
-	TestDylanClass(String s) {
-		// super();
-	}
 	
-	public void testMethod() {
-//		System.out.println("hello world");
-	}
 	
-	public void testMethod(int i) {
+	void logK() {
+		BaseInterface b = new BaseInterface() {
+			
+			@Override
+			public String getIt() {
+				System.out.println(i);
+				i = 11;
+				return null;
+			}
+		};
+		
+		i = 12;
+		
+		b.getIt();
 //		System.out.println(i);
-		
+	}
+	
+	void doTest(String s) {
+		s = "qweqwe";
+//		System.out.println(s);
+	}
+	
+	public static void main(String[] args) {
+		TestDylanClass c = new TestDylanClass();
+		c.logK();
+		String s = "123";
+		c.doTest(s);
+//		System.out.println(s);
 	}
 
-	public String testMethod(String s) {
-		return s;
+
+
+	@Override
+	public void testMethod() {
+		// TODO Auto-generated method stub
 	}
-	
-	public void logK() {
-//		super.logK();
-//		System.out.println(this.k);
+
+
+
+	@Override
+	public String testMehodString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-//	public static void main(String[] args) {
-//		TestDylanClass c = new TestDylanClass();
-//	}
+
+
+
+	@Override
+	protected int testMethodInt() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 
