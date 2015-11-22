@@ -13,6 +13,8 @@
 		0F042A9C1BF5B43200690F83 /* JavaStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */; };
 		0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC31BF5CC7F00690F83 /* JavaClass.swift */; };
 		0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC51BF5CC8900690F83 /* JavaObject.swift */; };
+		0F276A921C0172C600EE845C /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F276A911C0172C600EE845C /* Error.swift */; };
+		0F276A941C01746E00EE845C /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F276A931C01746E00EE845C /* Number.swift */; };
 		0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */; };
 		0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */; };
 		0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */; };
@@ -62,6 +64,8 @@
 		0F042A9B1BF5B43200690F83 /* JavaStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaStringExtension.swift; sourceTree = "<group>"; };
 		0F043FC31BF5CC7F00690F83 /* JavaClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaClass.swift; sourceTree = "<group>"; };
 		0F043FC51BF5CC8900690F83 /* JavaObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaObject.swift; sourceTree = "<group>"; };
+		0F276A911C0172C600EE845C /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		0F276A931C01746E00EE845C /* Number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
 		0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaThrowable.swift; sourceTree = "<group>"; };
 		0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = J2SwiftHeader.swift; sourceTree = "<group>"; };
 		0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Runnable.swift; sourceTree = "<group>"; };
@@ -167,6 +171,8 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				0F276A931C01746E00EE845C /* Number.swift */,
+				0F276A911C0172C600EE845C /* Error.swift */,
 				6BBFCA0D1C00BCA4006955E2 /* UnsupportedOperationException.swift */,
 				6BBFCA0E1C00BCA4006955E2 /* TypeNotPresentException.swift */,
 				6BBFCA0F1C00BCA4006955E2 /* StringIndexOutOfBoundsException.swift */,
@@ -320,9 +326,11 @@
 				0FBE636E1BFF243800BC4D3A /* Comparable.swift in Sources */,
 				6BBFCA081C00BB39006955E2 /* IllegalArgumentException.swift in Sources */,
 				6BBFCA1E1C00BCA4006955E2 /* ArithmeticException.swift in Sources */,
+				0F276A921C0172C600EE845C /* Error.swift in Sources */,
 				6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */,
 				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,
 				6BBFCA041C00721D006955E2 /* JavaArrayExtension.swift in Sources */,
+				0F276A941C01746E00EE845C /* Number.swift in Sources */,
 				6BBFC9F41C00338C006955E2 /* Serializable.swift in Sources */,
 				6BBFCA1C1C00BCA4006955E2 /* ClassCastException.swift in Sources */,
 				6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */,

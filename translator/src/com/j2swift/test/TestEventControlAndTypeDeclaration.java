@@ -11,6 +11,7 @@ public class TestEventControlAndTypeDeclaration {
 	public String password;
 	public int uId = 1000;
 	public String info1, info2 = "1";
+	public String self = "";
 	
 	public synchronized void testSynchronizedFunction() {
 	}
