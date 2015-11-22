@@ -14,6 +14,13 @@ extension Array {
         return JavaClass(mirror: type)
     }
     
+    public func lookup(index: Int) throws -> Element? {
+        if  index < count && index >= 0 {
+            return self[index]
+        } else {
+            throw JavaArrayIndexOutOfBoundsException(count, jint(index))
+        }
+    }
     
 }
 

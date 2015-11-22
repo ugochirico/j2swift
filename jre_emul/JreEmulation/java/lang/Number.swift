@@ -10,12 +10,36 @@ public class JavaNumber : JavaObject, JavaSerializable {
   private static let serialVersionUID:jlong = -8742448824652078965
 
 
+  public func intValue() ->jint  {
+    // can't call an abstract method
+    assertionFailure("Cannot directly invoke the abstract method ")
+    return 0;
+  }
+
+  public func longValue() ->jlong  {
+    // can't call an abstract method
+    assertionFailure("Cannot directly invoke the abstract method ")
+    return 0;
+  }
+
+  public func floatValue() ->jfloat  {
+    // can't call an abstract method
+    assertionFailure("Cannot directly invoke the abstract method ")
+    return 0;
+  }
+
+  public func doubleValue() ->jdouble  {
+    // can't call an abstract method
+    assertionFailure("Cannot directly invoke the abstract method ")
+    return 0;
+  }
+
   public func byteValue() ->jbyte  {
-    return (intValue() as jbyte?)
+    return jbyte(intValue())
   }
 
   public func shortValue() ->jshort  {
-    return (intValue() as jshort?)
+    return jshort(intValue())
   }
 
 
