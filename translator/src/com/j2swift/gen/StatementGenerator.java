@@ -149,7 +149,21 @@ public class StatementGenerator extends TreeVisitor {
 			buffer.append("\n");
 		}
 		buffer.append("super.init(");
-		List<Expression> args = node.getArguments();
+		printConstructorInvocationArgs(node.getArguments());
+		buffer.append(")");
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(ConstructorInvocation node) {
+		buffer.append("self.init(");
+		printConstructorInvocationArgs(node.getArguments());
+		buffer.append(")\n");
+		return false;
+	}
+	
+	private void printConstructorInvocationArgs(List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {
 			Expression exp = args.get(i);
 			if (exp.getTypeBinding() == null) {
@@ -162,17 +176,6 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(",");
 			}
 		}
-		buffer.append(")");
-		buffer.append("\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(ConstructorInvocation node) {
-		buffer.append("self.init(");
-		printMethodInvocationNameAndArgs(node.getArguments());
-		buffer.append(")\n");
-		return false;
 	}
 
 	@Override

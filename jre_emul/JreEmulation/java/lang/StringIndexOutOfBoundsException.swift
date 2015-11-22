@@ -26,7 +26,7 @@ public class JavaStringIndexOutOfBoundsException : JavaIndexOutOfBoundsException
   }
 
   public convenience init(withString s:String?, withjint index:jint)  {
-    self.init(s!.length(),index)
+    self.init(withjint: s!.length(),withjint: index)
   }
 
   public init(withjint sourceLength:jint, withjint index:jint)  {
@@ -35,7 +35,7 @@ public class JavaStringIndexOutOfBoundsException : JavaIndexOutOfBoundsException
   }
 
   public convenience init(withString s:String?, withjint offset:jint, withjint count:jint)  {
-    self.init(s!.length(),offset,count)
+    self.init(withjint: s!.length(),withjint: offset,withjint: count)
   }
 
   public init(withjint sourceLength:jint, withjint offset:jint, withjint count:jint)  {
