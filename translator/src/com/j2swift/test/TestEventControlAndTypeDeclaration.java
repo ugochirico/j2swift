@@ -98,7 +98,7 @@ public class TestEventControlAndTypeDeclaration {
 		boolean booleanShotType;
 
 		String a = "23";
-		String b = null, c = "45", d = b;
+		String b = "", c = "45", d = b;
 		int aLength = a.length();
 
 		a = b + c + d + "123";

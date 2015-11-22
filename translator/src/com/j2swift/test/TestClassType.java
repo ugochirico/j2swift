@@ -6,8 +6,8 @@ public class TestClassType {
 		
 	}
 	
-	public TestClassType(String a) {
-		
+	public TestClassType(String a) throws RuntimeException {
+		throw new RuntimeException("");
 	}
 
 	public void test() {

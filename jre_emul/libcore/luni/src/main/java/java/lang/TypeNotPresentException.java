@@ -27,7 +27,7 @@ package java.lang;
 public class TypeNotPresentException extends RuntimeException {
     private static final long serialVersionUID = -5101214195716534496L;
 
-    private String typeName;
+    private String typeName_;
 
     /**
      * Constructs a new {@code TypeNotPresentException} with the current stack
@@ -41,7 +41,7 @@ public class TypeNotPresentException extends RuntimeException {
      */
     public TypeNotPresentException(String typeName, Throwable cause) {
         super("Type " + typeName + " not present", cause);
-        this.typeName = typeName;
+        this.typeName_ = typeName;
     }
 
     /**
@@ -50,6 +50,6 @@ public class TypeNotPresentException extends RuntimeException {
      * @return the name of the type that caused this exception.
      */
     public String typeName() {
-        return typeName;
+        return typeName_;
     }
 }

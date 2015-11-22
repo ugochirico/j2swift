@@ -9,16 +9,16 @@ public class JavaTypeNotPresentException : JavaRuntimeException {
 
   private static let serialVersionUID:jlong = -5101214195716534496
 
-  private var typeName:String?
+  private var typeName_:String?
 
   public override init(_ typeName:String?, _ cause:JavaThrowable?)  {
     
     super.init("Type \(typeName) not present",cause)
-    self.typeName = typeName
+    self.typeName_ = typeName
   }
 
   public func typeName() ->String?  {
-    return typeName
+    return typeName_
   }
 
 
