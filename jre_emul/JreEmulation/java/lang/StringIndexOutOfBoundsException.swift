@@ -15,32 +15,32 @@ public class JavaStringIndexOutOfBoundsException : JavaIndexOutOfBoundsException
     super.init()
   }
 
-  public init(_ index:jint)  {
+  public init(withjint index:jint)  {
     
-    super.init("String index out of range: \(index)")
+    super.init(withString: "String index out of range: \(index)")
   }
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
-  public convenience init(_ s:String?, _ index:jint)  {
+  public convenience init(withString s:String?, withjint index:jint)  {
     self.init(s!.length(),index)
   }
 
-  public init(_ sourceLength:jint, _ index:jint)  {
+  public init(withjint sourceLength:jint, withjint index:jint)  {
     
-    super.init("length=\(sourceLength); index=\(index)")
+    super.init(withString: "length=\(sourceLength); index=\(index)")
   }
 
-  public convenience init(_ s:String?, _ offset:jint, _ count:jint)  {
+  public convenience init(withString s:String?, withjint offset:jint, withjint count:jint)  {
     self.init(s!.length(),offset,count)
   }
 
-  public init(_ sourceLength:jint, _ offset:jint, _ count:jint)  {
+  public init(withjint sourceLength:jint, withjint offset:jint, withjint count:jint)  {
     
-    super.init("length=\(sourceLength); regionStart=\(offset); regionLength=\(count)")
+    super.init(withString: "length=\(sourceLength); regionStart=\(offset); regionLength=\(count)")
   }
 
 

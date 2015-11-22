@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F0391AE1C01AB75000EA5BC /* Appendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0391AD1C01AB75000EA5BC /* Appendable.swift */; };
+		0F0391B01C01ABC0000EA5BC /* CharSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0391AF1C01ABC0000EA5BC /* CharSequence.swift */; };
+		0F0391B21C01B0C3000EA5BC /* ArrayStoreException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0391B11C01B0C3000EA5BC /* ArrayStoreException.swift */; };
+		0F0391B41C01B0F9000EA5BC /* AssertionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0391B31C01B0F9000EA5BC /* AssertionError.swift */; };
 		0F042A851BF595EE00690F83 /* JreEmulation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F042A841BF595EE00690F83 /* JreEmulation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0F042A8C1BF595EE00690F83 /* JreEmulation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F042A811BF595EE00690F83 /* JreEmulation.framework */; };
 		0F042A911BF595EE00690F83 /* JreEmulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F042A901BF595EE00690F83 /* JreEmulationTests.swift */; };
@@ -55,6 +59,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F0391AD1C01AB75000EA5BC /* Appendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appendable.swift; sourceTree = "<group>"; };
+		0F0391AF1C01ABC0000EA5BC /* CharSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharSequence.swift; sourceTree = "<group>"; };
+		0F0391B11C01B0C3000EA5BC /* ArrayStoreException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayStoreException.swift; sourceTree = "<group>"; };
+		0F0391B31C01B0F9000EA5BC /* AssertionError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssertionError.swift; sourceTree = "<group>"; };
 		0F042A811BF595EE00690F83 /* JreEmulation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JreEmulation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F042A841BF595EE00690F83 /* JreEmulation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JreEmulation.h; sourceTree = "<group>"; };
 		0F042A861BF595EE00690F83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -171,6 +179,10 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				0F0391B31C01B0F9000EA5BC /* AssertionError.swift */,
+				0F0391B11C01B0C3000EA5BC /* ArrayStoreException.swift */,
+				0F0391AF1C01ABC0000EA5BC /* CharSequence.swift */,
+				0F0391AD1C01AB75000EA5BC /* Appendable.swift */,
 				0F276A931C01746E00EE845C /* Number.swift */,
 				0F276A911C0172C600EE845C /* Error.swift */,
 				6BBFCA0D1C00BCA4006955E2 /* UnsupportedOperationException.swift */,
@@ -335,8 +347,12 @@
 				6BBFCA1C1C00BCA4006955E2 /* ClassCastException.swift in Sources */,
 				6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */,
 				6BBFC9F61C003415006955E2 /* IOException.swift in Sources */,
+				0F0391AE1C01AB75000EA5BC /* Appendable.swift in Sources */,
 				6BBFCA0C1C00BBB2006955E2 /* NoSuchFieldException.swift in Sources */,
 				0FBE636A1BFF1A7A00BC4D3A /* RuntimeException.swift in Sources */,
+				0F0391B01C01ABC0000EA5BC /* CharSequence.swift in Sources */,
+				0F0391B41C01B0F9000EA5BC /* AssertionError.swift in Sources */,
+				0F0391B21C01B0C3000EA5BC /* ArrayStoreException.swift in Sources */,
 				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
 				6BBFCA0A1C00BB6D006955E2 /* NumberFormatException.swift in Sources */,
 				0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */,

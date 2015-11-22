@@ -15,24 +15,24 @@ public class JavaException : JavaThrowable {
     super.init()
   }
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
-  public override init(_ detailMessage:String?, _ throwable:JavaThrowable?)  {
+  public override init(withString detailMessage:String?, withJavaThrowable throwable:JavaThrowable?)  {
     
-    super.init(detailMessage,throwable)
+    super.init(withString: detailMessage,withJavaThrowable: throwable)
   }
 
-  public override init(_ throwable:JavaThrowable?)  {
+  public override init(withJavaThrowable throwable:JavaThrowable?)  {
     
-    super.init(throwable)
+    super.init(withJavaThrowable: throwable)
   }
 
-  override init(_ message:String?, _ cause:JavaThrowable?, _ enableSuppression:jboolean, _ writableStackTrace:jboolean)  {
+  override init(withString message:String?, withJavaThrowable cause:JavaThrowable?, withjboolean enableSuppression:jboolean, withjboolean writableStackTrace:jboolean)  {
     
-    super.init(message,cause,enableSuppression,writableStackTrace)
+    super.init(withString: message,withJavaThrowable: cause,withjboolean: enableSuppression,withjboolean: writableStackTrace)
   }
 
 

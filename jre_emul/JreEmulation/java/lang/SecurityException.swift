@@ -15,19 +15,19 @@ public class JavaSecurityException : JavaRuntimeException {
     super.init()
   }
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
-  public override init(_ message:String?, _ cause:JavaThrowable?)  {
+  public override init(withString message:String?, withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init(message,cause)
+    super.init(withString: message,withJavaThrowable: cause)
   }
 
-  public override init(_ cause:JavaThrowable?)  {
+  public override init(withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init(cause == nil ? nil : cause!.toString(),cause)
+    super.init(withString: cause == nil ? nil : cause!.toString(),withJavaThrowable: cause)
   }
 
 

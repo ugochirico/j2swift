@@ -92,72 +92,73 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 	}
 
 	protected String getMethodSignature(MethodDeclaration m) {
-//		StringBuilder sb = new StringBuilder();
-//		IMethodBinding binding = m.getMethodBinding();
-//		
-//		//public
-//		if (Modifier.isPublic(m.getModifiers())) {
-//			sb.append("public ");
-//		}
-//		//static
-//		if (Modifier.isStatic(m.getModifiers())) {
-//			sb.append("static ");
-//		}
-//		//Override
-//		List<Annotation> annotations = m.getAnnotations();
-//		if (annotations != null && annotations.size() > 0) {
-//			for (Annotation annotation : annotations) {
-//				String annotationName = annotation.getAnnotationBinding().getName();
-//				if (annotationName != null && annotationName.equals("Override")) {
-//					sb.append("override ");	
-//				}
-//			}
-//		}
-//		
-//		String returnType = nameTable.getObjCType(binding.getReturnType());
-//		String selector = binding.getName();
-//		if (m.isConstructor()) {
-//			returnType = null;
-//			selector = "init";
-//		} else {
-//			sb.append("func ");
-//		}
-//		
-//		if (selector.equals("hash")) {
-//			// Explicitly test hashCode() because of NSObject's hash return
-//			// value.
-//			returnType = "NSUInteger";
-//		}
-//		sb.append(selector);
-//
-//		List<SingleVariableDeclaration> params = m.getParameters();
-//		if (params.isEmpty() || params.size() == 0) {
-//			sb.append("()");
-//		} else {
-//			for (int i = 0; i < params.size(); i++) {
-//				if (i == 0) {
-//					sb.append("(");
-//				}
-//				if (i != 0) {
-//					sb.append(", _ ");
-//				}
-//				IVariableBinding var = params.get(i).getVariableBinding();
-//				String typeName = nameTable.getSpecificObjCType(var.getType());
-//				sb.append(String.format("%s:%s?",
-//						nameTable.getVariableShortName(var), typeName));
-//				if (i == params.size() - 1) {
-//					sb.append(")");
-//				}
-//			}
-//		}
-//		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
-//			sb.append(" ->").append(returnType);
-//			ITypeBinding type = binding.getReturnType();
-//			if (!type.isPrimitive()) {
-//				sb.append("?");
-//			}
-//		}
-//		return sb.toString();
+		// StringBuilder sb = new StringBuilder();
+		// IMethodBinding binding = m.getMethodBinding();
+		//
+		// //public
+		// if (Modifier.isPublic(m.getModifiers())) {
+		// sb.append("public ");
+		// }
+		// //static
+		// if (Modifier.isStatic(m.getModifiers())) {
+		// sb.append("static ");
+		// }
+		// //Override
+		// List<Annotation> annotations = m.getAnnotations();
+		// if (annotations != null && annotations.size() > 0) {
+		// for (Annotation annotation : annotations) {
+		// String annotationName = annotation.getAnnotationBinding().getName();
+		// if (annotationName != null && annotationName.equals("Override")) {
+		// sb.append("override ");
+		// }
+		// }
+		// }
+		//
+		// String returnType = nameTable.getObjCType(binding.getReturnType());
+		// String selector = binding.getName();
+		// if (m.isConstructor()) {
+		// returnType = null;
+		// selector = "init";
+		// } else {
+		// sb.append("func ");
+		// }
+		//
+		// if (selector.equals("hash")) {
+		// // Explicitly test hashCode() because of NSObject's hash return
+		// // value.
+		// returnType = "NSUInteger";
+		// }
+		// sb.append(selector);
+		//
+		// List<SingleVariableDeclaration> params = m.getParameters();
+		// if (params.isEmpty() || params.size() == 0) {
+		// sb.append("()");
+		// } else {
+		// for (int i = 0; i < params.size(); i++) {
+		// if (i == 0) {
+		// sb.append("(");
+		// }
+		// if (i != 0) {
+		// sb.append(", _ ");
+		// }
+		// IVariableBinding var = params.get(i).getVariableBinding();
+		// String typeName = nameTable.getSpecificObjCType(var.getType());
+		// sb.append(String.format("%s:%s?",
+		// nameTable.getVariableShortName(var), typeName));
+		// if (i == params.size() - 1) {
+		// sb.append(")");
+		// }
+		// }
+		// }
+		// if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType))
+		// {
+		// sb.append(" ->").append(returnType);
+		// ITypeBinding type = binding.getReturnType();
+		// if (!type.isPrimitive()) {
+		// sb.append("?");
+		// }
+		// }
+		// return sb.toString();
 		return "";
 	}
 
@@ -190,23 +191,27 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	protected String printMethodParameter(MethodDeclaration m) {
 		StringBuilder sb = new StringBuilder();
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (params.isEmpty() || params.size() == 0) {
 			sb.append("()");
 		} else {
+			String token = "_";
 			for (int i = 0; i < params.size(); i++) {
+				if (m.isConstructor()) {
+					token = getContructorTypeToking(params.get(i));
+				}
 				if (i == 0) {
 					if (m.isConstructor()) {
-						sb.append("(_ ");
-					}else {
+						sb.append("(" + token + " ");
+					} else {
 						sb.append("(");
 					}
 				}
 				if (i != 0) {
-					sb.append(", _ ");
+					sb.append(", " + token + " ");
 				}
 				IVariableBinding var = params.get(i).getVariableBinding();
 				String typeName = nameTable.getSpecificObjCType(var.getType());
@@ -223,6 +228,12 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 		return sb.toString();
 	}
 	
+	private String getContructorTypeToking(SingleVariableDeclaration declaration) {
+		IVariableBinding var = declaration.getVariableBinding();
+		String typeName = nameTable.getSpecificObjCType(var.getType());
+		return "with" + typeName;
+	}
+
 	protected String getClassName() {
 		String className = typeName;
 		if (typeBinding.isGenericType()) {

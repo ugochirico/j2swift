@@ -90,18 +90,9 @@ public class ClassImplementationGenerator extends
 		} else if (isMehothodOvrrided(this.typeBinding, m)) {
 			sb.append("override ");
 		}
-		if (m.isConvenienceConstructor()) {
-			sb.append("convenience ");
-		}
 		String returnType = nameTable.getObjCType(binding.getReturnType());
 		String selector = binding.getName();
-		if (m.isConstructor()) {
-			returnType = null;
-			selector = "init";
-		} else {
-			sb.append("func ");
-		}
-
+		sb.append("func ");
 		if (selector.equals("hash")) {
 			// Explicitly test hashCode() because of NSObject's hash return
 			// value.
@@ -131,9 +122,46 @@ public class ClassImplementationGenerator extends
 		String methodBody = generateStatement(m.getBody());
 		indent();
 		printIndent();
-		print(getMethodSignature(m) + reindent(methodBody) + "\n");
+		if (m.isConstructor()) {
+			print(getConstructorSignature(m) + reindent(methodBody) + "\n");
+		} else {
+			print(getMethodSignature(m) + reindent(methodBody) + "\n");
+		}
 		unindent();
 		newline();
+	}
+
+	private String getConstructorSignature(MethodDeclaration m) {
+		StringBuilder sb = new StringBuilder();
+		IMethodBinding binding = m.getMethodBinding();
+
+		// public
+		if (Modifier.isPublic(m.getModifiers())) {
+			sb.append("public ");
+		}
+		
+		List<SingleVariableDeclaration> params = m.getParameters();
+		if (m.isConstructor()) {
+			if (params.isEmpty() || params.size() == 0) {// for
+															// "override init()"
+				sb.append("override ");
+			} else if (isConstructorOvrrided(this.typeBinding, m)) {
+				sb.append("override ");
+			}
+		} else if (isMehothodOvrrided(this.typeBinding, m)) {
+			sb.append("override ");
+		}
+		if (m.isConvenienceConstructor()) {
+			sb.append("convenience ");
+		}
+		String selector = "init";
+	
+		sb.append(selector);
+		sb.append(printMethodParameter(m));
+		if (binding.getExceptionTypes().length > 0) {
+			sb.append(" throws");
+		}
+		return sb.toString();
 	}
 
 	private boolean isMehothodOvrrided(ITypeBinding binding, MethodDeclaration m) {

@@ -13,19 +13,19 @@ public class JavaReflectiveOperationException : JavaException {
     super.init()
   }
 
-  public override init(_ message:String?)  {
+  public override init(withString message:String?)  {
     
-    super.init(message)
+    super.init(withString: message)
   }
 
-  public override init(_ cause:JavaThrowable?)  {
+  public override init(withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init(cause)
+    super.init(withJavaThrowable: cause)
   }
 
-  public override init(_ message:String?, _ cause:JavaThrowable?)  {
+  public override init(withString message:String?, withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init(message,cause)
+    super.init(withString: message,withJavaThrowable: cause)
   }
 
 

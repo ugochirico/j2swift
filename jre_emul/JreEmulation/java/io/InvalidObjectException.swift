@@ -10,9 +10,9 @@ public class JavaInvalidObjectException : JavaObjectStreamException {
   private static let serialVersionUID:jlong = 3233174318281839583
 
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
 

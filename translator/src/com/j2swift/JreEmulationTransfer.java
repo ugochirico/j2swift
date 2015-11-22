@@ -4,6 +4,10 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/lang/AssertionError.java",
+				"java/lang/ArrayStoreException.java",
+				"java/lang/CharSequence.java",
+				"java/lang/Appendable.java",
 				"java/lang/Number.java",
 				"java/lang/Error.java",
 				"java/lang/Boolean.java",

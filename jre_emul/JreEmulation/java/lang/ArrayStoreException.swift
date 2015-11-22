@@ -5,9 +5,9 @@
 
 import Foundation
 
-public class JavaClassCastException : JavaRuntimeException {
+public class JavaArrayStoreException : JavaRuntimeException {
 
-  private static let serialVersionUID:jlong = -9223365651070458532
+  private static let serialVersionUID:jlong = -4522193890499838241
 
 
   public override init()  {

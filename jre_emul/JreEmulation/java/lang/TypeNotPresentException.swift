@@ -11,9 +11,9 @@ public class JavaTypeNotPresentException : JavaRuntimeException {
 
   private var typeName_:String?
 
-  public override init(_ typeName:String?, _ cause:JavaThrowable?)  {
+  public override init(withString typeName:String?, withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init("Type \(typeName) not present",cause)
+    super.init(withString: "Type \(typeName) not present",withJavaThrowable: cause)
     self.typeName_ = typeName
   }
 

@@ -15,24 +15,24 @@ public class JavaArrayIndexOutOfBoundsException : JavaIndexOutOfBoundsException 
     super.init()
   }
 
-  public init(_ index:jint)  {
+  public init(withjint index:jint)  {
     
-    super.init("index=\(index)")
+    super.init(withString: "index=\(index)")
   }
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
-  public init(_ sourceLength:jint, _ index:jint)  {
+  public init(withjint sourceLength:jint, withjint index:jint)  {
     
-    super.init("length=\(sourceLength); index=\(index)")
+    super.init(withString: "length=\(sourceLength); index=\(index)")
   }
 
-  public init(_ sourceLength:jint, _ offset:jint, _ count:jint)  {
+  public init(withjint sourceLength:jint, withjint offset:jint, withjint count:jint)  {
     
-    super.init("length=\(sourceLength); regionStart=\(offset); regionLength=\(count)")
+    super.init(withString: "length=\(sourceLength); regionStart=\(offset); regionLength=\(count)")
   }
 
 

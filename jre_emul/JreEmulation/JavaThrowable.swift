@@ -17,23 +17,23 @@ public class JavaThrowable : JavaObject, ErrorType {
     public override init() {
     }
     
-    public init(_ message:String?) {
+    public init(withString message:String?) {
         super.init()
         self.detailMessage = message;
     }
     
-    public init(_ message:String?, _ cause:JavaThrowable?) {
+    public init(withString message:String?, withJavaThrowable cause:JavaThrowable?) {
         super.init()
         self.detailMessage = message
         self.cause = cause
     }
     
-    public init(_ cause:JavaThrowable?) {
+    public init(withJavaThrowable cause:JavaThrowable?) {
         detailMessage = cause?.toString()
         self.cause = cause;
     }
 
-    init(_ message:String?, _ cause:JavaThrowable?, _ enableSuppression:jboolean, _ writableStackTrace:jboolean) {
+    init(withString message:String?, withJavaThrowable cause:JavaThrowable?, withjboolean enableSuppression:jboolean, withjboolean writableStackTrace:jboolean) {
         detailMessage = message;
         self.cause = cause;
     }
@@ -44,6 +44,10 @@ public class JavaThrowable : JavaObject, ErrorType {
     
     public func getLocalizedMessage() -> String? {
         return getMessage()
+    }
+    
+    public func initCause(cause:JavaThrowable?) -> JavaThrowable? {
+        return nil;
     }
     
     public override func toString() -> String? {

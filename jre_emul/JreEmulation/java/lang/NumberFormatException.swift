@@ -15,9 +15,9 @@ public class JavaNumberFormatException : JavaIllegalArgumentException {
     super.init()
   }
 
-  public override init(_ detailMessage:String?)  {
+  public override init(withString detailMessage:String?)  {
     
-    super.init(detailMessage)
+    super.init(withString: detailMessage)
   }
 
 

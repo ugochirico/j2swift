@@ -13,6 +13,7 @@ import com.j2swift.ast.SimpleName;
 import com.j2swift.ast.TreeNode;
 import com.j2swift.ast.TreeVisitor;
 import com.j2swift.types.FunctionBinding;
+import com.j2swift.types.GeneratedVariableBinding;
 import com.j2swift.util.BindingUtil;
 
 public class OperatorRewriter extends TreeVisitor {
@@ -65,6 +66,8 @@ public class OperatorRewriter extends TreeVisitor {
 		}
 		replaceStringContact.append("\"");
 		SimpleName simpleName = new SimpleName(replaceStringContact.toString());
+		simpleName.setBinding(new GeneratedVariableBinding(
+				replaceStringContact.toString(), 0, typeEnv.getNSString(), false, true, null, null));
 		node.replaceWith(simpleName);
 	}
 
