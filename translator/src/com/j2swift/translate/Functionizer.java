@@ -10,11 +10,11 @@ import com.j2swift.ast.AnnotationTypeDeclaration;
 import com.j2swift.ast.BodyDeclaration;
 import com.j2swift.ast.CompilationUnit;
 import com.j2swift.ast.ConstructorInvocation;
+import com.j2swift.ast.Expression;
 import com.j2swift.ast.MethodDeclaration;
 import com.j2swift.ast.NativeStatement;
 import com.j2swift.ast.NormalAnnotation;
 import com.j2swift.ast.SingleMemberAnnotation;
-import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.ast.Statement;
 import com.j2swift.ast.SuperConstructorInvocation;
 import com.j2swift.ast.TreeNode;
@@ -100,8 +100,10 @@ public class Functionizer extends TreeVisitor {
 						node.setConvenienceConstructor(false);
 						ConstructorInvocation invocation = (ConstructorInvocation)firstStatemnt;
 						SuperConstructorInvocation superInvocation = new SuperConstructorInvocation(invocation.getMethodBinding());
-//						superInvocation.setArguments(invocation.getArguments());
-//						firstStatemnt.replaceWith(superInvocation);
+						for (Expression exp : invocation.getArguments()) {
+							superInvocation.getArguments().add(exp);
+						}
+						firstStatemnt.replaceWith(superInvocation);
 					} 
 				}
 			}
