@@ -28,29 +28,29 @@ public class JavaAssertionError : JavaError {
     }
   }
 
-  public convenience init(withjboolean detailMessage:jboolean)  {
-    self.init(withString: String.valueOf(detailMessage))
+  public init(withjboolean detailMessage:jboolean)  {
+    super.init(withString: String.valueOf(detailMessage))
   }
 
-  public convenience init(withjchar detailMessage:jchar)  {
-    self.init(withString: String.valueOf(detailMessage))
+  public init(withjchar detailMessage:jchar)  {
+    super.init(withString: String.valueOf(detailMessage))
   }
 
-  public convenience init(withjint detailMessage:jint)  {
-    self.init(withString: JavaInteger.toString(detailMessage))
-  }
-
-  public convenience init(withjlong detailMessage:jlong)  {
-    self.init(withString: JavaLong.toString(detailMessage))
-  }
-
-  public convenience init(withjfloat detailMessage:jfloat)  {
-    self.init(withString: JavaFloat.toString(detailMessage))
-  }
-
-  public convenience init(withjdouble detailMessage:jdouble)  {
-    self.init(withString: JavaDouble.toString(detailMessage))
-  }
+//  public init(withjint detailMessage:jint)  {
+//    super.init(withString: JavaInteger.toString(detailMessage))
+//  }
+//
+//  public init(withjlong detailMessage:jlong)  {
+//    super.init(withString: JavaLong.toString(detailMessage))
+//  }
+//
+//  public init(withjfloat detailMessage:jfloat)  {
+//    super.init(withString: JavaFloat.toString(detailMessage))
+//  }
+//
+//  public init(withjdouble detailMessage:jdouble)  {
+//    super.init(withString: JavaDouble.toString(detailMessage))
+//  }
 
 
 }
