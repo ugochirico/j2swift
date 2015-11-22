@@ -166,9 +166,6 @@ public class StatementGenerator extends TreeVisitor {
 	private void printConstructorInvocationArgs(List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {
 			Expression exp = args.get(i);
-			if (exp.getTypeBinding() == null) {
-				System.out.println(12);
-			}
 			String typeName = nameTable.getSpecificObjCType(exp.getTypeBinding());
 			buffer.append("with" + typeName + ": ");
 			exp.accept(this);
