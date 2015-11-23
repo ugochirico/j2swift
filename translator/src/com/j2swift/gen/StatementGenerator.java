@@ -437,9 +437,10 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(node.getIdentifier());
 			}
 		}
+//		if (node.isQualifiedName())
 		if (node.isNeedUnwarpOptional()
 				&& !BindingUtil.isPrimitive((IVariableBinding) node
-						.getBinding()) && !BindingUtil.isFinal(binding)) {
+						.getBinding()) && !(BindingUtil.isFinal(binding) && BindingUtil.isStatic(binding))) {
 			buffer.append("!");
 		}
 		return false;
@@ -917,7 +918,9 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(FieldAccess node) {
 		node.getExpression().accept(this);
 		buffer.append(".");
-		node.getName().accept(this);
+		SimpleName name = node.getName();
+		name.setNeedUnwarpOptional(true);
+		name.accept(this);
 		return false;
 	}
 }

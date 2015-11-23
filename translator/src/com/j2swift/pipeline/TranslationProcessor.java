@@ -26,7 +26,10 @@ import com.j2swift.gen.SwiftImplementationGenerator;
 import com.j2swift.translate.AbstractMethodRewriter;
 import com.j2swift.translate.AnonymousClassConverter;
 import com.j2swift.translate.Functionizer;
+import com.j2swift.translate.InnerClassExtractor;
 import com.j2swift.translate.OperatorRewriter;
+import com.j2swift.translate.OuterReferenceFixer;
+import com.j2swift.translate.OuterReferenceResolver;
 import com.j2swift.translate.PrimitiveRewriter;
 import com.j2swift.translate.Rewriter;
 import com.j2swift.types.HeaderImportCollector;
@@ -98,9 +101,9 @@ public class TranslationProcessor extends FileProcessor {
 //      ticker.tick("DeadCodeEliminator");
 //    }
 //
-//    OuterReferenceResolver outerResolver = new OuterReferenceResolver();
-//    outerResolver.run(unit);
-//    ticker.tick("OuterReferenceResolver");
+    OuterReferenceResolver outerResolver = new OuterReferenceResolver();
+    outerResolver.run(unit);
+    ticker.tick("OuterReferenceResolver");
 //
 //    // Update code that has GWT references.
 //    new GwtConverter().run(unit);
@@ -128,17 +131,17 @@ public class TranslationProcessor extends FileProcessor {
     // Extract inner and anonymous classes
     new AnonymousClassConverter().run(unit);
     ticker.tick("AnonymousClassConverter");
-//
-//    new InnerClassExtractor(outerResolver, unit).run(unit);
-//    ticker.tick("InnerClassExtractor");
+
+    new InnerClassExtractor(outerResolver, unit).run(unit);
+    ticker.tick("InnerClassExtractor");
 //
 //    // Normalize init statements
 //    new InitializationNormalizer(deadCodeMap).run(unit);
 //    ticker.tick("InitializationNormalizer");
 //
-//    // Fix references to outer scope and captured variables.
-//    new OuterReferenceFixer(outerResolver).run(unit);
-//    ticker.tick("OuterReferenceFixer");
+    // Fix references to outer scope and captured variables.
+    new OuterReferenceFixer(outerResolver).run(unit);
+    ticker.tick("OuterReferenceFixer");
 //
 //    // Rewrites expressions that would cause unsequenced compile errors.
 //    if (Options.extractUnsequencedModifications()) {
@@ -228,9 +231,9 @@ public class TranslationProcessor extends FileProcessor {
 //    ticker.tick("PrivateDeclarationResolver");
 //
 //    // Make sure we still have a valid AST.
-//    unit.validate();
-//
-//    ticker.pop();
+    unit.validate();
+
+    ticker.pop();
   }
 
   @VisibleForTesting

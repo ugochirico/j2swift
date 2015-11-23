@@ -78,7 +78,7 @@ public class Functionizer extends TreeVisitor {
 				boolean isNeedAddSuperInit = false;
 				Statement firstStatemnt = null;
 				if (statements != null && statements.size() > 0) {
-					firstStatemnt = statements.get(0);
+					firstStatemnt = statements.get(statements.size()-1);
 					if (firstStatemnt.getKind() != Kind.SUPER_CONSTRUCTOR_INVOCATION
 							&& firstStatemnt.getKind() != Kind.CONSTRUCTOR_INVOCATION) {
 						isNeedAddSuperInit = true;

@@ -46,7 +46,6 @@ public class AnonymousClassConverter extends TreeVisitor {
 	    if (parent instanceof ClassInstanceCreation) {
 	      newInvocation = (ClassInstanceCreation) parent;
 	      outerExpression = newInvocation.getExpression();
-	      newInvocation.setExpression(null);
 	      constructorBinding = newInvocation.getMethodBinding();
 	    } else if (parent instanceof EnumConstantDeclaration) {
 	      enumConstant = (EnumConstantDeclaration) parent;

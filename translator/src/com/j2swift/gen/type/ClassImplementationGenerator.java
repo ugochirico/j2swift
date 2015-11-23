@@ -59,9 +59,9 @@ public class ClassImplementationGenerator extends
 		// printReflectionMethods();
 		newline();
 		printIndent();
+		//TODO: we will put this in the class .and make TypeImplemention too
+		printOuterDeclarations();
 		println("}");
-		
-	    printOuterDeclarations();
 //	    printTypeLiteralImplementation();
 	}
 
