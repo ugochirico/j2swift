@@ -37,26 +37,26 @@ public class JavaAssertionError : JavaError {
     
     super.init(withString: String.valueOf(detailMessage))
   }
-//
-//  public init(withjint detailMessage:jint)  {
-//    
-//    super.init(withString: JavaInteger.toString(detailMessage))
-//  }
-//
-//  public init(withjlong detailMessage:jlong)  {
-//    
-//    super.init(withString: JavaLong.toString(detailMessage))
-//  }
-//
-//  public init(withjfloat detailMessage:jfloat)  {
-//    
-//    super.init(withString: JavaFloat.toString(detailMessage))
-//  }
-//
-//  public init(withjdouble detailMessage:jdouble)  {
-//    
-//    super.init(withString: JavaDouble.toString(detailMessage))
-//  }
+
+  public init(withjint detailMessage:jint)  {
+    
+    super.init(withString: JavaInteger.toString(detailMessage))
+  }
+
+  public init(withjlong detailMessage:jlong)  {
+    
+    super.init(withString: JavaLong.toString(detailMessage))
+  }
+
+  public init(withjfloat detailMessage:jfloat)  {
+    
+    super.init(withString: JavaFloat.toString(detailMessage))
+  }
+
+  public init(withjdouble detailMessage:jdouble)  {
+    
+    super.init(withString: JavaDouble.toString(detailMessage))
+  }
 
 
 }

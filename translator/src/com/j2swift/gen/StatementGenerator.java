@@ -919,7 +919,7 @@ public class StatementGenerator extends TreeVisitor {
 		node.getExpression().accept(this);
 		buffer.append(".");
 		SimpleName name = node.getName();
-		name.setNeedUnwarpOptional(true);
+		name.setNeedUnwarpOptional(node.isNeedUnwarpOptional());
 		name.accept(this);
 		return false;
 	}

@@ -23,7 +23,7 @@ public abstract class Expression extends TreeNode {
 
 	private Object constantValue = null;
 
-	private boolean needUnwarpOptional;
+	private boolean needUnwarpOptional = false;
 
 	protected Expression(org.eclipse.jdt.core.dom.Expression jdtNode) {
 		super(jdtNode);

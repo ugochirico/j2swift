@@ -4,6 +4,7 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/lang/TypeNotPresentException.java",
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",
 				"java/lang/CharSequence.java",
@@ -24,7 +25,6 @@ public class JreEmulationTransfer {
 				"java/lang/Comparable.java",
 				"java/lang/SecurityException.java",
 				"java/lang/StringIndexOutOfBoundsException.java",
-				"java/lang/TypeNotPresentException.java",
 				"java/lang/UnsupportedOperationException.java",
 				"java/lang/ArithmeticException.java",
 				"java/lang/IndexOutOfBoundsException.java",
