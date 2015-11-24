@@ -19,6 +19,7 @@
 		0F043FC61BF5CC8900690F83 /* JavaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F043FC51BF5CC8900690F83 /* JavaObject.swift */; };
 		0F276A921C0172C600EE845C /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F276A911C0172C600EE845C /* Error.swift */; };
 		0F276A941C01746E00EE845C /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F276A931C01746E00EE845C /* Number.swift */; };
+		0F2DA6CA1C046CB200F2E57F /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2DA6C91C046CB200F2E57F /* Integer.swift */; };
 		0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */; };
 		0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */; };
 		0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */; };
@@ -74,6 +75,7 @@
 		0F043FC51BF5CC8900690F83 /* JavaObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaObject.swift; sourceTree = "<group>"; };
 		0F276A911C0172C600EE845C /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		0F276A931C01746E00EE845C /* Number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		0F2DA6C91C046CB200F2E57F /* Integer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
 		0F99208C1BFD7D4500803CC6 /* JavaThrowable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JavaThrowable.swift; sourceTree = "<group>"; };
 		0F9E38341BF983D400E4F3CB /* J2SwiftHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = J2SwiftHeader.swift; sourceTree = "<group>"; };
 		0FBE63671BFF1A7A00BC4D3A /* Runnable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Runnable.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				0F2DA6C91C046CB200F2E57F /* Integer.swift */,
 				0F0391B31C01B0F9000EA5BC /* AssertionError.swift */,
 				0F0391B11C01B0C3000EA5BC /* ArrayStoreException.swift */,
 				0F0391AF1C01ABC0000EA5BC /* CharSequence.swift */,
@@ -329,6 +332,7 @@
 				6BBFCA171C00BCA4006955E2 /* TypeNotPresentException.swift in Sources */,
 				6BBFCA061C00BA6F006955E2 /* ReflectiveOperationException.swift in Sources */,
 				6BBFCA161C00BCA4006955E2 /* UnsupportedOperationException.swift in Sources */,
+				0F2DA6CA1C046CB200F2E57F /* Integer.swift in Sources */,
 				6BBFCA1B1C00BCA4006955E2 /* IndexOutOfBoundsException.swift in Sources */,
 				0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */,
 				0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */,

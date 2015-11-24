@@ -23,10 +23,19 @@ public class TestClassType {
 		b.a("");
 		A c = new B(); 
 		c.a(new String());
+		
+		float d = 123;
 	}
 }
 
 class A {
+	
+	private int i;
+	
+	public A() {
+		super();
+		int i = 0;
+	}
 	
 	public void a(String b) {
 		System.out.println("a");

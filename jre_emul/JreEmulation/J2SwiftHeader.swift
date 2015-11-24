@@ -16,3 +16,14 @@ public typealias jlong = CLongLong
 public typealias jfloat = Float
 public typealias jdouble = Double;
 public typealias jboolean = Bool
+
+
+infix operator >>> {
+    associativity none
+    precedence 160
+}
+
+func >>> (left:jint, right: jint) -> jint {
+    //TODO
+    return 0
+}

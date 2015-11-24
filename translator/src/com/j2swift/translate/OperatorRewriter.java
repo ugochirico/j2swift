@@ -73,21 +73,22 @@ public class OperatorRewriter extends TreeVisitor {
 
 	private static String getInfixFunction(InfixExpression.Operator op,
 			ITypeBinding nodeType) {
-		switch (op) {
-		case REMAINDER:
-			if (BindingUtil.isFloatingPoint(nodeType)) {
-				return nodeType.getName().equals("float") ? "fmodf" : "fmod";
-			}
-			return null;
-		case LEFT_SHIFT:
-			return "JreLShift" + intOrLong(nodeType);
-		case RIGHT_SHIFT_SIGNED:
-			return "JreRShift" + intOrLong(nodeType);
-		case RIGHT_SHIFT_UNSIGNED:
-			return "JreURShift" + intOrLong(nodeType);
-		default:
-			return null;
-		}
+//		switch (op) {
+//		case REMAINDER:
+//			if (BindingUtil.isFloatingPoint(nodeType)) {
+//				return nodeType.getName().equals("float") ? "fmodf" : "fmod";
+//			}
+//			return null;
+//		case LEFT_SHIFT:
+//			return "JreLShift" + intOrLong(nodeType);
+//		case RIGHT_SHIFT_SIGNED:
+//			return "JreRShift" + intOrLong(nodeType);
+//		case RIGHT_SHIFT_UNSIGNED:
+//			return "JreURShift" + intOrLong(nodeType);
+//		default:
+//			return null;
+//		}
+		return null;
 	}
 
 	private boolean isStringAppend(TreeNode node) {

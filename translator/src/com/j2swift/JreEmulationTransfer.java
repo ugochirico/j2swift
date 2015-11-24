@@ -4,6 +4,7 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/lang/Integer.java",
 				"java/lang/IntegralToString.java",
 				"java/lang/TypeNotPresentException.java",
 				"java/lang/AssertionError.java",
@@ -42,7 +43,7 @@ public class JreEmulationTransfer {
 	private void run(String[] jreListFile) {
 		String currentDirectory = System.getProperty("user.dir") + "/";
 		String outputDirectory = currentDirectory + "../jre_emul/JreEmulation";
-		String commandPrefix = "-jre -d " + outputDirectory;
+		String commandPrefix = "-jre -d " + outputDirectory + " -classpath " + currentDirectory + "../jre_emul/libcore/luni/src/main/java";
 		String fileNamePrefix = currentDirectory
 				+ "../jre_emul/libcore/luni/src/main/java/";
 		for (String fileName : jreListFile) {
