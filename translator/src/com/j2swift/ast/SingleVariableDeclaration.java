@@ -19,72 +19,83 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import java.util.List;
 
 /**
- * Node type for a declaration of a single variable. Used in parameter lists
- * and catch clauses.
+ * Node type for a declaration of a single variable. Used in parameter lists and
+ * catch clauses.
  */
 public class SingleVariableDeclaration extends VariableDeclaration {
 
-  private boolean isVarargs = false;
-  private final ChildList<Annotation> annotations = ChildList.create(Annotation.class, this);
-  private final ChildLink<Type> type = ChildLink.create(Type.class, this);
+	private boolean isVarargs = false;
+	private boolean isFinalDeclaration = true;
+	private final ChildList<Annotation> annotations = ChildList.create(
+			Annotation.class, this);
+	private final ChildLink<Type> type = ChildLink.create(Type.class, this);
 
-  public SingleVariableDeclaration(org.eclipse.jdt.core.dom.SingleVariableDeclaration jdtNode) {
-    super(jdtNode);
-    isVarargs = jdtNode.isVarargs();
-    for (Object modifier : jdtNode.modifiers()) {
-      if (modifier instanceof org.eclipse.jdt.core.dom.Annotation) {
-        annotations.add((Annotation) TreeConverter.convert(modifier));
-      }
-    }
-    type.set((Type) TreeConverter.convert(jdtNode.getType()));
-  }
+	public SingleVariableDeclaration(
+			org.eclipse.jdt.core.dom.SingleVariableDeclaration jdtNode) {
+		super(jdtNode);
+		isVarargs = jdtNode.isVarargs();
+		for (Object modifier : jdtNode.modifiers()) {
+			if (modifier instanceof org.eclipse.jdt.core.dom.Annotation) {
+				annotations.add((Annotation) TreeConverter.convert(modifier));
+			}
+		}
+		type.set((Type) TreeConverter.convert(jdtNode.getType()));
+	}
 
-  public SingleVariableDeclaration(SingleVariableDeclaration other) {
-    super(other);
-    isVarargs = other.isVarargs();
-    annotations.copyFrom(other.getAnnotations());
-    type.copyFrom(other.getType());
-  }
+	public SingleVariableDeclaration(SingleVariableDeclaration other) {
+		super(other);
+		isVarargs = other.isVarargs();
+		annotations.copyFrom(other.getAnnotations());
+		type.copyFrom(other.getType());
+	}
 
-  public SingleVariableDeclaration(IVariableBinding variableBinding) {
-    super(variableBinding, null);
-    type.set(Type.newType(variableBinding.getType()));
-  }
+	public SingleVariableDeclaration(IVariableBinding variableBinding) {
+		super(variableBinding, null);
+		type.set(Type.newType(variableBinding.getType()));
+	}
 
-  @Override
-  public Kind getKind() {
-    return Kind.SINGLE_VARIABLE_DECLARATION;
-  }
+	@Override
+	public Kind getKind() {
+		return Kind.SINGLE_VARIABLE_DECLARATION;
+	}
 
-  public boolean isVarargs() {
-    return isVarargs;
-  }
+	public boolean isVarargs() {
+		return isVarargs;
+	}
 
-  public List<Annotation> getAnnotations() {
-    return annotations;
-  }
+	public List<Annotation> getAnnotations() {
+		return annotations;
+	}
 
-  public Type getType() {
-    return type.get();
-  }
+	public Type getType() {
+		return type.get();
+	}
 
-  public void setType(Type newType) {
-    type.set(newType);
-  }
+	public void setType(Type newType) {
+		type.set(newType);
+	}
 
-  @Override
-  protected void acceptInner(TreeVisitor visitor) {
-    if (visitor.visit(this)) {
-      annotations.accept(visitor);
-      type.accept(visitor);
-      name.accept(visitor);
-      initializer.accept(visitor);
-    }
-    visitor.endVisit(this);
-  }
+	@Override
+	protected void acceptInner(TreeVisitor visitor) {
+		if (visitor.visit(this)) {
+			annotations.accept(visitor);
+			type.accept(visitor);
+			name.accept(visitor);
+			initializer.accept(visitor);
+		}
+		visitor.endVisit(this);
+	}
 
-  @Override
-  public SingleVariableDeclaration copy() {
-    return new SingleVariableDeclaration(this);
-  }
+	@Override
+	public SingleVariableDeclaration copy() {
+		return new SingleVariableDeclaration(this);
+	}
+
+	public boolean isFinalDeclaration() {
+		return isFinalDeclaration;
+	}
+
+	public void setFinalDeclaration(boolean isFinalDeclaration) {
+		this.isFinalDeclaration = isFinalDeclaration;
+	}
 }

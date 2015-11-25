@@ -4,9 +4,10 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
-				"java/lang/Integer.java",
-				"java/lang/IntegralToString.java",
 				"java/lang/TypeNotPresentException.java",
+				"java/lang/Integer.java",
+//				"java/lang/IntegralToString.java",
+				
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",
 				"java/lang/CharSequence.java",

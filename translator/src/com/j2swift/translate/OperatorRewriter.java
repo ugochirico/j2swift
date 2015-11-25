@@ -14,7 +14,6 @@ import com.j2swift.ast.TreeNode;
 import com.j2swift.ast.TreeVisitor;
 import com.j2swift.types.FunctionBinding;
 import com.j2swift.types.GeneratedVariableBinding;
-import com.j2swift.util.BindingUtil;
 
 public class OperatorRewriter extends TreeVisitor {
 	@Override

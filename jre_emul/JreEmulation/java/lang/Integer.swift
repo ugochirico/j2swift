@@ -17,13 +17,13 @@ public class JavaInteger : JavaNumber, JavaComparable {
 
   private let value:jint
 
-  public init(var withjint value:jint)  {
+  public init(withjint value:jint)  {
     self.value = value
     
     super.init()
   }
 
-  public convenience init(var withString string:String?) throws  {
+  public convenience init(withString string:String?) throws  {
     self.init(withjint: try JavaInteger.parseInt(string))
   }
 
@@ -31,19 +31,19 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return jbyte(value)
   }
 
-  public func compareTo(var object:JavaInteger?) ->jint  {
+  public func compareTo(object:JavaInteger?) ->jint  {
     return JavaInteger.compare(value,object!.value)
   }
 
-  public static func compare(var lhs:jint, var _ rhs:jint) ->jint  {
+  public static func compare(lhs:jint, _ rhs:jint) ->jint  {
     return lhs < rhs ? -1 : lhs == rhs ? 0 : 1
   }
 
-  static func invalidInt(var s:String?) ->JavaNumberFormatException?  {
+  static func invalidInt(s:String?) ->JavaNumberFormatException?  {
     throw JavaNumberFormatException(withString: "Invalid int: \"\(s)\"")
   }
 
-  public static func decode(var string:String?) throws ->JavaInteger?  {
+  public static func decode(string:String?) throws ->JavaInteger?  {
     var length:jint = string!.length()
     var i:jint = 0
     if (length == 0) {
@@ -86,7 +86,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return value
   }
 
-  public override func equals(var o:JavaObject?) ->jboolean  {
+  public override func equals(o:JavaObject?) ->jboolean  {
     return o is JavaInteger && (o as! JavaInteger).value == value
   }
 
@@ -94,7 +94,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return value
   }
 
-  public static func getInteger(var string:String?) ->JavaInteger?  {
+  public static func getInteger(string:String?) ->JavaInteger?  {
     if (string == nil || string!.length() == 0) {
       return nil
     }
@@ -111,7 +111,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     catch {}
   }
 
-  public static func getInteger(var string:String?, var _ defaultValue:jint) ->JavaInteger?  {
+  public static func getInteger(string:String?, _ defaultValue:jint) ->JavaInteger?  {
     if (string == nil || string!.length() == 0) {
       return JavaInteger.valueOf(defaultValue)
     }
@@ -128,7 +128,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     catch {}
   }
 
-  public static func getInteger(var string:String?, var _ defaultValue:JavaInteger?) ->JavaInteger?  {
+  public static func getInteger(string:String?, _ defaultValue:JavaInteger?) ->JavaInteger?  {
     if (string == nil || string!.length() == 0) {
       return defaultValue
     }
@@ -157,11 +157,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return value
   }
 
-  public static func parseInt(var string:String?) throws ->jint  {
+  public static func parseInt(string:String?) throws ->jint  {
     return try JavaInteger.parseInt(string,10)
   }
 
-  public static func parseInt(var string:String?, var _ radix:jint) throws ->jint  {
+  public static func parseInt(string:String?, _ radix:jint) throws ->jint  {
     if (radix < JavaCharacter.MIN_RADIX || radix > JavaCharacter.MAX_RADIX) {
       throw JavaNumberFormatException(withString: "Invalid radix: \(radix)")
     }
@@ -180,7 +180,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return try JavaInteger.parse(string,i,radix,negative)
   }
 
-  static func parse(var string:String?, var _ offset:jint, var _ radix:jint, var _ negative:jboolean) throws ->jint  {
+  static func parse(string:String?, _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
     var max:jint = JavaInteger.MIN_VALUE / radix
     var result:jint = 0
     var length:jint = string!.length()
@@ -211,15 +211,15 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return jshort(value)
   }
 
-  public static func toBinaryString(var i:jint) ->String?  {
+  public static func toBinaryString(i:jint) ->String?  {
     return JavaIntegralToString.intToBinaryString(i)
   }
 
-  public static func toHexString(var i:jint) ->String?  {
+  public static func toHexString(i:jint) ->String?  {
     return JavaIntegralToString.intToHexString(i,false,0)
   }
 
-  public static func toOctalString(var i:jint) ->String?  {
+  public static func toOctalString(i:jint) ->String?  {
     return JavaIntegralToString.intToOctalString(i)
   }
 
@@ -227,23 +227,23 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return JavaInteger.toString(value)
   }
 
-  public static func toString(var i:jint) ->String?  {
+  public static func toString(i:jint) ->String?  {
     return JavaIntegralToString.intToString(i)
   }
 
-  public static func toString(var i:jint, var _ radix:jint) ->String?  {
+  public static func toString(i:jint, _ radix:jint) ->String?  {
     return JavaIntegralToString.intToString(i,radix)
   }
 
-  public static func valueOf(var string:String?) throws ->JavaInteger?  {
+  public static func valueOf(string:String?) throws ->JavaInteger?  {
     return JavaInteger.valueOf(try JavaInteger.parseInt(string))
   }
 
-  public static func valueOf(var string:String?, var _ radix:jint) throws ->JavaInteger?  {
+  public static func valueOf(string:String?, _ radix:jint) throws ->JavaInteger?  {
     return JavaInteger.valueOf(try JavaInteger.parseInt(string,radix))
   }
 
-  public static func highestOneBit(var i:jint) ->jint  {
+  public static func highestOneBit(i:jint) ->jint  {
     i |= i >> 1
     i |= i >> 2
     i |= i >> 4
@@ -252,11 +252,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return i - i >>> 1
   }
 
-  public static func lowestOneBit(var i:jint) ->jint  {
+  public static func lowestOneBit(i:jint) ->jint  {
     return i & -i
   }
 
-  public static func numberOfLeadingZeros(var i:jint) ->jint  {
+  public static func numberOfLeadingZeros(i:jint) ->jint  {
     if (i <= 0) {
       return ~i >> 26 & 32
     }
@@ -280,11 +280,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return n - i >>> 31
   }
 
-  public static func numberOfTrailingZeros(var i:jint) ->jint  {
+  public static func numberOfTrailingZeros(i:jint) ->jint  {
     return JavaInteger.NTZ_TABLEi & -i * (jint) 0x0450FBAF >>> 26
   }
 
-  public static func bitCount(var i:jint) ->jint  {
+  public static func bitCount(i:jint) ->jint  {
     i -= i >> 1 & (jint) 0x55555555
     i = i & (jint) 0x33333333 + i >> 2 & (jint) 0x33333333
     i = i >> 4 + i & (jint) 0x0F0F0F0F
@@ -293,20 +293,20 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return i & (jint) 0x0000003F
   }
 
-  public static func rotateLeft(var i:jint, var _ distance:jint) ->jint  {
+  public static func rotateLeft(i:jint, _ distance:jint) ->jint  {
     return i << distance | i >>> -distance
   }
 
-  public static func rotateRight(var i:jint, var _ distance:jint) ->jint  {
+  public static func rotateRight(i:jint, _ distance:jint) ->jint  {
     return i >>> distance | i << -distance
   }
 
-  public static func reverseBytes(var i:jint) ->jint  {
+  public static func reverseBytes(i:jint) ->jint  {
     i = i >>> 8 & (jint) 0x00FF00FF | i & (jint) 0x00FF00FF << 8
     return i >>> 16 | i << 16
   }
 
-  public static func reverse(var i:jint) ->jint  {
+  public static func reverse(i:jint) ->jint  {
     i = i >>> 1 & (jint) 0x55555555 | i & (jint) 0x55555555 << 1
     i = i >>> 2 & (jint) 0x33333333 | i & (jint) 0x33333333 << 2
     i = i >>> 4 & (jint) 0x0F0F0F0F | i & (jint) 0x0F0F0F0F << 4
@@ -314,11 +314,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return i >>> 16 | i << 16
   }
 
-  public static func signum(var i:jint) ->jint  {
+  public static func signum(i:jint) ->jint  {
     return i >> 31 | -i >>> 31
   }
 
-  public static func valueOf(var i:jint) ->JavaInteger?  {
+  public static func valueOf(i:jint) ->JavaInteger?  {
     return i >= 128 || i < -128 ? JavaInteger(withjint: i) : JavaInteger.SMALL_VALUESi + 128
   }
 
