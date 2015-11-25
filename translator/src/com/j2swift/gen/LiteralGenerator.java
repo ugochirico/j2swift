@@ -120,7 +120,7 @@ public class LiteralGenerator {
     } else {
       // Convert Java long literals to jlong for Obj-C
       if (token.startsWith("0x")) {
-        token = "(jlong) " + token;  // Ensure constant is treated as signed.
+        token = "jlong(" + token + ")";  // Ensure constant is treated as signed.
       }
       token = token.replace("L", "");
     }
@@ -132,7 +132,7 @@ public class LiteralGenerator {
       // Convert min int literal to an expression
       token = "-0x7fffffff - 1";
     } else if (token.startsWith("0x")) {
-      token = "(jint) " + token;  // Ensure constant is treated as signed.
+      token = "jint(" + token + ")";  // Ensure constant is treated as signed.
     }
     return token;
   }

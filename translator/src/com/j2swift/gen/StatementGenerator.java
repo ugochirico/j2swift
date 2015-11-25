@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.j2swift.Options;
+import com.j2swift.ast.ArrayAccess;
 import com.j2swift.ast.ArrayCreation;
 import com.j2swift.ast.ArrayInitializer;
 import com.j2swift.ast.ArrayType;
@@ -23,6 +24,7 @@ import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
 import com.j2swift.ast.ConditionalExpression;
 import com.j2swift.ast.ConstructorInvocation;
+import com.j2swift.ast.Dimension;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
@@ -921,6 +923,15 @@ public class StatementGenerator extends TreeVisitor {
 		SimpleName name = node.getName();
 		name.setNeedUnwarpOptional(node.isNeedUnwarpOptional());
 		name.accept(this);
+		return false;
+	}
+	
+	@Override
+	public boolean visit(ArrayAccess node) {
+		node.getArray().accept(this);
+		buffer.append("[");
+		node.getIndex().accept(this);
+		buffer.append("]");
 		return false;
 	}
 }

@@ -8,12 +8,12 @@ import Foundation
 public class JavaInteger : JavaNumber, JavaComparable {
 
   private static let serialVersionUID:jlong = 1360826667806852920
-  public static let MAX_VALUE:jint = (jint) 0x7FFFFFFF
+  public static let MAX_VALUE:jint = jint(0x7FFFFFFF)
   public static let MIN_VALUE:jint = -0x7fffffff - 1
   public static let SIZE:jint = 32
-  private static let NTZ_TABLE:[jbyte]? = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
-  public static let TYPE:JavaClass? = ([jint].getClass().getComponentType())
-  private static let SMALL_VALUES:[JavaInteger]? = 
+  private static let NTZ_TABLE:[jbyte] = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
+  public static let TYPE:JavaClass = ([jint].getClass().getComponentType())
+  private static let SMALL_VALUES:[JavaInteger] = 
 
   private let value:jint
 
@@ -281,16 +281,16 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func numberOfTrailingZeros(i:jint) ->jint  {
-    return JavaInteger.NTZ_TABLEi & -i * (jint) 0x0450FBAF >>> 26
+    return JavaInteger.NTZ_TABLE[i & -i * jint(0x0450FBAF) >>> 26]
   }
 
   public static func bitCount(var i:jint) ->jint  {
-    i -= i >> 1 & (jint) 0x55555555
-    i = i & (jint) 0x33333333 + i >> 2 & (jint) 0x33333333
-    i = i >> 4 + i & (jint) 0x0F0F0F0F
+    i -= i >> 1 & jint(0x55555555)
+    i = i & jint(0x33333333) + i >> 2 & jint(0x33333333)
+    i = i >> 4 + i & jint(0x0F0F0F0F)
     i += i >> 8
     i += i >> 16
-    return i & (jint) 0x0000003F
+    return i & jint(0x0000003F)
   }
 
   public static func rotateLeft(i:jint, _ distance:jint) ->jint  {
@@ -302,15 +302,15 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func reverseBytes(var i:jint) ->jint  {
-    i = i >>> 8 & (jint) 0x00FF00FF | i & (jint) 0x00FF00FF << 8
+    i = i >>> 8 & jint(0x00FF00FF) | i & jint(0x00FF00FF) << 8
     return i >>> 16 | i << 16
   }
 
   public static func reverse(var i:jint) ->jint  {
-    i = i >>> 1 & (jint) 0x55555555 | i & (jint) 0x55555555 << 1
-    i = i >>> 2 & (jint) 0x33333333 | i & (jint) 0x33333333 << 2
-    i = i >>> 4 & (jint) 0x0F0F0F0F | i & (jint) 0x0F0F0F0F << 4
-    i = i >>> 8 & (jint) 0x00FF00FF | i & (jint) 0x00FF00FF << 8
+    i = i >>> 1 & jint(0x55555555) | i & jint(0x55555555) << 1
+    i = i >>> 2 & jint(0x33333333) | i & jint(0x33333333) << 2
+    i = i >>> 4 & jint(0x0F0F0F0F) | i & jint(0x0F0F0F0F) << 4
+    i = i >>> 8 & jint(0x00FF00FF) | i & jint(0x00FF00FF) << 8
     return i >>> 16 | i << 16
   }
 
@@ -319,7 +319,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func valueOf(i:jint) ->JavaInteger?  {
-    return i >= 128 || i < -128 ? JavaInteger(withjint: i) : JavaInteger.SMALL_VALUESi + 128
+    return i >= 128 || i < -128 ? JavaInteger(withjint: i) : JavaInteger.SMALL_VALUES[i + 128]
   }
 
 
