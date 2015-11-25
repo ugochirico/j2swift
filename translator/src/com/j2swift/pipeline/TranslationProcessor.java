@@ -25,6 +25,7 @@ import com.j2swift.gen.GenerationUnit;
 import com.j2swift.gen.SwiftImplementationGenerator;
 import com.j2swift.translate.AbstractMethodRewriter;
 import com.j2swift.translate.AnonymousClassConverter;
+import com.j2swift.translate.FinalParameterRewriter;
 import com.j2swift.translate.Functionizer;
 import com.j2swift.translate.InnerClassExtractor;
 import com.j2swift.translate.OperatorRewriter;
@@ -100,6 +101,10 @@ public class TranslationProcessor extends FileProcessor {
 //      new DeadCodeEliminator(unit, deadCodeMap).run(unit);
 //      ticker.tick("DeadCodeEliminator");
 //    }
+    
+    FinalParameterRewriter finalParameterRewriter = new FinalParameterRewriter();
+    finalParameterRewriter.run(unit);
+    ticker.tick("FinalParameterRewrite");
 //
     OuterReferenceResolver outerResolver = new OuterReferenceResolver();
     outerResolver.run(unit);
