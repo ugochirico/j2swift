@@ -243,7 +243,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return JavaInteger.valueOf(try JavaInteger.parseInt(string,radix))
   }
 
-  public static func highestOneBit(i:jint) ->jint  {
+  public static func highestOneBit(var i:jint) ->jint  {
     i |= i >> 1
     i |= i >> 2
     i |= i >> 4
@@ -256,7 +256,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return i & -i
   }
 
-  public static func numberOfLeadingZeros(i:jint) ->jint  {
+  public static func numberOfLeadingZeros(var i:jint) ->jint  {
     if (i <= 0) {
       return ~i >> 26 & 32
     }
@@ -284,7 +284,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return JavaInteger.NTZ_TABLEi & -i * (jint) 0x0450FBAF >>> 26
   }
 
-  public static func bitCount(i:jint) ->jint  {
+  public static func bitCount(var i:jint) ->jint  {
     i -= i >> 1 & (jint) 0x55555555
     i = i & (jint) 0x33333333 + i >> 2 & (jint) 0x33333333
     i = i >> 4 + i & (jint) 0x0F0F0F0F
@@ -301,12 +301,12 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return i >>> distance | i << -distance
   }
 
-  public static func reverseBytes(i:jint) ->jint  {
+  public static func reverseBytes(var i:jint) ->jint  {
     i = i >>> 8 & (jint) 0x00FF00FF | i & (jint) 0x00FF00FF << 8
     return i >>> 16 | i << 16
   }
 
-  public static func reverse(i:jint) ->jint  {
+  public static func reverse(var i:jint) ->jint  {
     i = i >>> 1 & (jint) 0x55555555 | i & (jint) 0x55555555 << 1
     i = i >>> 2 & (jint) 0x33333333 | i & (jint) 0x33333333 << 2
     i = i >>> 4 & (jint) 0x0F0F0F0F | i & (jint) 0x0F0F0F0F << 4
