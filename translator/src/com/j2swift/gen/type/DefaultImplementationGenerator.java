@@ -199,21 +199,26 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 			sb.append("()");
 		} else {
 			String token = "_";
+			String variable = "var ";
 			for (int i = 0; i < params.size(); i++) {
+				IVariableBinding var = params.get(i).getVariableBinding();
+				if (BindingUtil.isFinal(var)) {
+					variable = "";
+				}
 				if (m.isConstructor()) {
 					token = getContructorTypeToking(params.get(i));
 				}
 				if (i == 0) {
 					if (m.isConstructor()) {
-						sb.append("(" + token + " ");
+						sb.append("(" + variable + token + " ");
 					} else {
-						sb.append("(");
+						sb.append("("+variable);
 					}
 				}
 				if (i != 0) {
-					sb.append(", " + token + " ");
+					sb.append(", " + variable + token + " ");
 				}
-				IVariableBinding var = params.get(i).getVariableBinding();
+				
 				String typeName = nameTable.getSpecificObjCType(var.getType());
 				sb.append(String.format("%s:%s",
 						nameTable.getVariableShortName(var), typeName));
