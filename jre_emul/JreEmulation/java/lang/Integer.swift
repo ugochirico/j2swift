@@ -11,9 +11,9 @@ public class JavaInteger : JavaNumber, JavaComparable {
   public static let MAX_VALUE:jint = jint(0x7FFFFFFF)
   public static let MIN_VALUE:jint = -0x7fffffff - 1
   public static let SIZE:jint = 32
-  private static let NTZ_TABLE:[jbyte] = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
-  public static let TYPE:JavaClass = ([jint].getClass().getComponentType())
-  private static let SMALL_VALUES:[JavaInteger] = 
+  private static let NTZ_TABLE:[jbyte]? = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
+  public static let TYPE:JavaClass? = ([jint].getClass().getComponentType())
+  private static let SMALL_VALUES:[JavaInteger]? =
 
   private let value:jint
 
@@ -319,7 +319,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func valueOf(i:jint) ->JavaInteger?  {
-    return i >= 128 || i < -128 ? JavaInteger(withjint: i) : JavaInteger.SMALL_VALUES[i + 128]
+    return i >= 128 || i < -128 ? JavaInteger(withjint: i) : JavaInteger.SMALL_VALUES![i + 128]
   }
 
 

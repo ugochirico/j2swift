@@ -8,9 +8,9 @@ import Foundation
 public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   private static let serialVersionUID:jlong = -3665804199014368530
-  public static let TYPE:JavaClass = ([jboolean].getClass().getComponentType())
-  public static let TRUE_:JavaBoolean = JavaBoolean(withjboolean: true)
-  public static let FALSE_:JavaBoolean = JavaBoolean(withjboolean: false)
+  public static let TYPE:JavaClass? = ([jboolean].getClass().getComponentType())
+  public static let TRUE_:JavaBoolean? = JavaBoolean(withjboolean: true)
+  public static let FALSE_:JavaBoolean? = JavaBoolean(withjboolean: false)
 
   private let value:jboolean
 

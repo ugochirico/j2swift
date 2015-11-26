@@ -11,7 +11,7 @@ public class TestClassType {
 	public TestClassType() {
 		System.out.println(123);
 		abc = 3;
-		abcd = new Integer[]{11, 123};
+		abcd = null;
 	}
 	
 	public void abc(String a) {

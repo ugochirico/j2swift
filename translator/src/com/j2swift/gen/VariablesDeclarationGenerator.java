@@ -168,7 +168,7 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		Expression initializer = fragment.getInitializer();
 		printIndent();
 		print("" + baseDeclaration);
-		if (variableShouldBeOptional(fragment.getVariableBinding().getType()) && !BindingUtil.isFinal(fragment.getVariableBinding())) {
+		if (variableShouldBeOptional(fragment.getVariableBinding().getType())) {
 			print("?");
 		}
 		if (initializer != null) {
