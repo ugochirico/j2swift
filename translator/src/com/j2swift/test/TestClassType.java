@@ -8,6 +8,12 @@ public class TestClassType {
 	
 	private final Object obj = null;
 	
+	private static final String c;
+	
+	static {
+		c = "";
+	}
+	
 	public TestClassType() {
 		System.out.println(123);
 		abc = 3;

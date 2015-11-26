@@ -13,7 +13,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   public static let SIZE:jint = 32
   private static let NTZ_TABLE:[jbyte]? = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
   public static let TYPE:JavaClass? = ([jint].getClass().getComponentType())
-  private static let SMALL_VALUES:[JavaInteger]? =
+  private static let SMALL_VALUES:[JavaInteger]? = 
 
   private let value:jint
 
@@ -281,7 +281,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func numberOfTrailingZeros(i:jint) ->jint  {
-    return JavaInteger.NTZ_TABLE[i & -i * jint(0x0450FBAF) >>> 26]
+    return jint(JavaInteger.NTZ_TABLE![i & -i * jint(0x0450FBAF) >>> 26])
   }
 
   public static func bitCount(var i:jint) ->jint  {

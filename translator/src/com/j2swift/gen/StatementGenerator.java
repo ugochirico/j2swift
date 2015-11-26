@@ -442,7 +442,7 @@ public class StatementGenerator extends TreeVisitor {
 //		if (node.isQualifiedName())
 		if (node.isNeedUnwarpOptional()
 				&& !BindingUtil.isPrimitive((IVariableBinding) node
-						.getBinding()) && !(BindingUtil.isFinal(binding) && BindingUtil.isStatic(binding))) {
+						.getBinding())) {
 			buffer.append("!");
 		}
 		return false;
@@ -928,6 +928,7 @@ public class StatementGenerator extends TreeVisitor {
 	
 	@Override
 	public boolean visit(ArrayAccess node) {
+		node.getArray().setNeedUnwarpOptional(true);
 		node.getArray().accept(this);
 		buffer.append("[");
 		node.getIndex().accept(this);
