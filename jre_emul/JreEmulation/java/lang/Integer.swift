@@ -83,7 +83,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func doubleValue() ->jdouble  {
-    return value
+    return jdouble(value)
   }
 
   public override func equals(o:JavaObject?) ->jboolean  {

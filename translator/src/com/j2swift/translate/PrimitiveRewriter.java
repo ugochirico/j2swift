@@ -1,10 +1,14 @@
 package com.j2swift.translate;
 
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.j2swift.ast.BooleanLiteral;
 import com.j2swift.ast.Expression;
+import com.j2swift.ast.MethodDeclaration;
+import com.j2swift.ast.MethodInvocation;
 import com.j2swift.ast.NumberLiteral;
+import com.j2swift.ast.ReturnStatement;
 import com.j2swift.ast.TreeVisitor;
 import com.j2swift.ast.VariableDeclarationFragment;
 import com.j2swift.util.BindingUtil;
@@ -18,6 +22,8 @@ import com.j2swift.util.BindingUtil;
  */
 public class PrimitiveRewriter extends TreeVisitor {
 	
+	ITypeBinding methodReturnTypeBinding; 
+			
 	@Override
 	public void endVisit(VariableDeclarationFragment node) {
 		IVariableBinding binding = node.getVariableBinding();
@@ -48,5 +54,26 @@ public class PrimitiveRewriter extends TreeVisitor {
 				System.out.println(node);
 			}
 		}
+	}
+	
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		if (node.getReturnType() != null){
+			methodReturnTypeBinding = node.getReturnType().getTypeBinding();
+		} else {
+			methodReturnTypeBinding = null;
+		}
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(ReturnStatement node) {
+		ITypeBinding returnTypeBinding = node.getExpression().getTypeBinding();
+		if (returnTypeBinding != null) {
+			if (returnTypeBinding.isEqualTo(methodReturnTypeBinding)) {
+				//Need cast
+			}
+		}
+		return false;
 	}
 }
