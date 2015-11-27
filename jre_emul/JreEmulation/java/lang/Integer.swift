@@ -91,7 +91,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func floatValue() ->jfloat  {
-    return value
+    return jfloat(value)
   }
 
   public static func getInteger(string:String?) ->JavaInteger?  {
@@ -154,7 +154,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func longValue() ->jlong  {
-    return value
+    return jlong(value)
   }
 
   public static func parseInt(string:String?) throws ->jint  {

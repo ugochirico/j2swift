@@ -4,10 +4,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import com.j2swift.ast.BooleanLiteral;
+import com.j2swift.ast.CastExpression;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.MethodDeclaration;
-import com.j2swift.ast.MethodInvocation;
 import com.j2swift.ast.NumberLiteral;
+import com.j2swift.ast.ParenthesizedExpression;
 import com.j2swift.ast.ReturnStatement;
 import com.j2swift.ast.TreeVisitor;
 import com.j2swift.ast.VariableDeclarationFragment;
@@ -31,7 +32,6 @@ public class PrimitiveRewriter extends TreeVisitor {
 			Expression initializer = node.getInitializer();
 			if (initializer == null) {
 				char type = binding.getType().getBinaryName().charAt(0);
-				System.out.println("shot type is = " + type);
 				if (type == 'I' || type == 'S' || type == 'B') {
 					NumberLiteral number = NumberLiteral.newIntLiteral(0, typeEnv); 
 					node.setInitializer(number);
@@ -70,10 +70,17 @@ public class PrimitiveRewriter extends TreeVisitor {
 	public boolean visit(ReturnStatement node) {
 		ITypeBinding returnTypeBinding = node.getExpression().getTypeBinding();
 		if (returnTypeBinding != null) {
-			if (returnTypeBinding.isEqualTo(methodReturnTypeBinding)) {
-				//Need cast
+			if (!returnTypeBinding.isEqualTo(methodReturnTypeBinding) && methodReturnTypeBinding.isPrimitive()) {
+				addCast(node.getExpression());
 			}
 		}
 		return false;
 	}
+	
+	private void addCast(Expression expr) {
+	    ITypeBinding exprType = typeEnv.mapType(methodReturnTypeBinding.getTypeDeclaration());
+	    CastExpression castExpr = new CastExpression(exprType, null);
+	    expr.replaceWith(ParenthesizedExpression.parenthesize(castExpr));
+	    castExpr.setExpression(expr);
+	  }
 }
