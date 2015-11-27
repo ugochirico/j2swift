@@ -18,6 +18,7 @@ import com.j2swift.util.BindingUtil;
 
 /**
  * Generator all declaration variable
+ * 
  * @author xutao1
  *
  */
@@ -34,7 +35,7 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 	}
 
 	private void generate() {
-		printClassExtension();
+		printVariablesDeclation();
 	}
 
 	private static final Predicate<VariableDeclarationFragment> PROPERTIES = new Predicate<VariableDeclarationFragment>() {
@@ -44,58 +45,52 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		}
 	};
 
-	private void printClassExtension() {
+	private void printVariablesDeclation() {
 		if (isInterfaceType()) {
 			return;
 		}
-		boolean hasPrivateFields = !Iterables.isEmpty(getInstanceFields());
-		Iterable<BodyDeclaration> privateDecls = getInnerDeclarations();
-		if (!Iterables.isEmpty(privateDecls) || hasPrivateFields) {
+		boolean hasInstanceFields = !Iterables.isEmpty(getInstanceFields());
+		boolean hasStaticFields = !Iterables.isEmpty(getStaticFields());
+		boolean hasInnerDeclarations = !Iterables
+				.isEmpty(getInnerDeclarations());
+		if (hasInstanceFields) {
+			printInstanceFields();
+		}
+		if (hasStaticFields) {
+			printStaticFields();
+		}
+		if (hasInstanceFields || hasStaticFields || hasInnerDeclarations) {
 			newline();
-			printInstanceVariables();
+			Iterable<BodyDeclaration> privateDecls = getInnerDeclarations();
 			printDeclarations(privateDecls);
 		}
 	}
 
-	/**
-	 * Prints the list of instance variables in a type.
-	 */
-	protected void printInstanceVariables() {
+	protected void printInstanceFields() {
 		indent();
-		// Prints static field
-		Boolean needStaticDeclarationLine = false;
-		for (VariableDeclarationFragment fragment : getStaticFields()) {
-			printStaticFieldFullDeclaration(fragment);
-			needStaticDeclarationLine = true;
-		}
-		if (needStaticDeclarationLine) {
-			newline();
-		}
-		
 		Iterable<VariableDeclarationFragment> fields = getInstanceFields();
-		if (Iterables.isEmpty(fields)) {
-			newline();
-			unindent();
-			return;
-		}
-		
-		Boolean needDeclarationLine = false;
 		for (VariableDeclarationFragment fragment : fields) {
 			printFieldFullDeclaration(fragment);
-			needDeclarationLine = true;
 		}
-		if (needDeclarationLine) {
-			newline();
-		}
+		newline();
 		unindent();
 	}
-	
+
+	protected void printStaticFields() {
+		indent();
+		Iterable<VariableDeclarationFragment> fields = getStaticFields();
+		for (VariableDeclarationFragment fragment : fields) {
+			printStaticFieldFullDeclaration(fragment);
+		}
+		newline();
+		unindent();
+	}
+
 	private void printFieldFullDeclaration(VariableDeclarationFragment fragment) {
 		IVariableBinding varBinding = fragment.getVariableBinding();
-		FieldDeclaration declaration = (FieldDeclaration) fragment
-				.getParent();
-		JavadocGenerator.printDocComment(getBuilder(),
-				declaration.getJavadoc());
+		FieldDeclaration declaration = (FieldDeclaration) fragment.getParent();
+		JavadocGenerator
+				.printDocComment(getBuilder(), declaration.getJavadoc());
 		printIndent();
 		if (BindingUtil.isWeakReference(varBinding)
 				&& !BindingUtil.isVolatile(varBinding)) {
@@ -106,18 +101,15 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 		}
 		if (BindingUtil.isPrivate(varBinding)) {
 			print("private ");
-		}
-		else if (BindingUtil.isPublic(varBinding)) {
+		} else if (BindingUtil.isPublic(varBinding)) {
 			print("public ");
+		} else {
+			// default
 		}
-		else {
-			//default
-		}
-		
+
 		if (BindingUtil.isFinal(varBinding)) {
 			print("let ");
-		}
-		else {
+		} else {
 			print("var ");
 		}
 		print(nameTable.getVariableShortName(varBinding));
@@ -149,11 +141,10 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 			accessDeclaration = "private ";
 		} else if (BindingUtil.isPublic(var)) {
 			accessDeclaration = "public ";
-		}
-		else {
+		} else {
 			accessDeclaration = "";
 		}
-		
+
 		if (BindingUtil.isFinal(var)) {
 			finalStr = "let ";
 		} else {
@@ -198,12 +189,12 @@ public class VariablesDeclarationGenerator extends TypeGenerator {
 	@Override
 	protected void printInnerEnumDeclaration(EnumDeclaration decl) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	protected void printInnerTypeDeclaration(TypeDeclaration decl) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

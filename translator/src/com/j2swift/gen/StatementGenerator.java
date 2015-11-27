@@ -71,6 +71,7 @@ import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
+import com.j2swift.util.NameTable;
 
 public class StatementGenerator extends TreeVisitor {
 
@@ -267,9 +268,20 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(ArrayInitializer node) {
-		// TODO Auto-generated method stub
-		return super.visit(node);
+	public boolean visit(ArrayInitializer node) {  
+		ITypeBinding type = node.getTypeBinding();
+	    assert type.isArray();
+//	    ITypeBinding componentType = type.getComponentType();
+//	    buffer.append(String.format("(%s[]){ ", NameTable.getPrimitiveObjCType(componentType)));
+	    buffer.append("[");
+	    for (Iterator<Expression> it = node.getExpressions().iterator(); it.hasNext(); ) {
+	      it.next().accept(this);
+	      if (it.hasNext()) {
+	        buffer.append(", ");
+	      }
+	    }
+	    buffer.append("]");
+	    return false;
 	}
 
 	@Override
