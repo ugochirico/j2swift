@@ -33,6 +33,7 @@ import com.j2swift.translate.OuterReferenceFixer;
 import com.j2swift.translate.OuterReferenceResolver;
 import com.j2swift.translate.PrimitiveRewriter;
 import com.j2swift.translate.Rewriter;
+import com.j2swift.translate.RuntimeExceptionRewriter;
 import com.j2swift.types.HeaderImportCollector;
 import com.j2swift.types.ImplementationImportCollector;
 import com.j2swift.types.Import;
@@ -109,11 +110,11 @@ public class TranslationProcessor extends FileProcessor {
     OuterReferenceResolver outerResolver = new OuterReferenceResolver();
     outerResolver.run(unit);
     ticker.tick("OuterReferenceResolver");
-//
-//    // Update code that has GWT references.
-//    new GwtConverter().run(unit);
-//    ticker.tick("GwtConverter");
-//
+
+    RuntimeExceptionRewriter runtimeExceptionRewriter = new RuntimeExceptionRewriter();
+    runtimeExceptionRewriter.run(unit);
+    ticker.tick("RuntimeExceptionRewriter");
+    
     // Modify AST to be more compatible with Objective C
     new Rewriter().run(unit);
     ticker.tick("Rewriter");

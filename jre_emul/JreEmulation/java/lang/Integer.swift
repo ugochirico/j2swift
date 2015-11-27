@@ -39,7 +39,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     return lhs < rhs ? -1 : lhs == rhs ? 0 : 1
   }
 
-  static func invalidInt(s:String?) ->JavaNumberFormatException?  {
+  static func invalidInt(s:String?) throws ->JavaNumberFormatException?  {
     throw JavaNumberFormatException(withString: "Invalid int: \"\(s)\"")
   }
 
