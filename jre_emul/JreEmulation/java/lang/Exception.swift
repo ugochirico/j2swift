@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaException : JavaThrowable {
-
   private static let serialVersionUID:jlong = -3387516993124229948
 
 

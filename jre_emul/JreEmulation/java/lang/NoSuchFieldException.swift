@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaNoSuchFieldException : JavaReflectiveOperationException {
-
   private static let serialVersionUID:jlong = -6143714805279938260
 
 

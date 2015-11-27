@@ -7,7 +7,6 @@ import Foundation
 
 public class JavaReflectiveOperationException : JavaException {
 
-
   public override init()  {
     
     super.init()

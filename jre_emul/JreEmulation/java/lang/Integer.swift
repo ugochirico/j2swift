@@ -6,16 +6,16 @@
 import Foundation
 
 public class JavaInteger : JavaNumber, JavaComparable {
+  private let value:jint
 
   private static let serialVersionUID:jlong = 1360826667806852920
   public static let MAX_VALUE:jint = jint(0x7FFFFFFF)
   public static let MIN_VALUE:jint = -0x7fffffff - 1
   public static let SIZE:jint = 32
-  private static let NTZ_TABLE:[jbyte]? = 32011226-1133-17-1-1-1-114104-1-18-1-125-1-1-1-1-121271531115-1-1-1-1-19-1-124-1-1202630-1-1-1-123-11929-12218281716-1
+  private static let NTZ_TABLE:[jbyte]? = [32, 0, 1, 12, 2, 6, -1, 13, 3, -1, 7, -1, -1, -1, -1, 14, 10, 4, -1, -1, 8, -1, -1, 25, -1, -1, -1, -1, -1, 21, 27, 15, 31, 11, 5, -1, -1, -1, -1, -1, 9, -1, -1, 24, -1, -1, 20, 26, 30, -1, -1, -1, -1, 23, -1, 19, 29, -1, 22, 18, 28, 17, 16, -1]
   public static let TYPE:JavaClass? = ([jint].getClass().getComponentType())
   private static let SMALL_VALUES:[JavaInteger]? = 
 
-  private let value:jint
 
   public init(withjint value:jint)  {
     self.value = value

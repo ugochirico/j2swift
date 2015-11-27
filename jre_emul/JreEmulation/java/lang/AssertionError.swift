@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaAssertionError : JavaError {
-
   private static let serialVersionUID:jlong = -5013299493970297370
 
 

@@ -6,10 +6,10 @@
 import Foundation
 
 public class JavaTypeNotPresentException : JavaRuntimeException {
+  private var typeName_:String?
 
   private static let serialVersionUID:jlong = -5101214195716534496
 
-  private var typeName_:String?
 
   public override init(withString typeName:String?, withJavaThrowable cause:JavaThrowable?)  {
     

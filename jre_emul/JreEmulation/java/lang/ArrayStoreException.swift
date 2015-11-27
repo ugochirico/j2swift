@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaArrayStoreException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = -4522193890499838241
 
 

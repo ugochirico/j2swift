@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaArrayIndexOutOfBoundsException : JavaIndexOutOfBoundsException {
-
   private static let serialVersionUID:jlong = -5116101128118950844
 
 

@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaNegativeArraySizeException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = -8960118058596991861
 
 

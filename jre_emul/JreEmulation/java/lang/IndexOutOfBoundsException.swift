@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaIndexOutOfBoundsException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = 234122996006267687
 
 

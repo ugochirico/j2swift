@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaRuntimeException : JavaException {
-
   private static let serialVersionUID:jlong = -7034897190745766939
 
 

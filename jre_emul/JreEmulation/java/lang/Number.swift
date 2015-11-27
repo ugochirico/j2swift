@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaNumber : JavaObject, JavaSerializable {
-
   private static let serialVersionUID:jlong = -8742448824652078965
 
 

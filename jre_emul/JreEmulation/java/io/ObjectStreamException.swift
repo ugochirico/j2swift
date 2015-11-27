@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaObjectStreamException : JavaIOException {
-
   private static let serialVersionUID:jlong = 7260898174833392607
 
 

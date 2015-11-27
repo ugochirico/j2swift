@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaNumberFormatException : JavaIllegalArgumentException {
-
   private static let serialVersionUID:jlong = -2848938806368998894
 
 

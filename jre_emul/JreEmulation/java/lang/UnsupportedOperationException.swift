@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaUnsupportedOperationException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = -1242599979055084673
 
 

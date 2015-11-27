@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaClassCastException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = -9223365651070458532
 
 

@@ -21,9 +21,14 @@ public class TestClassType {
 	}
 	
 	public void abc(String a) {
-		
-		String b = a;
+				String b = a;
 		a ="123";
 	}
+	public static void main(String[] args) {
+		String test[]  = new String[10];
+		test[0] = null;
+		System.out.println(test[0]);
+	}
+	
 
 }

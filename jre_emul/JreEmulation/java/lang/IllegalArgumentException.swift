@@ -6,7 +6,6 @@
 import Foundation
 
 public class JavaIllegalArgumentException : JavaRuntimeException {
-
   private static let serialVersionUID:jlong = -5365630128856068164
 
 
