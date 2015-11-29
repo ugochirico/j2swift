@@ -62,7 +62,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
       if (++i == length) {
         return JavaInteger.valueOf(0)
       }
-      if (firstDigit = string!.charAt(i) == "x".asciiValue || firstDigit == "X".asciiValue) {
+      if (jchar(firstDigit = string!.charAt(i)) == "x".asciiValue || firstDigit == "X".asciiValue) {
         if (++i == length) {
           throw try JavaInteger.invalidInt(string)!
         }
