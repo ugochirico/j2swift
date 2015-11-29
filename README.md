@@ -60,6 +60,8 @@ override init(_ message:String?, _ cause:JavaThrowable?, _ enableSuppression:jbo
 
 ```
 
+But there is some limit with java. As java hava runtime exception and swift must declare throws when throw exception, so when write your java code, if any method throw java exception, you should declare method has exception even though runtime exception.
+
 * Support Java generic type
   
   ​
