@@ -69,6 +69,7 @@ import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
+import com.j2swift.util.UnicodeUtils;
 
 public class StatementGenerator extends TreeVisitor {
 
@@ -162,11 +163,12 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append(")\n");
 		return false;
 	}
-	
+
 	private void printConstructorInvocationArgs(List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {
 			Expression exp = args.get(i);
-			String typeName = nameTable.getSpecificObjCType(exp.getTypeBinding());
+			String typeName = nameTable.getSpecificObjCType(exp
+					.getTypeBinding());
 			buffer.append("with" + typeName + ": ");
 			exp.accept(this);
 			if (i != args.size() - 1) {
@@ -235,6 +237,10 @@ public class StatementGenerator extends TreeVisitor {
 	public boolean visit(ThrowStatement node) {
 		buffer.append("throw ");
 		node.getExpression().accept(this);
+		node.getExpression().getTypeBinding();
+		if (node.getExpression() instanceof MethodInvocation) {
+			buffer.append("!");
+		}
 		buffer.append("\n");
 		return false;
 	}
@@ -265,20 +271,22 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(ArrayInitializer node) {  
+	public boolean visit(ArrayInitializer node) {
 		ITypeBinding type = node.getTypeBinding();
-	    assert type.isArray();
-//	    ITypeBinding componentType = type.getComponentType();
-//	    buffer.append(String.format("(%s[]){ ", NameTable.getPrimitiveObjCType(componentType)));
-	    buffer.append("[");
-	    for (Iterator<Expression> it = node.getExpressions().iterator(); it.hasNext(); ) {
-	      it.next().accept(this);
-	      if (it.hasNext()) {
-	        buffer.append(", ");
-	      }
-	    }
-	    buffer.append("]");
-	    return false;
+		assert type.isArray();
+		// ITypeBinding componentType = type.getComponentType();
+		// buffer.append(String.format("(%s[]){ ",
+		// NameTable.getPrimitiveObjCType(componentType)));
+		buffer.append("[");
+		for (Iterator<Expression> it = node.getExpressions().iterator(); it
+				.hasNext();) {
+			it.next().accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append("]");
+		return false;
 	}
 
 	@Override
@@ -448,7 +456,7 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(node.getIdentifier());
 			}
 		}
-//		if (node.isQualifiedName())
+		// if (node.isQualifiedName())
 		if (node.isNeedUnwarpOptional()
 				&& !BindingUtil.isPrimitive((IVariableBinding) node
 						.getBinding())) {
@@ -639,8 +647,9 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(CharacterLiteral node) {
-		// char c = node.charValue();
+		buffer.append("\"");
 		buffer.append(node.charValue());
+		buffer.append("\".asciiValue");
 		return false;
 	}
 
@@ -909,7 +918,7 @@ public class StatementGenerator extends TreeVisitor {
 		if (typeName.equals(castTypeName)) {
 			needCast = false;
 		}
-		
+
 		if (needCast) {
 			if (!BindingUtil.variableShouldBeOptional(type)) {
 				buffer.append(" as ");
@@ -934,7 +943,7 @@ public class StatementGenerator extends TreeVisitor {
 		name.accept(this);
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(ArrayAccess node) {
 		node.getArray().setNeedUnwarpOptional(true);

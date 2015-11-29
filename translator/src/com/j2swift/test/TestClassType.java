@@ -28,7 +28,16 @@ public class TestClassType {
 		String test[]  = new String[10];
 		test[0] = null;
 		System.out.println(test[0]);
+		
+		new TestClassType().test2();
 	}
 	
 
+	public RuntimeException test1() {
+		return null;
+	}
+	
+	public void test2() {
+		throw test1();
+	}
 }
