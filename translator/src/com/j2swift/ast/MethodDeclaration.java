@@ -32,7 +32,6 @@ public class MethodDeclaration extends BodyDeclaration {
 			SingleVariableDeclaration.class, this);
 	private ChildLink<Block> body = ChildLink.create(Block.class, this);
 	private boolean isConvenienceConstructor = false;
-	private boolean throwsRuntimeExeception = false;
 
 	public MethodDeclaration(org.eclipse.jdt.core.dom.MethodDeclaration jdtNode) {
 		super(jdtNode);
@@ -130,13 +129,5 @@ public class MethodDeclaration extends BodyDeclaration {
 
 	public void setConvenienceConstructor(boolean isConvenienceConstructor) {
 		this.isConvenienceConstructor = isConvenienceConstructor;
-	}
-
-	public boolean isThrowsRuntimeExeception() {
-		return throwsRuntimeExeception;
-	}
-
-	public void setThrowsRuntimeExeception(boolean throwsRuntimeExeception) {
-		this.throwsRuntimeExeception = throwsRuntimeExeception;
 	}
 }

@@ -100,7 +100,7 @@ public class ClassImplementationGenerator extends
 		}
 		sb.append(selector);
 		sb.append(printMethodParameter(m));
-		if (binding.getExceptionTypes().length > 0 || m.isThrowsRuntimeExeception()) {
+		if (binding.getExceptionTypes().length > 0) {
 			sb.append(" throws");
 		}
 		if (!Strings.isNullOrEmpty(returnType) && !"void".equals(returnType)) {
@@ -158,7 +158,7 @@ public class ClassImplementationGenerator extends
 	
 		sb.append(selector);
 		sb.append(printMethodParameter(m));
-		if (binding.getExceptionTypes().length > 0 || m.isThrowsRuntimeExeception()) {
+		if (binding.getExceptionTypes().length > 0) {
 			sb.append(" throws");
 		}
 		return sb.toString();

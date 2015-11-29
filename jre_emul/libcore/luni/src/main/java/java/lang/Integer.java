@@ -133,7 +133,7 @@ public final class Integer extends Number implements Comparable<Integer> {
         return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
     }
 
-    private static NumberFormatException invalidInt(String s) {
+    private static NumberFormatException invalidInt(String s) throws RuntimeException {
         throw new NumberFormatException("Invalid int: \"" + s + "\"");
     }
 

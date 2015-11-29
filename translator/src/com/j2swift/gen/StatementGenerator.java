@@ -24,11 +24,9 @@ import com.j2swift.ast.CharacterLiteral;
 import com.j2swift.ast.ClassInstanceCreation;
 import com.j2swift.ast.ConditionalExpression;
 import com.j2swift.ast.ConstructorInvocation;
-import com.j2swift.ast.Dimension;
 import com.j2swift.ast.DoStatement;
 import com.j2swift.ast.EnhancedForStatement;
 import com.j2swift.ast.Expression;
-import com.j2swift.ast.ExpressionMethodReference;
 import com.j2swift.ast.ExpressionStatement;
 import com.j2swift.ast.FieldAccess;
 import com.j2swift.ast.ForStatement;
@@ -71,7 +69,6 @@ import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
-import com.j2swift.util.NameTable;
 
 public class StatementGenerator extends TreeVisitor {
 
