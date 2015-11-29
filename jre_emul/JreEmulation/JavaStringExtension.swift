@@ -52,7 +52,17 @@ extension String {
     }
     
     public func equalsIgnoreCase(another:String?) -> jboolean {
+        if (another == nil) {
+            return false
+        }
+        if(self.caseInsensitiveCompare(another!) == NSComparisonResult.OrderedSame){
+            return true
+        }
         //TODO
         return false
+    }
+    
+    public func charAt(i:jint) -> jchar {
+        return 0
     }
 }
