@@ -40,6 +40,7 @@ import com.j2swift.ast.Name;
 import com.j2swift.ast.NativeStatement;
 import com.j2swift.ast.NullLiteral;
 import com.j2swift.ast.NumberLiteral;
+import com.j2swift.ast.ParenthesizedExpression;
 import com.j2swift.ast.PostfixExpression;
 import com.j2swift.ast.PrefixExpression;
 import com.j2swift.ast.QualifiedName;
@@ -69,7 +70,6 @@ import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
-import com.j2swift.util.UnicodeUtils;
 
 public class StatementGenerator extends TreeVisitor {
 
@@ -953,4 +953,13 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("]");
 		return false;
 	}
+
+	@Override
+	public boolean visit(ParenthesizedExpression node) {
+		buffer.append("(");
+		node.getExpression().accept(this);
+		buffer.append(")");
+		return false;
+	}
+
 }
