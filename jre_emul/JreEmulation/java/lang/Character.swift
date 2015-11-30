@@ -9,6 +9,8 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   private let value:jchar
 
   private static let serialVersionUID:jlong = 3786198910865385080
+  public static let MIN_VALUE:jchar = 0x0000
+  public static let MAX_VALUE:jchar = 0xffff
   public static let MIN_RADIX:jint = 2
   public static let MAX_RADIX:jint = 36
   public static let TYPE:JavaClass? = ([jchar].getClass().getComponentType())
@@ -62,12 +64,12 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static let DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING:jbyte = 16
   public static let DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE:jbyte = 17
   public static let DIRECTIONALITY_POP_DIRECTIONAL_FORMAT:jbyte = 18
-  public static let MIN_HIGH_SURROGATE:jchar = "?".asciiValue
-  public static let MAX_HIGH_SURROGATE:jchar = "?".asciiValue
-  public static let MIN_LOW_SURROGATE:jchar = "?".asciiValue
-  public static let MAX_LOW_SURROGATE:jchar = "?".asciiValue
-  public static let MIN_SURROGATE:jchar = "?".asciiValue
-  public static let MAX_SURROGATE:jchar = "?".asciiValue
+  public static let MIN_HIGH_SURROGATE:jchar = 0xd800
+  public static let MAX_HIGH_SURROGATE:jchar = 0xdbff
+  public static let MIN_LOW_SURROGATE:jchar = 0xdc00
+  public static let MAX_LOW_SURROGATE:jchar = 0xdfff
+  public static let MIN_SURROGATE:jchar = 0xd800
+  public static let MAX_SURROGATE:jchar = 0xdfff
   public static let MIN_SUPPLEMENTARY_CODE_POINT:jint = jint(0x10000)
   public static let MIN_CODE_POINT:jint = jint(0x000000)
   public static let MAX_CODE_POINT:jint = jint(0x10FFFF)
@@ -447,9 +449,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static func isLowerCase(codePoint:jint) ->jboolean  {}
 
   public static func isSpace(c:jchar) ->jboolean  {
-    return c == "
-    ".asciiValue || c == "	".asciiValue || c == "".asciiValue || c == "
-    ".asciiValue || c == " ".asciiValue
+    return c == 0x000a || c == 0x0009 || c == 0x000c || c == 0x000d || c == " ".asciiValue
   }
 
   public static func isSpaceChar(c:jchar) ->jboolean  {

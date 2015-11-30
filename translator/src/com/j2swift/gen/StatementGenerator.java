@@ -647,9 +647,13 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(CharacterLiteral node) {
-		buffer.append("\"");
-		buffer.append(node.charValue());
-		buffer.append("\".asciiValue");
+		if (node.toString().startsWith("0x")) {
+			buffer.append(node.toString().replace("u", "x"));
+		} else {
+			buffer.append("\"");
+			buffer.append(node.charValue());
+			buffer.append("\".asciiValue");
+		}
 		return false;
 	}
 

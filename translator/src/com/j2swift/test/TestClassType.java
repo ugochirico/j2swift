@@ -8,6 +8,8 @@ public class TestClassType {
 	
 	private final Object obj = null;
 	
+    public static final char MIN_VALUE = '\u0000';
+	
 	private static final String c;
 	
 	static {
@@ -25,11 +27,7 @@ public class TestClassType {
 		a ="123";
 	}
 	public static void main(String[] args) {
-		String test[]  = new String[10];
-		test[0] = null;
-		System.out.println(test[0]);
-		
-		new TestClassType().test2();
+		System.out.println("1 = " + Integer.valueOf(MIN_VALUE));
 	}
 	
 
