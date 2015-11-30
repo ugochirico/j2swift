@@ -47,6 +47,7 @@
 		6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */; };
 		6BBFCA1E1C00BCA4006955E2 /* ArithmeticException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */; };
 		6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFD25011BFB73FB0061F7BE /* Utility.swift */; };
+		FCDDA3561C0AFB7C0022ED7A /* IntegralToString.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +104,7 @@
 		6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayIndexOutOfBoundsException.swift; sourceTree = "<group>"; };
 		6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArithmeticException.swift; sourceTree = "<group>"; };
 		6BFD25011BFB73FB0061F7BE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegralToString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +183,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */,
 				0F2DA6C91C046CB200F2E57F /* Integer.swift */,
 				0F0391B31C01B0F9000EA5BC /* AssertionError.swift */,
 				0F0391B11C01B0C3000EA5BC /* ArrayStoreException.swift */,
@@ -356,6 +359,7 @@
 				0FBE636A1BFF1A7A00BC4D3A /* RuntimeException.swift in Sources */,
 				0F0391B01C01ABC0000EA5BC /* CharSequence.swift in Sources */,
 				0F0391B41C01B0F9000EA5BC /* AssertionError.swift in Sources */,
+				FCDDA3561C0AFB7C0022ED7A /* IntegralToString.swift in Sources */,
 				0F0391B21C01B0C3000EA5BC /* ArrayStoreException.swift in Sources */,
 				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
 				6BBFCA0A1C00BB6D006955E2 /* NumberFormatException.swift in Sources */,

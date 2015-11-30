@@ -32,8 +32,6 @@ import com.j2swift.ast.Javadoc;
 import com.j2swift.ast.PackageDeclaration;
 import com.j2swift.ast.TreeUtil;
 import com.j2swift.types.HeaderImportCollector;
-import com.j2swift.types.ImplementationImportCollector;
-import com.j2swift.types.Import;
 import com.j2swift.util.BindingUtil;
 import com.j2swift.util.NameTable;
 import com.j2swift.util.TranslationUtil;
@@ -45,15 +43,15 @@ import com.j2swift.util.TranslationUtil;
  */
 public class GeneratedType {
 
-  private static final Set<Import> EMPTY_IMPORTS = Collections.<Import>emptySet();
+//  private static final Set<Import> EMPTY_IMPORTS = Collections.<Import>emptySet();
 
   private final String typeName;
   private final boolean isPrivate;
   private final List<String> superTypes;
-  private final Set<Import> headerForwardDeclarations;
-  private final Set<Import> headerIncludes;
-  private final Set<Import> implementationForwardDeclarations;
-  private final Set<Import> implementationIncludes;
+//  private final Set<Import> headerForwardDeclarations;
+//  private final Set<Import> headerIncludes;
+//  private final Set<Import> implementationForwardDeclarations;
+//  private final Set<Import> implementationIncludes;
   private final String publicDeclarationCode;
   private final String privateDeclarationCode;
   private final String implementationCode;
@@ -62,21 +60,21 @@ public class GeneratedType {
       String typeName,
       boolean isPrivate,
       List<String> superTypes,
-      Set<Import> headerForwardDeclarations,
-      Set<Import> headerIncludes,
-      Set<Import> implementationForwardDeclarations,
-      Set<Import> implementationIncludes,
+//      Set<Import> headerForwardDeclarations,
+//      Set<Import> headerIncludes,
+//      Set<Import> implementationForwardDeclarations,
+//      Set<Import> implementationIncludes,
       String publicDeclarationCode,
       String privateDeclarationCode,
       String implementationCode) {
     this.typeName = typeName;
     this.isPrivate = isPrivate;
     this.superTypes = Preconditions.checkNotNull(superTypes);
-    this.headerForwardDeclarations = Preconditions.checkNotNull(headerForwardDeclarations);
-    this.headerIncludes = Preconditions.checkNotNull(headerIncludes);
-    this.implementationForwardDeclarations =
-        Preconditions.checkNotNull(implementationForwardDeclarations);
-    this.implementationIncludes = Preconditions.checkNotNull(implementationIncludes);
+//    this.headerForwardDeclarations = Preconditions.checkNotNull(headerForwardDeclarations);
+//    this.headerIncludes = Preconditions.checkNotNull(headerIncludes);
+//    this.implementationForwardDeclarations =
+//        Preconditions.checkNotNull(implementationForwardDeclarations);
+//    this.implementationIncludes = Preconditions.checkNotNull(implementationIncludes);
     this.publicDeclarationCode = Preconditions.checkNotNull(publicDeclarationCode);
     this.privateDeclarationCode = Preconditions.checkNotNull(privateDeclarationCode);
     this.implementationCode = Preconditions.checkNotNull(implementationCode);
@@ -104,8 +102,8 @@ public class GeneratedType {
         new HeaderImportCollector(HeaderImportCollector.Filter.PRIVATE_ONLY);
     privateDeclarationCollector.collect(typeNode);
 
-    ImplementationImportCollector importCollector = new ImplementationImportCollector();
-    importCollector.collect(typeNode);
+//    ImplementationImportCollector importCollector = new ImplementationImportCollector();
+//    importCollector.collect(typeNode);
 
     SourceBuilder builder = new SourceBuilder(Options.emitLineDirectives());
 //    TypeDeclarationGenerator.generate(builder, typeNode);
@@ -122,18 +120,18 @@ public class GeneratedType {
     //TODO
     String implementationCode = builder.toString();
 
-    ImmutableSet.Builder<Import> implementationIncludes = ImmutableSet.builder();
-    implementationIncludes.addAll(privateDeclarationCollector.getSuperTypes());
-    implementationIncludes.addAll(importCollector.getImports());
+//    ImmutableSet.Builder<Import> implementationIncludes = ImmutableSet.builder();
+//    implementationIncludes.addAll(privateDeclarationCollector.getSuperTypes());
+//    implementationIncludes.addAll(importCollector.getImports());
 
     return new GeneratedType(
         nameTable.getFullName(typeBinding),
         typeNode.hasPrivateDeclaration(),
         superTypes.build(),
-        ImmutableSet.copyOf(headerCollector.getForwardDeclarations()),
-        ImmutableSet.copyOf(headerCollector.getSuperTypes()),
-        ImmutableSet.copyOf(privateDeclarationCollector.getForwardDeclarations()),
-        implementationIncludes.build(),
+//        ImmutableSet.copyOf(headerCollector.getForwardDeclarations()),
+//        ImmutableSet.copyOf(headerCollector.getSuperTypes()),
+//        ImmutableSet.copyOf(privateDeclarationCollector.getForwardDeclarations()),
+//        implementationIncludes.build(),
         publicDeclarationCode,
         privateDeclarationCode,
         implementationCode);
@@ -142,8 +140,8 @@ public class GeneratedType {
   public static GeneratedType forPackageDeclaration(CompilationUnit unit) {
     PackageDeclaration packageDecl = unit.getPackage();
 
-    ImplementationImportCollector importCollector = new ImplementationImportCollector();
-    importCollector.collect(packageDecl);
+//    ImplementationImportCollector importCollector = new ImplementationImportCollector();
+//    importCollector.collect(packageDecl);
 
     String publicDeclarationCode = "";
     Javadoc javadoc = packageDecl.getJavadoc();
@@ -158,10 +156,10 @@ public class GeneratedType {
         null,
         false,
         Collections.<String>emptyList(),
-        EMPTY_IMPORTS,
-        EMPTY_IMPORTS,
-        EMPTY_IMPORTS,
-        ImmutableSet.copyOf(importCollector.getImports()),
+//        EMPTY_IMPORTS,
+//        EMPTY_IMPORTS,
+//        EMPTY_IMPORTS,
+//        ImmutableSet.copyOf(importCollector.getImports()),
         publicDeclarationCode,
         "",
         generatePackageInfo(unit));
@@ -223,21 +221,21 @@ public class GeneratedType {
     return superTypes;
   }
 
-  public Set<Import> getHeaderForwardDeclarations() {
-    return headerForwardDeclarations;
-  }
-
-  public Set<Import> getHeaderIncludes() {
-    return headerIncludes;
-  }
-
-  public Set<Import> getImplementationForwardDeclarations() {
-    return implementationForwardDeclarations;
-  }
-
-  public Set<Import> getImplementationIncludes() {
-    return implementationIncludes;
-  }
+//  public Set<Import> getHeaderForwardDeclarations() {
+//    return headerForwardDeclarations;
+//  }
+//
+//  public Set<Import> getHeaderIncludes() {
+//    return headerIncludes;
+//  }
+//
+//  public Set<Import> getImplementationForwardDeclarations() {
+//    return implementationForwardDeclarations;
+//  }
+//
+//  public Set<Import> getImplementationIncludes() {
+//    return implementationIncludes;
+//  }
 
   public String getPublicDeclarationCode() {
     return publicDeclarationCode;

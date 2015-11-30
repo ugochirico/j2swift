@@ -14,7 +14,6 @@
 
 package com.j2swift.pipeline;
 
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,8 +34,8 @@ import com.j2swift.translate.PrimitiveRewriter;
 import com.j2swift.translate.Rewriter;
 import com.j2swift.translate.RuntimeExceptionRewriter;
 import com.j2swift.types.HeaderImportCollector;
-import com.j2swift.types.ImplementationImportCollector;
-import com.j2swift.types.Import;
+//import com.j2swift.types.ImplementationImportCollector;
+//import com.j2swift.types.Import;
 import com.j2swift.util.DeadCodeMap;
 import com.j2swift.util.ErrorUtil;
 import com.j2swift.util.JdtParser;
@@ -293,17 +292,17 @@ public class TranslationProcessor extends FileProcessor {
     HeaderImportCollector hdrCollector =
         new HeaderImportCollector(HeaderImportCollector.Filter.INCLUDE_ALL);
     hdrCollector.collect(unit);
-    ImplementationImportCollector implCollector = new ImplementationImportCollector();
-    implCollector.collect(unit);
-    Set<Import> imports = hdrCollector.getForwardDeclarations();
-    imports.addAll(hdrCollector.getSuperTypes());
-    imports.addAll(implCollector.getImports());
-    for (Import imp : imports) {
-      String qualifiedName = imp.getJavaQualifiedName();
-      if (qualifiedName != null) {
-        closureQueue.addName(qualifiedName);
-      }
-    }
+//    ImplementationImportCollector implCollector = new ImplementationImportCollector();
+//    implCollector.collect(unit);
+//    Set<Import> imports = hdrCollector.getForwardDeclarations();
+//    imports.addAll(hdrCollector.getSuperTypes());
+//    imports.addAll(implCollector.getImports());
+//    for (Import imp : imports) {
+//      String qualifiedName = imp.getJavaQualifiedName();
+//      if (qualifiedName != null) {
+//        closureQueue.addName(qualifiedName);
+//      }
+//    }
   }
 
   private static TimeTracker getTicker(String name) {

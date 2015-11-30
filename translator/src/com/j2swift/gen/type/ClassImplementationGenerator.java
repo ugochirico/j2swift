@@ -119,7 +119,13 @@ public class ClassImplementationGenerator extends
 			return;
 		}
 		syncLineNumbers(m.getName()); // avoid doc-comment
-		String methodBody = generateStatement(m.getBody());
+		String methodBody;
+		if (Modifier.isNative(m.getModifiers())) {
+			methodBody = "{}";
+		}
+		else {
+			methodBody = generateStatement(m.getBody());	
+		}
 		indent();
 		printIndent();
 		if (m.isConstructor()) {

@@ -99,7 +99,7 @@ public class Types {
     mapIOSType(IOSTypeBinding.newUnmappedClass("NSZone"));
     idType = mapIOSType(IOSTypeBinding.newUnmappedClass("JavaObject"));
 
-    initializeArrayTypes();
+//    initializeArrayTypes();
     initializeTypeMap();
     initializeCommonJavaTypes();
     populatePrimitiveAndWrapperTypeMaps();
@@ -120,17 +120,17 @@ public class Types {
     return type;
   }
 
-  private void initializeArrayTypes() {
-    initializePrimitiveArray("boolean", "IOSBooleanArray");
-    initializePrimitiveArray("byte", "IOSByteArray");
-    initializePrimitiveArray("char", "IOSCharArray");
-    initializePrimitiveArray("double", "IOSDoubleArray");
-    initializePrimitiveArray("float", "IOSFloatArray");
-    initializePrimitiveArray("int", "IOSIntArray");
-    initializePrimitiveArray("long", "IOSLongArray");
-    initializePrimitiveArray("short", "IOSShortArray");
-    IOSObjectArray = mapIOSType(IOSTypeBinding.newUnmappedClass("IOSObjectArray"));
-  }
+//  private void initializeArrayTypes() {
+//    initializePrimitiveArray("boolean", "IOSBooleanArray");
+//    initializePrimitiveArray("byte", "IOSByteArray");
+//    initializePrimitiveArray("char", "IOSCharArray");
+//    initializePrimitiveArray("double", "IOSDoubleArray");
+//    initializePrimitiveArray("float", "IOSFloatArray");
+//    initializePrimitiveArray("int", "IOSIntArray");
+//    initializePrimitiveArray("long", "IOSLongArray");
+//    initializePrimitiveArray("short", "IOSShortArray");
+//    IOSObjectArray = mapIOSType(IOSTypeBinding.newUnmappedClass("IOSObjectArray"));
+//  }
 
   /**
    * Initialize type map with classes that are explicitly mapped to an iOS
@@ -154,12 +154,12 @@ public class Types {
     javaBindingMap.put("java.lang.Number", javaNumberType);
   }
 
-  private void initializePrimitiveArray(String javaTypeName, String iosTypeName) {
-    ITypeBinding javaType = ast.resolveWellKnownType(javaTypeName);
-    IOSTypeBinding iosType = mapIOSType(IOSTypeBinding.newUnmappedClass(iosTypeName));
-    iosType.setHeader("IOSPrimitiveArray.h");
-    arrayBindingMap.put(javaType, iosType);
-  }
+//  private void initializePrimitiveArray(String javaTypeName, String iosTypeName) {
+//    ITypeBinding javaType = ast.resolveWellKnownType(javaTypeName);
+//    IOSTypeBinding iosType = mapIOSType(IOSTypeBinding.newUnmappedClass(iosTypeName));
+//    iosType.setHeader("IOSPrimitiveArray.h");
+//    arrayBindingMap.put(javaType, iosType);
+//  }
 
   private void populatePrimitiveAndWrapperTypeMaps() {
     loadPrimitiveAndWrapperTypes("boolean", "java.lang.Boolean");
@@ -189,7 +189,7 @@ public class Types {
       return null;
     }
     if (binding.isArray()) {
-      return resolveArrayType(binding.getComponentType());
+//      return resolveArrayType(binding.getComponentType());
     }
     ITypeBinding newBinding = typeMap.get(binding);
     if (newBinding == null && binding.isAssignmentCompatible(javaClassType)) {

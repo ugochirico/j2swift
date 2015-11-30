@@ -6,7 +6,7 @@ public class JreEmulationTransfer {
 		String[] fileList = new String[] {
 				"java/lang/Integer.java",
 				"java/lang/TypeNotPresentException.java",
-//				"java/lang/IntegralToString.java",
+				"java/lang/IntegralToString.java",
 				
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",

@@ -1284,17 +1284,15 @@ public class NameTable {
 				classType = getFullName(type);
 			}
 		}
-		
-		 if (!interfaces.isEmpty()) {
+
+		if (!interfaces.isEmpty()) {
 			return interfaces.get(0);
-		}
-		 else if (!Strings.isNullOrEmpty(classType)) {
+		} else if (!Strings.isNullOrEmpty(classType)) {
 			return classType;
+		} else {
+			return ID_TYPE;
 		}
-		 else {
-			 return ID_TYPE;
-		 }
-		 
+
 	}
 
 	/**
@@ -1335,45 +1333,53 @@ public class NameTable {
 		String name = getFullNameInner(binding);
 		return name;
 	}
-	
+
 	private String getArrayFullName(ITypeBinding binding) {
 		ITypeBinding erasure = binding.getErasure();
 		ITypeBinding componentType = erasure.getComponentType();
 		StringBuilder result = new StringBuilder("[]");
 		while (componentType != null && componentType.getDimensions() > 0) {
-			result.insert(result.length()/2, "[]");
+			result.insert(result.length() / 2, "[]");
 			componentType = componentType.getComponentType();
 		}
-		result.insert(result.length()/2, getSpecificObjCType(componentType));
+		if (componentType.isPrimitive()) {
+			result.insert(result.length() / 2, getSpecificObjCType(componentType));
+		} else {
+			result.insert(result.length() / 2, getSpecificObjCType(componentType) + "?");
+		}
 		return result.toString();
 	}
 
 	private String getFullNameInner(ITypeBinding binding) {
-	if (binding.isArray()) {
-		return getArrayFullName(binding);
+		if (binding.isArray()) {
+			return getArrayFullName(binding);
+		}
+		binding = typeEnv.mapType(binding.getErasure()); // Make sure type
+															// variables aren't
+															// included.
+
+		// Use ObjectiveCType annotation, if it exists.
+		IAnnotationBinding annotation = BindingUtil.getAnnotation(binding,
+				ObjectiveCName.class);
+		if (annotation != null) {
+			return (String) BindingUtil.getAnnotationValue(annotation, "value");
+		}
+
+		ITypeBinding outerBinding = binding.getDeclaringClass();
+		if (outerBinding != null) {
+			return getFullNameInner(outerBinding) + '_'
+					+ getTypeSubName(binding);
+		}
+		String name = binding.getQualifiedName();
+
+		// Use mapping file entry, if it exists.
+		if (Options.getClassMappings().containsKey(name)) {
+			return Options.getClassMappings().get(name);
+		}
+
+		// Use camel-cased package+class name.
+		return getPrefix(binding.getPackage()) + binding.getName();
 	}
-    binding = typeEnv.mapType(binding.getErasure());  // Make sure type variables aren't included.
-
-    // Use ObjectiveCType annotation, if it exists.
-    IAnnotationBinding annotation = BindingUtil.getAnnotation(binding, ObjectiveCName.class);
-    if (annotation != null) {
-      return (String) BindingUtil.getAnnotationValue(annotation, "value");
-    }
-
-    ITypeBinding outerBinding = binding.getDeclaringClass();
-    if (outerBinding != null) {
-      return getFullNameInner(outerBinding) + '_' + getTypeSubName(binding);
-    }
-    String name = binding.getQualifiedName();
-
-    // Use mapping file entry, if it exists.
-    if (Options.getClassMappings().containsKey(name)) {
-      return Options.getClassMappings().get(name);
-    }
-
-    // Use camel-cased package+class name.
-    return getPrefix(binding.getPackage()) + binding.getName();
-  }
 
 	private static String getTypeSubName(ITypeBinding binding) {
 		if (binding.isAnonymous()) {

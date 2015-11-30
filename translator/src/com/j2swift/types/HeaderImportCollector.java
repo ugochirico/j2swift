@@ -69,11 +69,11 @@ public class HeaderImportCollector extends TreeVisitor {
 
   // Forward declarations. The order in which imports are collected affect
   // which imports become forward declarations.
-  private Set<Import> forwardDecls = Sets.newLinkedHashSet();
+//  private Set<Import> forwardDecls = Sets.newLinkedHashSet();
   // Supertypes of the below declared types that haven't been seen by this collector.
-  private Set<Import> superTypes = Sets.newLinkedHashSet();
+//  private Set<Import> superTypes = Sets.newLinkedHashSet();
   // Declared types seen by this collector.
-  private Set<Import> declaredTypes = Sets.newHashSet();
+//  private Set<Import> declaredTypes = Sets.newHashSet();
 
   public HeaderImportCollector(Filter filter) {
     this.filter = filter;
@@ -89,13 +89,15 @@ public class HeaderImportCollector extends TreeVisitor {
     }
   }
 
-  public Set<Import> getForwardDeclarations() {
-    return forwardDecls;
-  }
+//  public Set<Import> getForwardDeclarations() {
+//	  return null;
+//    return forwardDecls;
+//  }
 
-  public Set<Import> getSuperTypes() {
-    return superTypes;
-  }
+//  public Set<Import> getSuperTypes() {
+//	  return null;
+//    return superTypes;
+//  }
 
   private void addForwardDecl(Type type) {
     if (type != null) {
@@ -104,15 +106,15 @@ public class HeaderImportCollector extends TreeVisitor {
   }
 
   private void addForwardDecl(ITypeBinding type) {
-    forwardDecls.addAll(Sets.difference(Import.getImports(type, unit), declaredTypes));
+//    forwardDecls.addAll(Sets.difference(Import.getImports(type, unit), declaredTypes));
   }
 
   private void addSuperType(ITypeBinding type) {
-    Import.addImports(type, superTypes, unit);
+//    Import.addImports(type, superTypes, unit);
   }
 
   private void addDeclaredType(ITypeBinding type) {
-    Import.addImports(type, declaredTypes, unit);
+//    Import.addImports(type, declaredTypes, unit);
   }
 
   @Override
