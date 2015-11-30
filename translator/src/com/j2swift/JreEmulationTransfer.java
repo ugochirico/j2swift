@@ -7,6 +7,7 @@ public class JreEmulationTransfer {
 				"java/lang/Integer.java",
 				"java/lang/TypeNotPresentException.java",
 				"java/lang/IntegralToString.java",
+				"java/lang/Character.java",
 				
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",
