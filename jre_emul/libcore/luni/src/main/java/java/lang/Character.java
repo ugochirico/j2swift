@@ -1916,7 +1916,7 @@ public final class Character implements Serializable, Comparable<Character> {
         return value;
     }
 
-    private static void checkValidCodePoint(int codePoint) {
+    private static void checkValidCodePoint(int codePoint) throws RuntimeException {
         if (!isValidCodePoint(codePoint)) {
             throw new IllegalArgumentException("Invalid code point: " + codePoint);
         }
@@ -2125,7 +2125,7 @@ public final class Character implements Serializable, Comparable<Character> {
      *             the length of {@code seq}.
      * @since 1.5
      */
-    public static int codePointAt(CharSequence seq, int index) {
+    public static int codePointAt(CharSequence seq, int index) throws RuntimeException {
         if (seq == null) {
             throw new NullPointerException("seq == null");
         }
@@ -2248,7 +2248,7 @@ public final class Character implements Serializable, Comparable<Character> {
      *             length of {@code seq}.
      * @since 1.5
      */
-    public static int codePointBefore(CharSequence seq, int index) {
+    public static int codePointBefore(CharSequence seq, int index) throws RuntimeException {
         if (seq == null) {
             throw new NullPointerException("seq == null");
         }
@@ -2375,7 +2375,7 @@ public final class Character implements Serializable, Comparable<Character> {
      *             {@link #isSupplementaryCodePoint(int) supplementary code point}.
      * @since 1.5
      */
-    public static int toChars(int codePoint, char[] dst, int dstIndex) {
+    public static int toChars(int codePoint, char[] dst, int dstIndex) throws RuntimeException {
         checkValidCodePoint(codePoint);
         if (dst == null) {
             throw new NullPointerException("dst == null");
@@ -2447,7 +2447,7 @@ public final class Character implements Serializable, Comparable<Character> {
      * @since 1.5
      */
     public static int codePointCount(CharSequence seq, int beginIndex,
-            int endIndex) {
+            int endIndex) throws RuntimeException {
         if (seq == null) {
             throw new NullPointerException("seq == null");
         }
@@ -2543,7 +2543,7 @@ public final class Character implements Serializable, Comparable<Character> {
      *             negative) from {@code index}.
      * @since 1.5
      */
-    public static int offsetByCodePoints(CharSequence seq, int index, int codePointOffset) {
+    public static int offsetByCodePoints(CharSequence seq, int index, int codePointOffset) throws RuntimeException {
         if (seq == null) {
             throw new NullPointerException("seq == null");
         }

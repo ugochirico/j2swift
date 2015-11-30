@@ -47,6 +47,7 @@
 		6BBFCA1C1C00BCA4006955E2 /* ClassCastException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA131C00BCA4006955E2 /* ClassCastException.swift */; };
 		6BBFCA1D1C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */; };
 		6BBFCA1E1C00BCA4006955E2 /* ArithmeticException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */; };
+		6BF182071C0C9FA6006EA731 /* NullPointerException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF182061C0C9FA6006EA731 /* NullPointerException.swift */; };
 		6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFD25011BFB73FB0061F7BE /* Utility.swift */; };
 		FCDDA3561C0AFB7C0022ED7A /* IntegralToString.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */; };
 /* End PBXBuildFile section */
@@ -105,6 +106,7 @@
 		6BBFCA131C00BCA4006955E2 /* ClassCastException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassCastException.swift; sourceTree = "<group>"; };
 		6BBFCA141C00BCA4006955E2 /* ArrayIndexOutOfBoundsException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayIndexOutOfBoundsException.swift; sourceTree = "<group>"; };
 		6BBFCA151C00BCA4006955E2 /* ArithmeticException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArithmeticException.swift; sourceTree = "<group>"; };
+		6BF182061C0C9FA6006EA731 /* NullPointerException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NullPointerException.swift; sourceTree = "<group>"; };
 		6BFD25011BFB73FB0061F7BE /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegralToString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +187,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				6BF182061C0C9FA6006EA731 /* NullPointerException.swift */,
 				0F46F7961C0C41340041D74A /* Character.swift */,
 				FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */,
 				0F2DA6C91C046CB200F2E57F /* Integer.swift */,
@@ -343,6 +346,7 @@
 				6BBFCA1B1C00BCA4006955E2 /* IndexOutOfBoundsException.swift in Sources */,
 				0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */,
 				0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */,
+				6BF182071C0C9FA6006EA731 /* NullPointerException.swift in Sources */,
 				6BBFC9FE1C004BF8006955E2 /* JavaSystem.swift in Sources */,
 				6BBFC9F81C0043A9006955E2 /* InvalidObjectException.swift in Sources */,
 				0F99208D1BFD7D4500803CC6 /* JavaThrowable.swift in Sources */,

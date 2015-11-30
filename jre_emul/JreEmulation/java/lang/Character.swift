@@ -86,7 +86,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return value
   }
 
-  static func checkValidCodePoint(codePoint:jint)  {
+  static func checkValidCodePoint(codePoint:jint) throws  {
     if (!JavaCharacter.isValidCodePoint(codePoint)) {
       throw JavaIllegalArgumentException(withString: "Invalid code point: \(codePoint)")
     }
@@ -140,7 +140,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return jint(h | l) + jint(0x10000)
   }
 
-  public static func codePointAt(seq:JavaCharSequence?, _ index:jint) ->jint  {
+  public static func codePointAt(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
@@ -163,7 +163,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
 
   public static func codePointAt(seq:[jchar]?, _ index:jint, _ limit:jint) ->jint  {}
 
-  public static func codePointBefore(seq:JavaCharSequence?, _ index:jint) ->jint  {
+  public static func codePointBefore(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
@@ -186,8 +186,8 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
 
   public static func codePointBefore(seq:[jchar]?, _ index:jint, _ start:jint) ->jint  {}
 
-  public static func toChars(codePoint:jint, _ dst:[jchar]?, _ dstIndex:jint) ->jint  {
-    JavaCharacter.checkValidCodePoint(codePoint)
+  public static func toChars(codePoint:jint, _ dst:[jchar]?, _ dstIndex:jint) throws ->jint  {
+    try JavaCharacter.checkValidCodePoint(codePoint)
     if (dst == nil) {
       throw JavaNullPointerException(withString: "dst == null")
     }
@@ -210,7 +210,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func toChars(codePoint:jint) ->[jchar]?  {
-    JavaCharacter.checkValidCodePoint(codePoint)
+    try JavaCharacter.checkValidCodePoint(codePoint)
     if (JavaCharacter.isSupplementaryCodePoint(codePoint)) {
       var cpPrime:jint = codePoint - jint(0x10000)
       var high:jint = jint(0xD800) | jint(jint(cpPrime >> 10) & jint(0x3FF))
@@ -220,7 +220,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return [(char)codePoint]
   }
 
-  public static func codePointCount(seq:JavaCharSequence?, _ beginIndex:jint, _ endIndex:jint) ->jint  {
+  public static func codePointCount(seq:JavaCharSequence?, _ beginIndex:jint, _ endIndex:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
@@ -246,7 +246,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
 
   public static func codePointCount(seq:[jchar]?, _ offset:jint, _ count:jint) ->jint  {}
 
-  public static func offsetByCodePoints(seq:JavaCharSequence?, _ index:jint, _ codePointOffset:jint) ->jint  {
+  public static func offsetByCodePoints(seq:JavaCharSequence?, _ index:jint, _ codePointOffset:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
@@ -308,7 +308,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static func forDigit(digit:jint, _ radix:jint) ->jchar  {}
 
   public static func getName(codePoint:jint) ->String?  {
-    JavaCharacter.checkValidCodePoint(codePoint)
+    try JavaCharacter.checkValidCodePoint(codePoint)
     if (JavaCharacter.getType(codePoint) == JavaCharacter.UNASSIGNED) {
       return nil
     }
@@ -798,7 +798,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
   }
 
   public static func of(codePoint:jint) ->JavaCharacter_UnicodeBlock?  {
-    JavaCharacter.checkValidCodePoint(codePoint)
+    try JavaCharacter.checkValidCodePoint(codePoint)
     var block:jint = JavaCharacter_UnicodeBlock.ofImpl(codePoint)
     if (block == -1 || block >= JavaCharacter_UnicodeBlock.BLOCKS!.length) {
       return nil

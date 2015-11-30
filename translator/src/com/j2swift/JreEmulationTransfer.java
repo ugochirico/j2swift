@@ -8,6 +8,7 @@ public class JreEmulationTransfer {
 				"java/lang/Integer.java",
 				"java/lang/TypeNotPresentException.java",
 				"java/lang/IntegralToString.java",
+				"java/lang/NullPointerException.java",
 				
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",
