@@ -26,7 +26,7 @@ public class JavaSecurityException : JavaRuntimeException {
 
   public override init(withJavaThrowable cause:JavaThrowable?)  {
     
-    super.init(withString: cause == nil ? nil : cause!.toString(),withJavaThrowable: cause)
+    super.init(withString: (cause == nil ? nil : cause!.toString()),withJavaThrowable: cause)
   }
 
 

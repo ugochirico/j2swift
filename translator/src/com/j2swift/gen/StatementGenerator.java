@@ -863,11 +863,21 @@ public class StatementGenerator extends TreeVisitor {
 			} else {
 				operand.setNeedUnwarpOptional(needUnwarpOptional);
 			}
-
+			
 			if (!isFirst) {
 				buffer.append(opStr);
 			}
 			isFirst = false;
+			String castTypeName = null; 
+			if (operand.getTypeBinding().isPrimitive() && operand instanceof ParenthesizedExpression) {
+				/*
+				 * process the specific assignment (firstDigit = string.charAt(i)) == 'x'
+				 */
+				castTypeName = nameTable.getSpecificObjCType(operand.getTypeBinding());
+			}
+			if (castTypeName != null) {
+				buffer.append(castTypeName);
+			}
 			operand.accept(this);
 		}
 		return false;

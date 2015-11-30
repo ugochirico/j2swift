@@ -29,7 +29,7 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public override func equals(o:JavaObject?) ->jboolean  {
-    return o == self || o is JavaBoolean && (o as! JavaBoolean).value == value
+    return jboolean(o == self) || jboolean(jboolean(o is JavaBoolean) && jboolean(((o as! JavaBoolean)).value == value))
   }
 
   public func compareTo(that:JavaBoolean?) ->jint  {
@@ -52,7 +52,7 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
     if (string == nil || string!.length() == 0) {
       return false
     }
-    return JavaBoolean.parseBoolean(JavaSystem.getProperty(string))
+    return (JavaBoolean.parseBoolean(JavaSystem.getProperty(string)))
   }
 
   public static func parseBoolean(s:String?) ->jboolean  {
