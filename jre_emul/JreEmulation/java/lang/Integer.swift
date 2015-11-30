@@ -47,24 +47,24 @@ public class JavaInteger : JavaNumber, JavaComparable {
     var length:jint = string!.length()
     var i:jint = 0
     if (length == 0) {
-      throw JavaInteger.invalidInt(string)
+      throw try JavaInteger.invalidInt(string)!
     }
     var firstDigit:jchar = string!.charAt(i)
-    var negative:jboolean = firstDigit == -
+    var negative:jboolean = firstDigit == "-".asciiValue
     if (negative) {
       if (length == 1) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
       firstDigit = string!.charAt(++i)
     }
     var base:jint = 10
-    if (firstDigit == 0) {
+    if (firstDigit == "0".asciiValue) {
       if (++i == length) {
         return JavaInteger.valueOf(0)
       }
-      if (firstDigit = string!.charAt(i) == x || firstDigit == X) {
+      if (jchar(firstDigit = string!.charAt(i)) == "x".asciiValue || firstDigit == "X".asciiValue) {
         if (++i == length) {
-          throw JavaInteger.invalidInt(string)
+          throw try JavaInteger.invalidInt(string)!
         }
         base = 16
       }
@@ -72,9 +72,9 @@ public class JavaInteger : JavaNumber, JavaComparable {
         base = 8
       }
     }
-    else if (firstDigit == #) {
+    else if (firstDigit == "#".asciiValue) {
       if (++i == length) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
       base = 16
     }
@@ -166,16 +166,16 @@ public class JavaInteger : JavaNumber, JavaComparable {
       throw JavaNumberFormatException(withString: "Invalid radix: \(radix)")
     }
     if (string == nil) {
-      throw JavaInteger.invalidInt(string)
+      throw try JavaInteger.invalidInt(string)!
     }
     var length:jint = string!.length()
     var i:jint = 0
     if (length == 0) {
-      throw JavaInteger.invalidInt(string)
+      throw try JavaInteger.invalidInt(string)!
     }
-    var negative:jboolean = string!.charAt(i) == -
+    var negative:jboolean = string!.charAt(i) == "-".asciiValue
     if (negative && ++i == length) {
-      throw JavaInteger.invalidInt(string)
+      throw try JavaInteger.invalidInt(string)!
     }
     return try JavaInteger.parse(string,i,radix,negative)
   }
@@ -187,21 +187,21 @@ public class JavaInteger : JavaNumber, JavaComparable {
     while (offset < length) {
       var digit:jint = JavaCharacter.digit(string!.charAt(offset++),radix)
       if (digit == -1) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
       if (max > result) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
       var next:jint = result * radix - digit
       if (next > result) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
       result = next
     }
     if (!negative) {
       result = -result
       if (result < 0) {
-        throw JavaInteger.invalidInt(string)
+        throw try JavaInteger.invalidInt(string)!
       }
     }
     return result

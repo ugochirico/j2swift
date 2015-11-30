@@ -8,7 +8,21 @@
 
 import Foundation
 
-extension String {
+extension Character {
+    var unicodeScalarsValue: UInt16 {
+        return UInt16(String(self).unicodeScalars.first!.value)
+    }
+}
+
+public extension String {
+    
+    public var asciiValue: UInt16 {
+        guard let first = characters.first where characters.count == 1 else  { return 0 }
+        return first.unicodeScalarsValue
+    }
+    
+    ////////////////////////////////////////////////////
+    
     public func isEmpty()->Bool {
         return characters.count == 0;
     }
@@ -52,7 +66,17 @@ extension String {
     }
     
     public func equalsIgnoreCase(another:String?) -> jboolean {
+        if (another == nil) {
+            return false
+        }
+        if(self.caseInsensitiveCompare(another!) == NSComparisonResult.OrderedSame){
+            return true
+        }
         //TODO
         return false
+    }
+    
+    public func charAt(i:jint) -> jchar {
+        return 0
     }
 }
