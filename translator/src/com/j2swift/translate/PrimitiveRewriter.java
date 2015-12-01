@@ -70,7 +70,7 @@ public class PrimitiveRewriter extends TreeVisitor {
 	public boolean visit(ReturnStatement node) {
 		ITypeBinding returnTypeBinding = node.getExpression().getTypeBinding();
 		if (returnTypeBinding != null) {
-			if (!returnTypeBinding.isEqualTo(methodReturnTypeBinding) && methodReturnTypeBinding.isPrimitive()) {
+			if (methodReturnTypeBinding.isPrimitive()) {
 				addCast(node.getExpression());
 			}
 		}

@@ -22,6 +22,11 @@ extension Array {
         }
     }
     
+    public var length: jint {
+        get {
+            return self.count
+        }
+    }
 }
 
 extension SequenceType where Generator.Element == Int {

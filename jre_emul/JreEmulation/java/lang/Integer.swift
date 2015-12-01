@@ -28,15 +28,15 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func byteValue() ->jbyte  {
-    return jbyte(value)
+    return (jbyte(jbyte(value)))
   }
 
   public func compareTo(object:JavaInteger?) ->jint  {
-    return JavaInteger.compare(value,object!.value)
+    return (jint(JavaInteger.compare(value,object!.value)))
   }
 
   public static func compare(lhs:jint, _ rhs:jint) ->jint  {
-    return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1)
+    return (jint(lhs < rhs ? -1 : (lhs == rhs ? 0 : 1)))
   }
 
   static func invalidInt(s:String?) throws ->JavaNumberFormatException?  {
@@ -87,7 +87,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func equals(o:JavaObject?) ->jboolean  {
-    return jboolean(o is JavaInteger) && jboolean(((o as! JavaInteger)).value == value)
+    return (jboolean(jboolean(o is JavaInteger) && jboolean(((o as! JavaInteger)).value == value)))
   }
 
   public override func floatValue() ->jfloat  {
@@ -146,11 +146,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public override func hashCode() ->jint  {
-    return value
+    return (jint(value))
   }
 
   public override func intValue() ->jint  {
-    return value
+    return (jint(value))
   }
 
   public override func longValue() ->jlong  {
@@ -158,7 +158,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func parseInt(string:String?) throws ->jint  {
-    return try JavaInteger.parseInt(string,10)
+    return (jint(try JavaInteger.parseInt(string,10)))
   }
 
   public static func parseInt(string:String?, _ radix:jint) throws ->jint  {
@@ -177,7 +177,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     if (negative && ++i == length) {
       throw try JavaInteger.invalidInt(string)!
     }
-    return try JavaInteger.parse(string,i,radix,negative)
+    return (jint(try JavaInteger.parse(string,i,radix,negative)))
   }
 
   static func parse(string:String?, _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
@@ -204,11 +204,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
         throw try JavaInteger.invalidInt(string)!
       }
     }
-    return result
+    return (jint(result))
   }
 
   public override func shortValue() ->jshort  {
-    return jshort(value)
+    return (jshort(jshort(value)))
   }
 
   public static func toBinaryString(i:jint) ->String?  {
@@ -249,16 +249,16 @@ public class JavaInteger : JavaNumber, JavaComparable {
     i |= (i >> 4)
     i |= (i >> 8)
     i |= (i >> 16)
-    return i - jint(i >>> 1)
+    return (jint(i - jint(i >>> 1)))
   }
 
   public static func lowestOneBit(i:jint) ->jint  {
-    return i & -i
+    return (jint(i & -i))
   }
 
   public static func numberOfLeadingZeros(var i:jint) ->jint  {
     if (i <= 0) {
-      return jint(~i >> 26) & 32
+      return (jint(jint(~i >> 26) & 32))
     }
     var n:jint = 1
     if (i >> 16 == 0) {
@@ -277,7 +277,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
       n += 2
       i <<= 2
     }
-    return n - jint(i >>> 31)
+    return (jint(n - jint(i >>> 31)))
   }
 
   public static func numberOfTrailingZeros(i:jint) ->jint  {
@@ -290,20 +290,20 @@ public class JavaInteger : JavaNumber, JavaComparable {
     i = jint(jint(i >> 4) + i) & jint(0x0F0F0F0F)
     i += i >> 8
     i += i >> 16
-    return i & jint(0x0000003F)
+    return (jint(i & jint(0x0000003F)))
   }
 
   public static func rotateLeft(i:jint, _ distance:jint) ->jint  {
-    return jint(i << distance) | jint(i >>> -distance)
+    return (jint(jint(i << distance) | jint(i >>> -distance)))
   }
 
   public static func rotateRight(i:jint, _ distance:jint) ->jint  {
-    return jint(i >>> distance) | jint(i << -distance)
+    return (jint(jint(i >>> distance) | jint(i << -distance)))
   }
 
   public static func reverseBytes(var i:jint) ->jint  {
     i = jint(jint(i >>> 8) & jint(0x00FF00FF)) | jint(jint(i & jint(0x00FF00FF)) << 8)
-    return jint(i >>> 16) | jint(i << 16)
+    return (jint(jint(i >>> 16) | jint(i << 16)))
   }
 
   public static func reverse(var i:jint) ->jint  {
@@ -311,11 +311,11 @@ public class JavaInteger : JavaNumber, JavaComparable {
     i = jint(jint(i >>> 2) & jint(0x33333333)) | jint(jint(i & jint(0x33333333)) << 2)
     i = jint(jint(i >>> 4) & jint(0x0F0F0F0F)) | jint(jint(i & jint(0x0F0F0F0F)) << 4)
     i = jint(jint(i >>> 8) & jint(0x00FF00FF)) | jint(jint(i & jint(0x00FF00FF)) << 8)
-    return jint((i >>> 16)) | jint(jint(i) << 16)
+    return (jint(jint((i >>> 16)) | jint(jint(i) << 16)))
   }
 
   public static func signum(i:jint) ->jint  {
-    return jint(i >> 31) | jint(-i >>> 31)
+    return (jint(jint(i >> 31) | jint(-i >>> 31)))
   }
 
   public static func valueOf(i:jint) ->JavaInteger?  {

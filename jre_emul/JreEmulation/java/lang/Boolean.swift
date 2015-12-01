@@ -25,23 +25,23 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public func booleanValue() ->jboolean  {
-    return value
+    return (jboolean(value))
   }
 
   public override func equals(o:JavaObject?) ->jboolean  {
-    return jboolean(o == self) || jboolean(jboolean(o is JavaBoolean) && jboolean(((o as! JavaBoolean)).value == value))
+    return (jboolean(jboolean(o == self) || jboolean(jboolean(o is JavaBoolean) && jboolean(((o as! JavaBoolean)).value == value))))
   }
 
   public func compareTo(that:JavaBoolean?) ->jint  {
-    return JavaBoolean.compare(value,that!.value)
+    return (jint(JavaBoolean.compare(value,that!.value)))
   }
 
   public static func compare(lhs:jboolean, _ rhs:jboolean) ->jint  {
-    return lhs == rhs ? 0 : lhs ? 1 : -1
+    return (jint(lhs == rhs ? 0 : lhs ? 1 : -1))
   }
 
   public override func hashCode() ->jint  {
-    return value ? 1231 : 1237
+    return (jint(value ? 1231 : 1237))
   }
 
   public override func toString() ->String?  {
@@ -50,13 +50,13 @@ public class JavaBoolean : JavaObject, JavaSerializable, JavaComparable {
 
   public static func getBoolean(string:String?) ->jboolean  {
     if (string == nil || string!.length() == 0) {
-      return false
+      return (jboolean(false))
     }
-    return (JavaBoolean.parseBoolean(JavaSystem.getProperty(string)))
+    return (jboolean((JavaBoolean.parseBoolean(JavaSystem.getProperty(string)))))
   }
 
   public static func parseBoolean(s:String?) ->jboolean  {
-    return "true".equalsIgnoreCase(s)
+    return (jboolean("true".equalsIgnoreCase(s)))
   }
 
   public static func toString(value:jboolean) ->String?  {

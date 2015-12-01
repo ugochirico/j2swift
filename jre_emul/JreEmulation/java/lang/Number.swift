@@ -34,11 +34,11 @@ public class JavaNumber : JavaObject, JavaSerializable {
   }
 
   public func byteValue() ->jbyte  {
-    return jbyte(intValue())
+    return (jbyte(jbyte(intValue())))
   }
 
   public func shortValue() ->jshort  {
-    return jshort(intValue())
+    return (jshort(jshort(intValue())))
   }
 
 
