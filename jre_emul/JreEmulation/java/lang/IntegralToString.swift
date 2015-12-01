@@ -12,35 +12,65 @@ public class JavaIntegralToString : JavaObject {
     super.init()
   }
 
-  public static func intToString(i:jint, _ radix:jint) ->String?  {}
+  public static func intToString(i:jint, _ radix:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func intToString(i:jint) ->String?  {}
+  public static func intToString(i:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func appendInt(sb:JavaAbstractStringBuilder?, _ i:jint)  {}
+  public static func appendInt(sb:JavaAbstractStringBuilder?, _ i:jint)  {
+    //TODO: add Native implemention
+  }
 
-  public static func longToString(v:jlong, _ radix:jint) ->String?  {}
+  public static func longToString(v:jlong, _ radix:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func longToString(l:jlong) ->String?  {}
+  public static func longToString(l:jlong) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func appendLong(sb:JavaAbstractStringBuilder?, _ l:jlong)  {}
+  public static func appendLong(sb:JavaAbstractStringBuilder?, _ l:jlong)  {
+    //TODO: add Native implemention
+  }
 
-  public static func intToBinaryString(i:jint) ->String?  {}
+  public static func intToBinaryString(i:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func longToBinaryString(v:jlong) ->String?  {}
+  public static func longToBinaryString(v:jlong) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func appendByteAsHex(sb:JavaStringBuilder?, _ b:jbyte, _ upperCase:jboolean) ->JavaStringBuilder?  {}
+  public static func appendByteAsHex(sb:JavaStringBuilder?, _ b:jbyte, _ upperCase:jboolean) ->JavaStringBuilder?  {
+    //TODO: add Native implemention
+  }
 
-  public static func byteToHexString(b:jbyte, _ upperCase:jboolean) ->String?  {}
+  public static func byteToHexString(b:jbyte, _ upperCase:jboolean) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func bytesToHexString(bytes:[jbyte]?, _ upperCase:jboolean) ->String?  {}
+  public static func bytesToHexString(bytes:[jbyte]?, _ upperCase:jboolean) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func intToHexString(i:jint, _ upperCase:jboolean, _ minWidth:jint) ->String?  {}
+  public static func intToHexString(i:jint, _ upperCase:jboolean, _ minWidth:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func longToHexString(v:jlong) ->String?  {}
+  public static func longToHexString(v:jlong) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func intToOctalString(i:jint) ->String?  {}
+  public static func intToOctalString(i:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
-  public static func longToOctalString(v:jlong) ->String?  {}
+  public static func longToOctalString(v:jlong) ->String?  {
+    //TODO: add Native implemention
+  }
 
 
 }

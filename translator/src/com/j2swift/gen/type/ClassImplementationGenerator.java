@@ -45,7 +45,7 @@ public class ClassImplementationGenerator extends
 		} else {
 			printf("class %s ", className);
 		}
-		
+
 		printImplementedProtocols(hasSuperClass);
 
 		printf(" {\n");
@@ -59,10 +59,10 @@ public class ClassImplementationGenerator extends
 		// printReflectionMethods();
 		newline();
 		printIndent();
-		//TODO: we will put this in the class .and make TypeImplemention too
+		// TODO: we will put this in the class .and make TypeImplemention too
 		printOuterDeclarations();
 		println("}");
-//	    printTypeLiteralImplementation();
+		// printTypeLiteralImplementation();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class ClassImplementationGenerator extends
 		if (Modifier.isStatic(m.getModifiers())) {
 			sb.append("static ");
 		}
-		
+
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (m.isConstructor()) {
 			if (params.isEmpty() || params.size() == 0) {// for
@@ -121,11 +121,9 @@ public class ClassImplementationGenerator extends
 		syncLineNumbers(m.getName()); // avoid doc-comment
 		String methodBody;
 		if (Modifier.isNative(m.getModifiers())) {
-			//TODO:
 			methodBody = "{\n//TODO: add Native implemention\n}";
-		}
-		else {
-			methodBody = generateStatement(m.getBody());	
+		} else {
+			methodBody = generateStatement(m.getBody());
 		}
 		indent();
 		printIndent();
@@ -146,7 +144,7 @@ public class ClassImplementationGenerator extends
 		if (Modifier.isPublic(m.getModifiers())) {
 			sb.append("public ");
 		}
-		
+
 		List<SingleVariableDeclaration> params = m.getParameters();
 		if (m.isConstructor()) {
 			if (params.isEmpty() || params.size() == 0) {// for
@@ -162,7 +160,7 @@ public class ClassImplementationGenerator extends
 			sb.append("convenience ");
 		}
 		String selector = "init";
-	
+
 		sb.append(selector);
 		sb.append(printMethodParameter(m));
 		if (binding.getExceptionTypes().length > 0) {

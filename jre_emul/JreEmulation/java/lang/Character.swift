@@ -104,7 +104,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return c < 128 ? JavaCharacter.smallValueOf(c) : JavaCharacter(withjchar: c)
   }
 
-  static func smallValueOf(c:jchar) ->JavaCharacter?  {}
+  static func smallValueOf(c:jchar) ->JavaCharacter?  {
+    //TODO: add Native implemention
+  }
 
   public static func isValidCodePoint(codePoint:jint) ->jboolean  {
     return (jboolean((JavaCharacter.MIN_CODE_POINT <= codePoint && JavaCharacter.MAX_CODE_POINT >= codePoint)))
@@ -159,9 +161,13 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(high))
   }
 
-  public static func codePointAt(seq:[jchar]?, _ index:jint) ->jint  {}
+  public static func codePointAt(seq:[jchar]?, _ index:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
-  public static func codePointAt(seq:[jchar]?, _ index:jint, _ limit:jint) ->jint  {}
+  public static func codePointAt(seq:[jchar]?, _ index:jint, _ limit:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func codePointBefore(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
     if (seq == nil) {
@@ -182,9 +188,13 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(low))
   }
 
-  public static func codePointBefore(seq:[jchar]?, _ index:jint) ->jint  {}
+  public static func codePointBefore(seq:[jchar]?, _ index:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
-  public static func codePointBefore(seq:[jchar]?, _ index:jint, _ start:jint) ->jint  {}
+  public static func codePointBefore(seq:[jchar]?, _ index:jint, _ start:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func toChars(codePoint:jint, _ dst:[jchar]?, _ dstIndex:jint) throws ->jint  {
     try JavaCharacter.checkValidCodePoint(codePoint)
@@ -244,7 +254,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(result))
   }
 
-  public static func codePointCount(seq:[jchar]?, _ offset:jint, _ count:jint) ->jint  {}
+  public static func codePointCount(seq:[jchar]?, _ offset:jint, _ count:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func offsetByCodePoints(seq:JavaCharSequence?, _ index:jint, _ codePointOffset:jint) throws ->jint  {
     if (seq == nil) {
@@ -293,19 +305,25 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(i))
   }
 
-  public static func offsetByCodePoints(seq:[jchar]?, _ start:jint, _ count:jint, _ index:jint, _ codePointOffset:jint) ->jint  {}
+  public static func offsetByCodePoints(seq:[jchar]?, _ start:jint, _ count:jint, _ index:jint, _ codePointOffset:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func digit(c:jchar, _ radix:jint) ->jint  {
     return (jint(JavaCharacter.digit(jint(c),radix)))
   }
 
-  public static func digit(codePoint:jint, _ radix:jint) ->jint  {}
+  public static func digit(codePoint:jint, _ radix:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public override func equals(object:JavaObject?) ->jboolean  {
     return (jboolean(jboolean(object is JavaCharacter) && jboolean(((object as! JavaCharacter)).value == value)))
   }
 
-  public static func forDigit(digit:jint, _ radix:jint) ->jchar  {}
+  public static func forDigit(digit:jint, _ radix:jint) ->jchar  {
+    //TODO: add Native implemention
+  }
 
   public static func getName(codePoint:jint) ->String?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
@@ -320,7 +338,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return result
   }
 
-  static func getNameImpl(codePoint:jint) ->String?  {}
+  static func getNameImpl(codePoint:jint) ->String?  {
+    //TODO: add Native implemention
+  }
 
   public static func getNumericValue(c:jchar) ->jint  {
     return (jint(JavaCharacter.getNumericValue(jint(c))))
@@ -352,19 +372,25 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(JavaCharacter.getType(jint(c))))
   }
 
-  public static func getType(codePoint:jint) ->jint  {}
+  public static func getType(codePoint:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func getDirectionality(c:jchar) ->jbyte  {
     return (jbyte(JavaCharacter.getDirectionality(jint(c))))
   }
 
-  public static func getDirectionality(codePoint:jint) ->jbyte  {}
+  public static func getDirectionality(codePoint:jint) ->jbyte  {
+    //TODO: add Native implemention
+  }
 
   public static func isMirrored(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isMirrored(jint(c))))
   }
 
-  public static func isMirrored(codePoint:jint) ->jboolean  {}
+  public static func isMirrored(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public override func hashCode() ->jint  {
     return (jint(value))
@@ -378,7 +404,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jchar(jchar((jint(codePoint & jint(0x3ff)) | jint(0xdc00)))))
   }
 
-  public static func isAlphabetic(codePoint:jint) ->jboolean  {}
+  public static func isAlphabetic(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isBmpCodePoint(codePoint:jint) ->jboolean  {
     return (jboolean(codePoint >= JavaCharacter.MIN_VALUE && codePoint <= JavaCharacter.MAX_VALUE))
@@ -388,39 +416,53 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jboolean(JavaCharacter.isDefined(jint(c))))
   }
 
-  public static func isDefined(codePoint:jint) ->jboolean  {}
+  public static func isDefined(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isDigit(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isDigit(jint(c))))
   }
 
-  public static func isDigit(codePoint:jint) ->jboolean  {}
+  public static func isDigit(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isIdentifierIgnorable(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isIdentifierIgnorable(jint(c))))
   }
 
-  public static func isIdeographic(codePoint:jint) ->jboolean  {}
+  public static func isIdeographic(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
-  public static func isIdentifierIgnorable(codePoint:jint) ->jboolean  {}
+  public static func isIdentifierIgnorable(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isISOControl(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isISOControl(jint(c))))
   }
 
-  public static func isISOControl(c:jint) ->jboolean  {}
+  public static func isISOControl(c:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isJavaIdentifierPart(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isJavaIdentifierPart(jint(c))))
   }
 
-  public static func isJavaIdentifierPart(codePoint:jint) ->jboolean  {}
+  public static func isJavaIdentifierPart(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isJavaIdentifierStart(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isJavaIdentifierStart(jint(c))))
   }
 
-  public static func isJavaIdentifierStart(codePoint:jint) ->jboolean  {}
+  public static func isJavaIdentifierStart(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isJavaLetter(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isJavaIdentifierStart(c)))
@@ -434,19 +476,25 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jboolean(JavaCharacter.isLetter(jint(c))))
   }
 
-  public static func isLetter(codePoint:jint) ->jboolean  {}
+  public static func isLetter(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isLetterOrDigit(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isLetterOrDigit(jint(c))))
   }
 
-  public static func isLetterOrDigit(codePoint:jint) ->jboolean  {}
+  public static func isLetterOrDigit(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isLowerCase(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isLowerCase(jint(c))))
   }
 
-  public static func isLowerCase(codePoint:jint) ->jboolean  {}
+  public static func isLowerCase(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isSpace(c:jchar) ->jboolean  {
     return (jboolean(c == 0x000a || c == 0x0009 || c == 0x000c || c == 0x000d || c == " ".asciiValue))
@@ -456,37 +504,49 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jboolean(JavaCharacter.isSpaceChar(jint(c))))
   }
 
-  public static func isSpaceChar(codePoint:jint) ->jboolean  {}
+  public static func isSpaceChar(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isTitleCase(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isTitleCase(jint(c))))
   }
 
-  public static func isTitleCase(codePoint:jint) ->jboolean  {}
+  public static func isTitleCase(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isUnicodeIdentifierPart(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isUnicodeIdentifierPart(jint(c))))
   }
 
-  public static func isUnicodeIdentifierPart(codePoint:jint) ->jboolean  {}
+  public static func isUnicodeIdentifierPart(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isUnicodeIdentifierStart(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isUnicodeIdentifierStart(jint(c))))
   }
 
-  public static func isUnicodeIdentifierStart(codePoint:jint) ->jboolean  {}
+  public static func isUnicodeIdentifierStart(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isUpperCase(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isUpperCase(jint(c))))
   }
 
-  public static func isUpperCase(codePoint:jint) ->jboolean  {}
+  public static func isUpperCase(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func isWhitespace(c:jchar) ->jboolean  {
     return (jboolean(JavaCharacter.isWhitespace(jint(c))))
   }
 
-  public static func isWhitespace(codePoint:jint) ->jboolean  {}
+  public static func isWhitespace(codePoint:jint) ->jboolean  {
+    //TODO: add Native implemention
+  }
 
   public static func reverseBytes(c:jchar) ->jchar  {
     return (jchar(jchar((jint(c << 8) | jint(c >> 8)))))
@@ -496,7 +556,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jchar(jchar(JavaCharacter.toLowerCase(jint(c)))))
   }
 
-  public static func toLowerCase(codePoint:jint) ->jint  {}
+  public static func toLowerCase(codePoint:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public override func toString() ->String?  {
     return String.valueOf(value)
@@ -510,13 +572,17 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jchar(jchar(JavaCharacter.toTitleCase(jint(c)))))
   }
 
-  public static func toTitleCase(codePoint:jint) ->jint  {}
+  public static func toTitleCase(codePoint:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   public static func toUpperCase(c:jchar) ->jchar  {
     return (jchar(jchar(JavaCharacter.toUpperCase(jint(c)))))
   }
 
-  public static func toUpperCase(codePoint:jint) ->jint  {}
+  public static func toUpperCase(codePoint:jint) ->jint  {
+    //TODO: add Native implemention
+  }
 
   static func binarySearchRange(table:[jint]?, _ c:jint) ->jint  {
     var value:jint = 0
@@ -540,7 +606,7 @@ public class JavaCharacter_Subset : JavaObject {
   private let name:String?
 
 
-  init(withString name:String?)  {
+  init(withString name:String?) throws  {
     if (name == nil) {
       throw JavaNullPointerException(withString: "name == null")
     }

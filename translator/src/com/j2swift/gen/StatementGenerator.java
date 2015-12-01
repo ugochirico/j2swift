@@ -2,12 +2,10 @@ package com.j2swift.gen;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-
 import com.j2swift.Options;
 import com.j2swift.ast.ArrayAccess;
 import com.j2swift.ast.ArrayCreation;
@@ -91,183 +89,32 @@ public class StatementGenerator extends TreeVisitor {
 		useReferenceCounting = !Options.useARC();
 	}
 
-	private String getResult() {
-		return buffer.toString();
-	}
-
 	@Override
-	public boolean visit(ExpressionStatement node) {
-		Expression expression = node.getExpression();
-		ITypeBinding type = expression.getTypeBinding();
-		if (!type.isPrimitive()
-				&& Options.useARC()
-				&& (expression instanceof MethodInvocation
-						|| expression instanceof SuperMethodInvocation || expression instanceof FunctionInvocation)) {
-			// Avoid clang warning that the return value is unused.
-			buffer.append("(void) ");
-		}
-		expression.accept(this);
-		buffer.append("\n");
+	public boolean visit(ArrayAccess node) {
+		node.getArray().setNeedUnwarpOptional(true);
+		node.getArray().accept(this);
+		buffer.append("[");
+		node.getIndex().accept(this);
+		buffer.append("]");
 		return false;
 	}
 
 	@Override
-	public boolean visit(MethodInvocation node) {
-		IMethodBinding binding = node.getMethodBinding();
-		assert binding != null;
-		if (BindingUtil.isThrowsExeception(binding)) {
-			buffer.append("try ");
-		}
-		// Object receiving the message, or null if it's a method in this class.
-		Expression receiver = node.getExpression();
-		if (receiver != null) {
-			receiver.setNeedUnwarpOptional(true);
-		}
-		if (BindingUtil.isStatic(binding)) {
-			buffer.append(nameTable.getFullName(binding.getDeclaringClass()));
-		} else if (receiver != null) {
-			receiver.accept(this);
-		}
-		if (receiver != null || BindingUtil.isStatic(binding)) {
-			buffer.append(".");
-		}
-		buffer.append(binding.getName());
-		buffer.append('(');
-		printMethodInvocationNameAndArgs(node.getArguments());
-		buffer.append(')');
-		return false;
-	}
-
-	@Override
-	public boolean visit(SuperConstructorInvocation node) {
-		IMethodBinding binding = node.getMethodBinding();
-		// assert node.getQualifier() == null
-		// :
-		// "Qualifiers expected to be handled by SuperMethodInvocationRewriter.";
-		// assert !BindingUtil.isStatic(binding) :
-		// "Static invocations are rewritten by Functionizer.";
-		if (!buffer.toString().trim().endsWith("\n")) {
-			buffer.append("\n");
-		}
-		buffer.append("super.init(");
-		printConstructorInvocationArgs(node.getArguments());
-		buffer.append(")");
-		buffer.append("\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(ConstructorInvocation node) {
-		buffer.append("self.init(");
-		printConstructorInvocationArgs(node.getArguments());
-		buffer.append(")\n");
-		return false;
-	}
-
-	private void printConstructorInvocationArgs(List<Expression> args) {
-		for (int i = 0; i < args.size(); i++) {
-			Expression exp = args.get(i);
-			String typeName = nameTable.getSpecificObjCType(exp
-					.getTypeBinding());
-			buffer.append("with" + typeName + ": ");
-			exp.accept(this);
-			if (i != args.size() - 1) {
-				buffer.append(",");
-			}
-		}
-	}
-
-	@Override
-	public boolean visit(TryStatement node) {
-		List<VariableDeclarationExpression> resources = node.getResources();
-		boolean hasResources = !resources.isEmpty();
-		boolean extendedTryWithResources = hasResources
-				&& (!node.getCatchClauses().isEmpty() || node.getFinally() != null);
-
-		if (hasResources && !extendedTryWithResources) {
-			// printBasicTryWithResources(node.getBody(), resources);
-			return false;
-		}
-
-		buffer.append("do ");
-		if (extendedTryWithResources) {
-			// Put resources inside the body of this statement (JSL 14.20.3.2).
-			// printBasicTryWithResources(node.getBody(), resources);
+	public boolean visit(ArrayCreation node) {
+		ITypeBinding arrayType = node.getTypeBinding();
+		ArrayInitializer initializer = node.getInitializer();
+		if (initializer != null) {
+			return newInitializedArrayInvocation(arrayType,
+					initializer.getExpressions());
 		} else {
-			node.getBody().accept(this);
-		}
-		buffer.append(' ');
-
-		for (CatchClause cc : node.getCatchClauses()) {
-			if (cc.getException().getType() instanceof UnionType) {
-				printMultiCatch(cc);
+			List<Expression> dimensions = node.getDimensions();
+			if (dimensions.size() == 1) {
+				return newSingleDimensionArrayInvocation(arrayType,
+						dimensions.get(0));
+			} else {
+				return newMultiDimensionArrayInvocation(arrayType, dimensions);
 			}
-			buffer.append("catch (let ");
-			buffer.append(cc.getException().getName().toString());
-			buffer.append(" as ");
-			cc.getException().getType().accept(this);
-			buffer.append(") {\n");
-			printStatements(cc.getBody().getStatements());
-			buffer.append("}\n");
 		}
-		buffer.append(" catch {}\n");
-
-		if (node.getFinally() != null) {
-			buffer.append("defer {\n");
-			printStatements(node.getFinally().getStatements());
-			buffer.append("}\n");
-		}
-		return false;
-	}
-
-	private void printMultiCatch(CatchClause node) {
-		SingleVariableDeclaration exception = node.getException();
-		for (Type exceptionType : ((UnionType) exception.getType()).getTypes()) {
-			buffer.append("catch (let ");
-			buffer.append(exception.getName().toString());
-			buffer.append(" as ");
-			exceptionType.accept(this);
-			buffer.append(") {\n");
-			printStatements(node.getBody().getStatements());
-			buffer.append("}\n");
-		}
-	}
-
-	@Override
-	public boolean visit(ThrowStatement node) {
-		buffer.append("throw ");
-		node.getExpression().accept(this);
-		node.getExpression().getTypeBinding();
-		if (node.getExpression() instanceof MethodInvocation) {
-			buffer.append("!");
-		}
-		buffer.append("\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(SynchronizedStatement node) {
-		buffer.append("objc_sync_enter(");
-		node.getExpression().accept(this);
-		buffer.append(")\n");
-		node.getBody().accept(this);
-		buffer.append("\nobjc_sync_exit(");
-		node.getExpression().accept(this);
-		buffer.append(")\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(NativeStatement node) {
-		buffer.append(node.getCode());
-		buffer.append('\n');
-		return false;
-	}
-
-	@Override
-	public boolean visit(ThisExpression node) {
-		buffer.append("self");
-		return false;
 	}
 
 	@Override
@@ -302,108 +149,13 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(ArrayCreation node) {
-		ITypeBinding arrayType = node.getTypeBinding();
-		ArrayInitializer initializer = node.getInitializer();
-		if (initializer != null) {
-			return newInitializedArrayInvocation(arrayType,
-					initializer.getExpressions());
-		} else {
-			List<Expression> dimensions = node.getDimensions();
-			if (dimensions.size() == 1) {
-				return newSingleDimensionArrayInvocation(arrayType,
-						dimensions.get(0));
-			} else {
-				return newMultiDimensionArrayInvocation(arrayType, dimensions);
-			}
-		}
-	}
-
-	private boolean newInitializedArrayInvocation(ITypeBinding arrayType,
-			List<Expression> elements) {
-		ITypeBinding componentType = arrayType.getComponentType();
-		ITypeBinding elementType = componentType.getDimensions() == 0 ? componentType
-				: null;
-		while (elementType == null) {
-			componentType = componentType.getComponentType();
-			if (componentType.getDimensions() == 0) {
-				elementType = componentType;
-			}
-		}
-		StringBuilder result = new StringBuilder("");
-		appendArrayExpression(elements, result, elementType);
-		buffer.append(result.toString());
+	public boolean visit(Assignment node) {
+		node.getLeftHandSide().accept(this);
+		buffer.append(' ');
+		buffer.append(node.getOperator().toString());
+		buffer.append(' ');
+		node.getRightHandSide().accept(this);
 		return false;
-	}
-
-	private void appendArrayExpression(List<Expression> elements,
-			StringBuilder result, ITypeBinding type) {
-		result.append("[");
-		int i = 0;
-		for (Expression exp : elements) {
-			if (exp instanceof ArrayInitializer) {
-				appendArrayExpression(
-						((ArrayInitializer) exp).getExpressions(), result, type);
-			} else {
-				if (exp instanceof StringLiteral) {
-					result.append("\"").append(exp).append("\"");
-				} else {
-					result.append(exp);
-				}
-			}
-			if (i != elements.size() - 1) {
-				result.append(",");
-			}
-			i++;
-		}
-		result.append("]");
-	}
-
-	private boolean newMultiDimensionArrayInvocation(ITypeBinding arrayType,
-			List<Expression> dimensions) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	private boolean newSingleDimensionArrayInvocation(ITypeBinding arrayType,
-			Expression expression) {
-		// TODO Auto-generated method stub
-		buffer.append(nameTable.getFullName(arrayType));
-		buffer.append("(count: ");
-		if (expression != null) {
-			expression.accept(this);
-		}
-		else {
-			buffer.append(0);
-		}
-		buffer.append(", repeatedValue: ");
-		ITypeBinding componentType = arrayType.getComponentType();
-		if (!componentType.isPrimitive()) {
-			buffer.append("nil");
-		}
-		else {
-			buffer.append(getDefaultValue(componentType));
-		}
-		buffer.append(")");
-		return false;
-	}
-	
-	private String getDefaultValue(ITypeBinding binding) {
-		char type = binding.getBinaryName().charAt(0);
-		if (type == 'I' || type == 'S' || type == 'B') {//0
-			return "0";
-		} else if (type == 'C') {//0
-			return "0";
-		} if (type == 'J') {//new Long(0)
-			return "0";
-		} if (type == 'F') {//new Float(0.0)
-			return "0.0";
-		} if (type == 'D') {//new Double(0.0)
-			return "0.0";
-		} if (type == 'Z') {//false
-			return "false";
-		}
-		return "0";
 	}
 
 	@Override
@@ -424,27 +176,69 @@ public class StatementGenerator extends TreeVisitor {
 		return false;
 	}
 
-	private void printStatements(List<?> statements) {
-		for (Iterator<?> it = statements.iterator(); it.hasNext();) {
-			Statement s = (Statement) it.next();
-			s.accept(this);
-		}
+	@Override
+	public boolean visit(BooleanLiteral node) {
+		buffer.append(node.booleanValue() ? "true" : "false");
+		return false;
 	}
 
 	@Override
-	public boolean visit(ReturnStatement node) {
-		buffer.append("return");
-		Expression expr = node.getExpression();
-		IMethodBinding methodBinding = TreeUtil.getOwningMethodBinding(node);
-		if (expr != null) {
-			buffer.append(' ');
-			expr.accept(this);
-		} else if (methodBinding != null && methodBinding.isConstructor()) {
-			// A return statement without any expression is allowed in
-			// constructors.
-			buffer.append(" self");
+	public boolean visit(BreakStatement node) {
+		if (node.getLabel() != null) {
+			// Objective-C doesn't have a labeled break, so use a goto.
+			buffer.append("fallthrough ");
+			node.getLabel().accept(this);
+		} else {
+			buffer.append("break");
 		}
-		buffer.append("\n");
+		buffer.append(";\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(CastExpression node) {
+		ITypeBinding type = node.getType().getTypeBinding();
+		String typeName = nameTable.getSpecificObjCType(type);
+		if (type.isPrimitive()) {
+			buffer.append(typeName);
+			buffer.append("(");
+			node.getExpression().accept(this);
+			buffer.append(")");
+			return false;
+		}
+		buffer.append("(");
+		node.getExpression().accept(this);
+		ITypeBinding castTypeBinding = node.getExpression().getTypeBinding();
+		String castTypeName = nameTable.getSpecificObjCType(castTypeBinding);
+		boolean needCast = true;
+		if (typeName.equals(castTypeName)) {
+			needCast = false;
+		}
+
+		if (needCast) {
+			if (!BindingUtil.variableShouldBeOptional(type)) {
+				buffer.append(" as ");
+			} else {
+				buffer.append(" as! ");
+			}
+			buffer.append(typeName);
+			if (!BindingUtil.variableShouldBeOptional(type)) {
+				buffer.append("?");
+			}
+		}
+		buffer.append(")");
+		return false;
+	}
+
+	@Override
+	public boolean visit(CharacterLiteral node) {
+		if (node.toString().startsWith("0x")) {
+			buffer.append(node.toString().replace("u", "x"));
+		} else {
+			buffer.append("\"");
+			buffer.append(node.charValue());
+			buffer.append("\".asciiValue");
+		}
 		return false;
 	}
 
@@ -457,68 +251,6 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("(");
 		printConstructorInvocationArgs(node.getArguments());
 		buffer.append(")");
-		return false;
-	}
-
-	@Override
-	public boolean visit(StringLiteral node) {
-		buffer.append("\"" + node.getLiteralValue() + "\"");
-		return false;
-	}
-
-	@Override
-	public boolean visit(CStringLiteral node) {
-		buffer.append("\"");
-		buffer.append(node.getLiteralValue());
-		buffer.append("\"");
-		return false;
-	}
-
-	@Override
-	public boolean visit(SimpleName node) {
-		IBinding binding = node.getBinding();
-		if (binding instanceof IVariableBinding) {
-			buffer.append(nameTable
-					.getVariableQualifiedName((IVariableBinding) binding));
-		} else {
-			if (binding instanceof ITypeBinding) {
-				if (binding instanceof IOSTypeBinding) {
-					buffer.append(binding.getName());
-				} else {
-					buffer.append(nameTable.getFullName((ITypeBinding) binding));
-				}
-			} else {
-				buffer.append(node.getIdentifier());
-			}
-		}
-		// if (node.isQualifiedName())
-		if (node.isNeedUnwarpOptional()
-				&& !BindingUtil.isPrimitive((IVariableBinding) node
-						.getBinding())) {
-			buffer.append("!");
-		}
-		return false;
-	}
-
-	@Override
-	public boolean visit(SingleVariableDeclaration node) {
-
-		if (node.isVarargs()) {
-			buffer.append("...");
-		}
-		if (buffer.charAt(buffer.length() - 1) != '*') {
-			buffer.append(" ");
-		}
-		node.getName().accept(this);
-		buffer.append(":");
-		buffer.append(nameTable.getSpecificObjCType(node.getVariableBinding()));
-		for (int i = 0; i < node.getExtraDimensions(); i++) {
-			buffer.append("[]");
-		}
-		if (node.getInitializer() != null) {
-			buffer.append(" = ");
-			node.getInitializer().accept(this);
-		}
 		return false;
 	}
 
@@ -564,6 +296,275 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(ConstructorInvocation node) {
+		buffer.append("self.init(");
+		printConstructorInvocationArgs(node.getArguments());
+		buffer.append(")\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(CStringLiteral node) {
+		buffer.append("\"");
+		buffer.append(node.getLiteralValue());
+		buffer.append("\"");
+		return false;
+	}
+
+	@Override
+	public boolean visit(DoStatement node) {
+		buffer.append("repeat ");
+		node.getBody().accept(this);
+		buffer.append(" while (");
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(EnhancedForStatement node) {
+		buffer.append("for");
+		node.getParameter().accept(this);
+		buffer.append(" in ");
+		node.getExpression().setNeedUnwarpOptional(true);
+		node.getExpression().accept(this);
+		buffer.append(" ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(ExpressionStatement node) {
+		Expression expression = node.getExpression();
+		ITypeBinding type = expression.getTypeBinding();
+		if (!type.isPrimitive()
+				&& Options.useARC()
+				&& (expression instanceof MethodInvocation
+						|| expression instanceof SuperMethodInvocation || expression instanceof FunctionInvocation)) {
+			// Avoid clang warning that the return value is unused.
+			buffer.append("(void) ");
+		}
+		expression.accept(this);
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(FieldAccess node) {
+		node.getExpression().accept(this);
+		buffer.append(".");
+		SimpleName name = node.getName();
+		name.setNeedUnwarpOptional(node.isNeedUnwarpOptional());
+		name.accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(ForStatement node) {
+		buffer.append("for (");
+		for (Iterator<Expression> it = node.getInitializers().iterator(); it
+				.hasNext();) {
+			Expression next = it.next();
+			next.accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append("; ");
+		if (node.getExpression() != null) {
+			node.getExpression().accept(this);
+		}
+		buffer.append("; ");
+		for (Iterator<Expression> it = node.getUpdaters().iterator(); it
+				.hasNext();) {
+			it.next().accept(this);
+			if (it.hasNext()) {
+				buffer.append(", ");
+			}
+		}
+		buffer.append(") ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(IfStatement node) {
+		buffer.append("if (");
+		node.getExpression().accept(this);
+		buffer.append(") ");
+		node.getThenStatement().accept(this);
+		if (node.getElseStatement() != null) {
+			buffer.append(" else ");
+			node.getElseStatement().accept(this);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.
+	 * InfixExpression)
+	 * 
+	 * Tranlator Java Operation as < > <= >= etc...
+	 */
+	@Override
+	public boolean visit(InfixExpression node) {
+		InfixExpression.Operator op = node.getOperator();
+		List<Expression> operands = node.getOperands();
+		assert operands.size() >= 2;
+		boolean equalsOrNotEqualsOp = false;
+		if (op.equals(InfixExpression.Operator.EQUALS)
+				|| op.equals(InfixExpression.Operator.NOT_EQUALS)) {
+			equalsOrNotEqualsOp = true;
+		}
+		if (equalsOrNotEqualsOp) {
+			Expression lhs = operands.get(0);
+			Expression rhs = operands.get(1);
+			// TODO
+			if (lhs instanceof StringLiteral || rhs instanceof StringLiteral) {
+				if (!(lhs instanceof StringLiteral)) {
+					// In case the lhs can't call isEqual.
+					lhs = operands.get(1);
+					rhs = operands.get(0);
+				}
+				buffer.append(op.equals(InfixExpression.Operator.NOT_EQUALS) ? "!["
+						: "[");
+				lhs.accept(this);
+				buffer.append(" isEqual:");
+				rhs.accept(this);
+				buffer.append("]");
+				return false;
+			}
+		}
+		String opStr = ' ' + op.toString() + ' ';
+		boolean isFirst = true;
+		// TODO
+		boolean needUnwarpOptional = operands.size() > 1;
+		for (Expression operand : operands) {
+			if (isFirst) {
+				if (equalsOrNotEqualsOp && operand instanceof SimpleName) {
+					operand.setNeedUnwarpOptional(false);
+				} else {
+					operand.setNeedUnwarpOptional(needUnwarpOptional);
+				}
+			} else {
+				operand.setNeedUnwarpOptional(needUnwarpOptional);
+			}
+
+			if (!isFirst) {
+				buffer.append(opStr);
+			}
+			isFirst = false;
+			String castTypeName = null;
+			if (operand.getTypeBinding().isPrimitive()
+					&& operand instanceof ParenthesizedExpression) {
+				/*
+				 * process the specific assignment (firstDigit =
+				 * string.charAt(i)) == 'x'
+				 */
+				castTypeName = nameTable.getSpecificObjCType(operand
+						.getTypeBinding());
+			}
+			if (castTypeName != null) {
+				buffer.append(castTypeName);
+			}
+			operand.accept(this);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(InstanceofExpression node) {
+		node.getLeftOperand().accept(this);
+		buffer.append(" is ");
+		node.getRightOperand().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(LabeledStatement node) {
+		node.getLabel().accept(this);
+		buffer.append(": ");
+		node.getBody().accept(this);
+		return false;
+	}
+
+	@Override
+	public boolean visit(MethodInvocation node) {
+		IMethodBinding binding = node.getMethodBinding();
+		assert binding != null;
+		if (BindingUtil.isThrowsExeception(binding)) {
+			buffer.append("try ");
+		}
+		// Object receiving the message, or null if it's a method in this class.
+		Expression receiver = node.getExpression();
+		if (receiver != null) {
+			receiver.setNeedUnwarpOptional(true);
+		}
+		if (BindingUtil.isStatic(binding)) {
+			buffer.append(nameTable.getFullName(binding.getDeclaringClass()));
+		} else if (receiver != null) {
+			receiver.accept(this);
+		}
+		if (receiver != null || BindingUtil.isStatic(binding)) {
+			buffer.append(".");
+		}
+		buffer.append(binding.getName());
+		buffer.append('(');
+		printMethodInvocationNameAndArgs(node.getArguments());
+		buffer.append(')');
+		return false;
+	}
+
+	@Override
+	public boolean visit(NativeStatement node) {
+		buffer.append(node.getCode());
+		buffer.append('\n');
+		return false;
+	}
+
+	@Override
+	public boolean visit(NullLiteral node) {
+		buffer.append("nil");
+		return false;
+	}
+
+	@Override
+	public boolean visit(NumberLiteral node) {
+		String token = node.getToken();
+		if (token != null) {
+			buffer.append(LiteralGenerator.fixNumberToken(token,
+					node.getTypeBinding()));
+		} else {
+			buffer.append(LiteralGenerator.generate(node.getValue()));
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(ParenthesizedExpression node) {
+		buffer.append("(");
+		node.getExpression().accept(this);
+		buffer.append(")");
+		return false;
+	}
+
+	@Override
+	public boolean visit(PostfixExpression node) {
+		node.getOperand().accept(this);
+		buffer.append(node.getOperator().toString());
+		return false;
+	}
+
+	@Override
+	public boolean visit(PrefixExpression node) {
+		buffer.append(node.getOperator().toString());
+		node.getOperand().accept(this);
+		return false;
+	}
+
+	@Override
 	public boolean visit(QualifiedName node) {
 		IBinding binding = node.getBinding();
 		if (binding instanceof IVariableBinding) {
@@ -586,10 +587,45 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(LabeledStatement node) {
-		node.getLabel().accept(this);
-		buffer.append(": ");
-		node.getBody().accept(this);
+	public boolean visit(ReturnStatement node) {
+		buffer.append("return");
+		Expression expr = node.getExpression();
+		IMethodBinding methodBinding = TreeUtil.getOwningMethodBinding(node);
+		if (expr != null) {
+			buffer.append(' ');
+			expr.accept(this);
+		} else if (methodBinding != null && methodBinding.isConstructor()) {
+			// A return statement without any expression is allowed in
+			// constructors.
+			buffer.append(" self");
+		}
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SimpleName node) {
+		IBinding binding = node.getBinding();
+		if (binding instanceof IVariableBinding) {
+			buffer.append(nameTable
+					.getVariableQualifiedName((IVariableBinding) binding));
+		} else {
+			if (binding instanceof ITypeBinding) {
+				if (binding instanceof IOSTypeBinding) {
+					buffer.append(binding.getName());
+				} else {
+					buffer.append(nameTable.getFullName((ITypeBinding) binding));
+				}
+			} else {
+				buffer.append(node.getIdentifier());
+			}
+		}
+		// if (node.isQualifiedName())
+		if (node.isNeedUnwarpOptional()
+				&& !BindingUtil.isPrimitive((IVariableBinding) node
+						.getBinding())) {
+			buffer.append("!");
+		}
 		return false;
 	}
 
@@ -605,6 +641,176 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
+	public boolean visit(SingleVariableDeclaration node) {
+
+		if (node.isVarargs()) {
+			buffer.append("...");
+		}
+		if (buffer.charAt(buffer.length() - 1) != '*') {
+			buffer.append(" ");
+		}
+		node.getName().accept(this);
+		buffer.append(":");
+		buffer.append(nameTable.getSpecificObjCType(node.getVariableBinding()));
+		for (int i = 0; i < node.getExtraDimensions(); i++) {
+			buffer.append("[]");
+		}
+		if (node.getInitializer() != null) {
+			buffer.append(" = ");
+			node.getInitializer().accept(this);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(StringLiteral node) {
+		buffer.append("\"" + node.getLiteralValue() + "\"");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SuperConstructorInvocation node) {
+		IMethodBinding binding = node.getMethodBinding();
+		// assert node.getQualifier() == null
+		// :
+		// "Qualifiers expected to be handled by SuperMethodInvocationRewriter.";
+		// assert !BindingUtil.isStatic(binding) :
+		// "Static invocations are rewritten by Functionizer.";
+		if (!buffer.toString().trim().endsWith("\n")) {
+			buffer.append("\n");
+		}
+		buffer.append("super.init(");
+		printConstructorInvocationArgs(node.getArguments());
+		buffer.append(")");
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SwitchCase node) {
+		if (node.isDefault()) {
+			buffer.append("  default:\n");
+		} else {
+			buffer.append("  case ");
+			Expression expr = node.getExpression();
+			boolean isEnumConstant = expr.getTypeBinding().isEnum();
+			if (isEnumConstant) {
+				String typeName = nameTable.getFullName(expr.getTypeBinding());
+				buffer.append(typeName).append(".");
+			}
+			if (isEnumConstant && expr instanceof SimpleName) {
+				buffer.append(((SimpleName) expr).getIdentifier());
+			} else if (isEnumConstant && expr instanceof QualifiedName) {
+				buffer.append(((QualifiedName) expr).getName().getIdentifier());
+			} else {
+				expr.accept(this);
+			}
+			buffer.append(": \n");
+		}
+		return false;
+	}
+
+	@Override
+	public boolean visit(SwitchStatement node) {
+		Expression expr = node.getExpression();
+		ITypeBinding exprType = expr.getTypeBinding();
+		if (typeEnv.isJavaStringType(exprType)) {
+			// printStringSwitchStatement(node);
+			return false;
+		}
+		buffer.append("switch (");
+		expr.setNeedUnwarpOptional(true);
+		expr.accept(this);
+		buffer.append(") ");
+		buffer.append("{\n");
+		List<Statement> stmts = node.getStatements();
+		for (Statement stmt : stmts) {
+			stmt.accept(this);
+		}
+		if (!stmts.isEmpty()
+				&& stmts.get(stmts.size() - 1) instanceof SwitchCase) {
+			// Last switch case doesn't have an associated statement, so add
+			// an empty one.
+			buffer.append(";\n");
+		}
+		buffer.append("}\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(SynchronizedStatement node) {
+		buffer.append("objc_sync_enter(");
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		node.getBody().accept(this);
+		buffer.append("\nobjc_sync_exit(");
+		node.getExpression().accept(this);
+		buffer.append(")\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(ThisExpression node) {
+		buffer.append("self");
+		return false;
+	}
+
+	@Override
+	public boolean visit(ThrowStatement node) {
+		buffer.append("throw ");
+		node.getExpression().accept(this);
+		node.getExpression().getTypeBinding();
+		if (node.getExpression() instanceof MethodInvocation) {
+			buffer.append("!");
+		}
+		buffer.append("\n");
+		return false;
+	}
+
+	@Override
+	public boolean visit(TryStatement node) {
+		List<VariableDeclarationExpression> resources = node.getResources();
+		boolean hasResources = !resources.isEmpty();
+		boolean extendedTryWithResources = hasResources
+				&& (!node.getCatchClauses().isEmpty() || node.getFinally() != null);
+
+		if (hasResources && !extendedTryWithResources) {
+			// printBasicTryWithResources(node.getBody(), resources);
+			return false;
+		}
+
+		buffer.append("do ");
+		if (extendedTryWithResources) {
+			// Put resources inside the body of this statement (JSL 14.20.3.2).
+			// printBasicTryWithResources(node.getBody(), resources);
+		} else {
+			node.getBody().accept(this);
+		}
+		buffer.append(' ');
+
+		for (CatchClause cc : node.getCatchClauses()) {
+			if (cc.getException().getType() instanceof UnionType) {
+				printMultiCatch(cc);
+			}
+			buffer.append("catch (let ");
+			buffer.append(cc.getException().getName().toString());
+			buffer.append(" as ");
+			cc.getException().getType().accept(this);
+			buffer.append(") {\n");
+			printStatements(cc.getBody().getStatements());
+			buffer.append("}\n");
+		}
+		buffer.append(" catch {}\n");
+
+		if (node.getFinally() != null) {
+			buffer.append("defer {\n");
+			printStatements(node.getFinally().getStatements());
+			buffer.append("}\n");
+		}
+		return false;
+	}
+
+	@Override
 	public boolean visit(TypeLiteral node) {
 		ITypeBinding type = node.getType().getTypeBinding();
 		if (type.isPrimitive()) {
@@ -613,16 +819,6 @@ public class StatementGenerator extends TreeVisitor {
 			buffer.append(nameTable.getFullName(type));
 			buffer.append(".getClass()");
 		}
-		return false;
-	}
-
-	@Override
-	public boolean visit(Assignment node) {
-		node.getLeftHandSide().accept(this);
-		buffer.append(' ');
-		buffer.append(node.getOperator().toString());
-		buffer.append(' ');
-		node.getRightHandSide().accept(this);
 		return false;
 	}
 
@@ -675,21 +871,116 @@ public class StatementGenerator extends TreeVisitor {
 	}
 
 	@Override
-	public boolean visit(NullLiteral node) {
-		buffer.append("nil");
+	public boolean visit(WhileStatement node) {
+		buffer.append("while (");
+		node.getExpression().accept(this);
+		buffer.append(") ");
+		node.getBody().accept(this);
 		return false;
 	}
 
-	@Override
-	public boolean visit(CharacterLiteral node) {
-		if (node.toString().startsWith("0x")) {
-			buffer.append(node.toString().replace("u", "x"));
-		} else {
-			buffer.append("\"");
-			buffer.append(node.charValue());
-			buffer.append("\".asciiValue");
+	private void appendArrayExpression(List<Expression> elements,
+			StringBuilder result, ITypeBinding type) {
+		result.append("[");
+		int i = 0;
+		for (Expression exp : elements) {
+			if (exp instanceof ArrayInitializer) {
+				appendArrayExpression(
+						((ArrayInitializer) exp).getExpressions(), result, type);
+			} else {
+				if (exp instanceof StringLiteral) {
+					result.append("\"").append(exp).append("\"");
+				} else {
+					result.append(exp);
+				}
+			}
+			if (i != elements.size() - 1) {
+				result.append(",");
+			}
+			i++;
 		}
+		result.append("]");
+	}
+
+	private String getResult() {
+		return buffer.toString();
+	}
+
+	private boolean newInitializedArrayInvocation(ITypeBinding arrayType,
+			List<Expression> elements) {
+		ITypeBinding componentType = arrayType.getComponentType();
+		ITypeBinding elementType = componentType.getDimensions() == 0 ? componentType
+				: null;
+		while (elementType == null) {
+			componentType = componentType.getComponentType();
+			if (componentType.getDimensions() == 0) {
+				elementType = componentType;
+			}
+		}
+		StringBuilder result = new StringBuilder("");
+		appendArrayExpression(elements, result, elementType);
+		buffer.append(result.toString());
 		return false;
+	}
+
+	private boolean newMultiDimensionArrayInvocation(ITypeBinding arrayType,
+			List<Expression> dimensions) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean newSingleDimensionArrayInvocation(ITypeBinding arrayType,
+			Expression expression) {
+		buffer.append(nameTable.getFullName(arrayType));
+		buffer.append("(count: ");
+		if (expression != null) {
+			expression.accept(this);
+		}
+		else {
+			buffer.append(0);
+		}
+		buffer.append(", repeatedValue: ");
+		ITypeBinding componentType = arrayType.getComponentType();
+		if (!componentType.isPrimitive()) {
+			buffer.append("nil");
+		}
+		else {
+			buffer.append(getDefaultValue(componentType));
+		}
+		buffer.append(")");
+		return false;
+	}
+	
+	private String getDefaultValue(ITypeBinding binding) {
+		char type = binding.getBinaryName().charAt(0);
+		if (type == 'I' || type == 'S' || type == 'B') {//0
+			return "0";
+		} else if (type == 'C') {//0
+			return "0";
+		} if (type == 'J') {//new Long(0)
+			return "0";
+		} if (type == 'F') {//new Float(0.0)
+			return "0.0";
+		} if (type == 'D') {//new Double(0.0)
+			return "0.0";
+		} if (type == 'Z') {//false
+			return "false";
+		}
+		return "0";
+	}
+
+
+	private void printConstructorInvocationArgs(List<Expression> args) {
+		for (int i = 0; i < args.size(); i++) {
+			Expression exp = args.get(i);
+			String typeName = nameTable.getSpecificObjCType(exp
+					.getTypeBinding());
+			buffer.append("with" + typeName + ": ");
+			exp.accept(this);
+			if (i != args.size() - 1) {
+				buffer.append(",");
+			}
+		}
 	}
 
 	private void printMethodInvocationNameAndArgs(List<Expression> args) {
@@ -701,314 +992,24 @@ public class StatementGenerator extends TreeVisitor {
 		}
 	}
 
-	@Override
-	public boolean visit(IfStatement node) {
-		buffer.append("if (");
-		node.getExpression().accept(this);
-		buffer.append(") ");
-		node.getThenStatement().accept(this);
-		if (node.getElseStatement() != null) {
-			buffer.append(" else ");
-			node.getElseStatement().accept(this);
+	private void printMultiCatch(CatchClause node) {
+		SingleVariableDeclaration exception = node.getException();
+		for (Type exceptionType : ((UnionType) exception.getType()).getTypes()) {
+			buffer.append("catch (let ");
+			buffer.append(exception.getName().toString());
+			buffer.append(" as ");
+			exceptionType.accept(this);
+			buffer.append(") {\n");
+			printStatements(node.getBody().getStatements());
+			buffer.append("}\n");
 		}
-		return false;
 	}
 
-	@Override
-	public boolean visit(ForStatement node) {
-		buffer.append("for (");
-		for (Iterator<Expression> it = node.getInitializers().iterator(); it
-				.hasNext();) {
-			Expression next = it.next();
-			next.accept(this);
-			if (it.hasNext()) {
-				buffer.append(", ");
-			}
+	private void printStatements(List<?> statements) {
+		for (Object name : statements) {
+			Statement s = (Statement) name;
+			s.accept(this);
 		}
-		buffer.append("; ");
-		if (node.getExpression() != null) {
-			node.getExpression().accept(this);
-		}
-		buffer.append("; ");
-		for (Iterator<Expression> it = node.getUpdaters().iterator(); it
-				.hasNext();) {
-			it.next().accept(this);
-			if (it.hasNext()) {
-				buffer.append(", ");
-			}
-		}
-		buffer.append(") ");
-		node.getBody().accept(this);
-		return false;
-	}
-
-	@Override
-	public boolean visit(EnhancedForStatement node) {
-		buffer.append("for");
-		node.getParameter().accept(this);
-		buffer.append(" in ");
-		node.getExpression().setNeedUnwarpOptional(true);
-		node.getExpression().accept(this);
-		buffer.append(" ");
-		node.getBody().accept(this);
-		return false;
-	}
-
-	@Override
-	public boolean visit(WhileStatement node) {
-		buffer.append("while (");
-		node.getExpression().accept(this);
-		buffer.append(") ");
-		node.getBody().accept(this);
-		return false;
-	}
-
-	@Override
-	public boolean visit(DoStatement node) {
-		buffer.append("repeat ");
-		node.getBody().accept(this);
-		buffer.append(" while (");
-		node.getExpression().accept(this);
-		buffer.append(")\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(SwitchStatement node) {
-		Expression expr = node.getExpression();
-		ITypeBinding exprType = expr.getTypeBinding();
-		if (typeEnv.isJavaStringType(exprType)) {
-			// printStringSwitchStatement(node);
-			return false;
-		}
-		buffer.append("switch (");
-		expr.setNeedUnwarpOptional(true);
-		expr.accept(this);
-		buffer.append(") ");
-		buffer.append("{\n");
-		List<Statement> stmts = node.getStatements();
-		for (Statement stmt : stmts) {
-			stmt.accept(this);
-		}
-		if (!stmts.isEmpty()
-				&& stmts.get(stmts.size() - 1) instanceof SwitchCase) {
-			// Last switch case doesn't have an associated statement, so add
-			// an empty one.
-			buffer.append(";\n");
-		}
-		buffer.append("}\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(SwitchCase node) {
-		if (node.isDefault()) {
-			buffer.append("  default:\n");
-		} else {
-			buffer.append("  case ");
-			Expression expr = node.getExpression();
-			boolean isEnumConstant = expr.getTypeBinding().isEnum();
-			if (isEnumConstant) {
-				String typeName = nameTable.getFullName(expr.getTypeBinding());
-				buffer.append(typeName).append(".");
-			}
-			if (isEnumConstant && expr instanceof SimpleName) {
-				buffer.append(((SimpleName) expr).getIdentifier());
-			} else if (isEnumConstant && expr instanceof QualifiedName) {
-				buffer.append(((QualifiedName) expr).getName().getIdentifier());
-			} else {
-				expr.accept(this);
-			}
-			buffer.append(": \n");
-		}
-		return false;
-	}
-
-	@Override
-	public boolean visit(BreakStatement node) {
-		if (node.getLabel() != null) {
-			// Objective-C doesn't have a labeled break, so use a goto.
-			buffer.append("fallthrough ");
-			node.getLabel().accept(this);
-		} else {
-			buffer.append("break");
-		}
-		buffer.append(";\n");
-		return false;
-	}
-
-	@Override
-	public boolean visit(PostfixExpression node) {
-		node.getOperand().accept(this);
-		buffer.append(node.getOperator().toString());
-		return false;
-	}
-
-	@Override
-	public boolean visit(PrefixExpression node) {
-		buffer.append(node.getOperator().toString());
-		node.getOperand().accept(this);
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.kingxt.j2swift.ast.TreeVisitor#visit(com.kingxt.j2swift.ast.
-	 * InfixExpression)
-	 * 
-	 * Tranlator Java Operation as < > <= >= etc...
-	 */
-	@Override
-	public boolean visit(InfixExpression node) {
-		InfixExpression.Operator op = node.getOperator();
-		List<Expression> operands = node.getOperands();
-		assert operands.size() >= 2;
-		boolean equalsOrNotEqualsOp = false;
-		if ((op.equals(InfixExpression.Operator.EQUALS) || op
-				.equals(InfixExpression.Operator.NOT_EQUALS))) {
-			equalsOrNotEqualsOp = true;
-		}
-		if (equalsOrNotEqualsOp) {
-			Expression lhs = operands.get(0);
-			Expression rhs = operands.get(1);
-			// TODO
-			if (lhs instanceof StringLiteral || rhs instanceof StringLiteral) {
-				if (!(lhs instanceof StringLiteral)) {
-					// In case the lhs can't call isEqual.
-					lhs = operands.get(1);
-					rhs = operands.get(0);
-				}
-				buffer.append(op.equals(InfixExpression.Operator.NOT_EQUALS) ? "!["
-						: "[");
-				lhs.accept(this);
-				buffer.append(" isEqual:");
-				rhs.accept(this);
-				buffer.append("]");
-				return false;
-			}
-		}
-		String opStr = ' ' + op.toString() + ' ';
-		boolean isFirst = true;
-		// TODO
-		boolean needUnwarpOptional = operands.size() > 1;
-		for (Expression operand : operands) {
-			if (isFirst) {
-				if (equalsOrNotEqualsOp && operand instanceof SimpleName) {
-					operand.setNeedUnwarpOptional(false);
-				} else {
-					operand.setNeedUnwarpOptional(needUnwarpOptional);
-				}
-			} else {
-				operand.setNeedUnwarpOptional(needUnwarpOptional);
-			}
-			
-			if (!isFirst) {
-				buffer.append(opStr);
-			}
-			isFirst = false;
-			String castTypeName = null; 
-			if (operand.getTypeBinding().isPrimitive() && operand instanceof ParenthesizedExpression) {
-				/*
-				 * process the specific assignment (firstDigit = string.charAt(i)) == 'x'
-				 */
-				castTypeName = nameTable.getSpecificObjCType(operand.getTypeBinding());
-			}
-			if (castTypeName != null) {
-				buffer.append(castTypeName);
-			}
-			operand.accept(this);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean visit(NumberLiteral node) {
-		String token = node.getToken();
-		if (token != null) {
-			buffer.append(LiteralGenerator.fixNumberToken(token,
-					node.getTypeBinding()));
-		} else {
-			buffer.append(LiteralGenerator.generate(node.getValue()));
-		}
-		return false;
-	}
-
-	@Override
-	public boolean visit(BooleanLiteral node) {
-		buffer.append(node.booleanValue() ? "true" : "false");
-		return false;
-	}
-
-	@Override
-	public boolean visit(InstanceofExpression node) {
-		node.getLeftOperand().accept(this);
-		buffer.append(" is ");
-		node.getRightOperand().accept(this);
-		return false;
-	}
-
-	@Override
-	public boolean visit(CastExpression node) {
-		ITypeBinding type = node.getType().getTypeBinding();
-		String typeName = nameTable.getSpecificObjCType(type);
-		if (type.isPrimitive()) {
-			buffer.append(typeName);
-			buffer.append("(");
-			node.getExpression().accept(this);
-			buffer.append(")");
-			return false;
-		}
-		buffer.append("(");
-		node.getExpression().accept(this);
-		ITypeBinding castTypeBinding = node.getExpression().getTypeBinding();
-		String castTypeName = nameTable.getSpecificObjCType(castTypeBinding);
-		boolean needCast = true;
-		if (typeName.equals(castTypeName)) {
-			needCast = false;
-		}
-
-		if (needCast) {
-			if (!BindingUtil.variableShouldBeOptional(type)) {
-				buffer.append(" as ");
-			} else {
-				buffer.append(" as! ");
-			}
-			buffer.append(typeName);
-			if (!BindingUtil.variableShouldBeOptional(type)) {
-				buffer.append("?");
-			}
-		}
-		buffer.append(")");
-		return false;
-	}
-
-	@Override
-	public boolean visit(FieldAccess node) {
-		node.getExpression().accept(this);
-		buffer.append(".");
-		SimpleName name = node.getName();
-		name.setNeedUnwarpOptional(node.isNeedUnwarpOptional());
-		name.accept(this);
-		return false;
-	}
-
-	@Override
-	public boolean visit(ArrayAccess node) {
-		node.getArray().setNeedUnwarpOptional(true);
-		node.getArray().accept(this);
-		buffer.append("[");
-		node.getIndex().accept(this);
-		buffer.append("]");
-		return false;
-	}
-
-	@Override
-	public boolean visit(ParenthesizedExpression node) {
-		buffer.append("(");
-		node.getExpression().accept(this);
-		buffer.append(")");
-		return false;
 	}
 
 }
