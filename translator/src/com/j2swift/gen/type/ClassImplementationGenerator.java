@@ -121,7 +121,8 @@ public class ClassImplementationGenerator extends
 		syncLineNumbers(m.getName()); // avoid doc-comment
 		String methodBody;
 		if (Modifier.isNative(m.getModifiers())) {
-			methodBody = "{}";
+			//TODO:
+			methodBody = "{\n//TODO: add Native implemention\n}";
 		}
 		else {
 			methodBody = generateStatement(m.getBody());	

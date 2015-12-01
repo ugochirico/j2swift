@@ -368,7 +368,42 @@ public class StatementGenerator extends TreeVisitor {
 	private boolean newSingleDimensionArrayInvocation(ITypeBinding arrayType,
 			Expression expression) {
 		// TODO Auto-generated method stub
+		buffer.append(nameTable.getFullName(arrayType));
+		buffer.append("(count: ");
+		if (expression != null) {
+			expression.accept(this);
+		}
+		else {
+			buffer.append(0);
+		}
+		buffer.append(", repeatedValue: ");
+		ITypeBinding componentType = arrayType.getComponentType();
+		if (!componentType.isPrimitive()) {
+			buffer.append("nil");
+		}
+		else {
+			buffer.append(getDefaultValue(componentType));
+		}
+		buffer.append(")");
 		return false;
+	}
+	
+	private String getDefaultValue(ITypeBinding binding) {
+		char type = binding.getBinaryName().charAt(0);
+		if (type == 'I' || type == 'S' || type == 'B') {//0
+			return "0";
+		} else if (type == 'C') {//0
+			return "0";
+		} if (type == 'J') {//new Long(0)
+			return "0";
+		} if (type == 'F') {//new Float(0.0)
+			return "0.0";
+		} if (type == 'D') {//new Double(0.0)
+			return "0.0";
+		} if (type == 'Z') {//false
+			return "false";
+		}
+		return "0";
 	}
 
 	@Override

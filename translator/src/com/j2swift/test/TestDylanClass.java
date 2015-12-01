@@ -15,8 +15,12 @@ package com.j2swift.test;
 //}
 
 class TestDylanClass {
-	// String[] array = new String[23];
-	int[] array = { 1, 2, 3 };
-	String[] strs = {"1","2","3"};
-	int[][] a = {{1,2,3},{2,3,4}};
+//	 String[] array = new String[23];
+////	int[] array = { 1, 2, 3 };
+//	String[] strs = {"1","2","3"};
+//	int[][] a = {{1,2,3},{2,3,4}};
+	int[] array = new int[3];
+	String[] strs = new String[3];
+	char[] chars = new char[10];
+	boolean[] bs = new boolean[10];
 }
