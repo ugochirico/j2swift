@@ -213,13 +213,13 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 					if (m.isConstructor()) {
 						sb.append("(" + variable + token + " ");
 					} else {
-						sb.append("("+variable);
+						sb.append("(" + variable);
 					}
 				}
 				if (i != 0) {
 					sb.append(", " + variable + token + " ");
 				}
-				
+
 				String typeName = nameTable.getSpecificObjCType(var.getType());
 				sb.append(String.format("%s:%s",
 						nameTable.getVariableShortName(var), typeName));
@@ -233,7 +233,7 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 		}
 		return sb.toString();
 	}
-	
+
 	private String getContructorTypeToking(SingleVariableDeclaration declaration) {
 		IVariableBinding var = declaration.getVariableBinding();
 		String typeName = nameTable.getSpecificObjCType(var.getType());

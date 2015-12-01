@@ -540,7 +540,7 @@ public class JavaCharacter_Subset : JavaObject {
   private let name:String?
 
 
-  init(withString name:String?)  {
+  init(withString name:String?) throws  {
     if (name == nil) {
       throw JavaNullPointerException(withString: "name == null")
     }

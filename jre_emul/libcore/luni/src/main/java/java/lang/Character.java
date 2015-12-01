@@ -516,7 +516,7 @@ public final class Character implements Serializable, Comparable<Character> {
         /**
          * Constructs a new {@code Subset}.
          */
-        protected Subset(String name) {
+        protected Subset(String name) throws RuntimeException {
             if (name == null) {
                 throw new NullPointerException("name == null");
             }
