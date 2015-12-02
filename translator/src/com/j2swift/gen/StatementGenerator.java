@@ -834,7 +834,14 @@ public class StatementGenerator extends TreeVisitor {
 		Expression initializer = node.getInitializer();
 		if (initializer != null) {
 			buffer.append(" = ");
+			if (BindingUtil.isPrimitive(binding)) {
+				buffer.append(swiftType);
+				buffer.append("(");
+			}
 			initializer.accept(this);
+			if (BindingUtil.isPrimitive(binding)) {
+				buffer.append(")");
+			}
 		}
 		return false;
 	}

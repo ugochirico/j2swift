@@ -70,9 +70,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static let MAX_LOW_SURROGATE:jchar = 0xdfff
   public static let MIN_SURROGATE:jchar = 0xd800
   public static let MAX_SURROGATE:jchar = 0xdfff
-  public static let MIN_SUPPLEMENTARY_CODE_POINT:jint = jint(0x10000)
-  public static let MIN_CODE_POINT:jint = jint(0x000000)
-  public static let MAX_CODE_POINT:jint = jint(0x10FFFF)
+  public static let MIN_SUPPLEMENTARY_CODE_POINT:jint = 0x10000
+  public static let MIN_CODE_POINT:jint = 0x000000
+  public static let MAX_CODE_POINT:jint = 0x10FFFF
   public static let SIZE:jint = 16
 
 
@@ -133,28 +133,28 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func charCount(codePoint:jint) ->jint  {
-    return (jint((codePoint >= jint(0x10000) ? 2 : 1)))
+    return (jint((codePoint >= 0x10000 ? 2 : 1)))
   }
 
   public static func toCodePoint(high:jchar, _ low:jchar) ->jint  {
-    var h:jint = jint(high & jint(0x3FF)) << 10
-    var l:jint = low & jint(0x3FF)
-    return (jint(jint(h | l) + jint(0x10000)))
+    var h:jint = jint(jint(high & 0x3FF) << 10)
+    var l:jint = jint(low & 0x3FF)
+    return (jint(jint(h | l) + 0x10000))
   }
 
   public static func codePointAt(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = seq!.length()
+    var len:jint = jint(seq!.length())
     if (index < 0 || index >= len) {
       throw JavaIndexOutOfBoundsException()
     }
-    var high:jchar = seq!.charAt(index++)
+    var high:jchar = jchar(seq!.charAt(index++))
     if (index >= len) {
       return (jint(high))
     }
-    var low:jchar = seq!.charAt(index)
+    var low:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
       return (jint(JavaCharacter.toCodePoint(high,low)))
     }
@@ -173,15 +173,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = seq!.length()
+    var len:jint = jint(seq!.length())
     if (index < 1 || index > len) {
       throw JavaIndexOutOfBoundsException()
     }
-    var low:jchar = seq!.charAt(--index)
+    var low:jchar = jchar(seq!.charAt(--index))
     if (--index < 0) {
       return (jint(low))
     }
-    var high:jchar = seq!.charAt(index)
+    var high:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
       return (jint(JavaCharacter.toCodePoint(high,low)))
     }
@@ -208,9 +208,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       if (dstIndex == dst!.length - 1) {
         throw JavaIndexOutOfBoundsException()
       }
-      var cpPrime:jint = codePoint - jint(0x10000)
-      var high:jint = jint(0xD800) | jint(jint(cpPrime >> 10) & jint(0x3FF))
-      var low:jint = jint(0xDC00) | jint(cpPrime & jint(0x3FF))
+      var cpPrime:jint = jint(codePoint - 0x10000)
+      var high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
+      var low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
       dst![dstIndex] = jchar(high)
       dst![dstIndex + 1] = jchar(low)
       return (jint(2))
@@ -222,9 +222,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static func toChars(codePoint:jint) ->[jchar]?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
     if (JavaCharacter.isSupplementaryCodePoint(codePoint)) {
-      var cpPrime:jint = codePoint - jint(0x10000)
-      var high:jint = jint(0xD800) | jint(jint(cpPrime >> 10) & jint(0x3FF))
-      var low:jint = jint(0xDC00) | jint(cpPrime & jint(0x3FF))
+      var cpPrime:jint = jint(codePoint - 0x10000)
+      var high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
+      var low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
       return [(char)high,(char)low]
     }
     return [(char)codePoint]
@@ -234,13 +234,13 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = seq!.length()
+    var len:jint = jint(seq!.length())
     if (beginIndex < 0 || endIndex > len || beginIndex > endIndex) {
       throw JavaIndexOutOfBoundsException()
     }
-    var result:jint = 0
-    for (var i:jint = beginIndex; i < endIndex; i++) {
-      var c:jchar = seq!.charAt(i)
+    var result:jint = jint(0)
+    for (var i:jint = jint(beginIndex); i < endIndex; i++) {
+      var c:jchar = jchar(seq!.charAt(i))
       if (JavaCharacter.isHighSurrogate(c)) {
         if (++i < endIndex) {
           c = seq!.charAt(i)
@@ -262,7 +262,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = seq!.length()
+    var len:jint = jint(seq!.length())
     if (index < 0 || index > len) {
       throw JavaIndexOutOfBoundsException()
     }
@@ -270,15 +270,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       return (jint(index))
     }
     if (codePointOffset > 0) {
-      var codePoints:jint = codePointOffset
-      var i:jint = index
+      var codePoints:jint = jint(codePointOffset)
+      var i:jint = jint(index)
       while (codePoints > 0) {
         codePoints--
         if (i >= len) {
           throw JavaIndexOutOfBoundsException()
         }
         if (JavaCharacter.isHighSurrogate(seq!.charAt(i))) {
-          var next:jint = i + 1
+          var next:jint = jint(i + 1)
           if (next < len && JavaCharacter.isLowSurrogate(seq!.charAt(next))) {
             i++
           }
@@ -287,8 +287,8 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       }
       return (jint(i))
     }
-    var codePoints:jint = -codePointOffset
-    var i:jint = index
+    var codePoints:jint = jint(-codePointOffset)
+    var i:jint = jint(index)
     while (codePoints > 0) {
       codePoints--
       i--
@@ -296,7 +296,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
         throw JavaIndexOutOfBoundsException()
       }
       if (JavaCharacter.isLowSurrogate(seq!.charAt(i))) {
-        var prev:jint = i - 1
+        var prev:jint = jint(i - 1)
         if (prev >= 0 && JavaCharacter.isHighSurrogate(seq!.charAt(prev))) {
           i--
         }
@@ -359,11 +359,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       }
       return (jint(-1))
     }
-    if (codePoint >= jint(0xff21) && codePoint <= jint(0xff3a)) {
-      return (jint(codePoint - jint(0xff17)))
+    if (codePoint >= 0xff21 && codePoint <= 0xff3a) {
+      return (jint(codePoint - 0xff17))
     }
-    if (codePoint >= jint(0xff41) && codePoint <= jint(0xff5a)) {
-      return (jint(codePoint - jint(0xff37)))
+    if (codePoint >= 0xff41 && codePoint <= 0xff5a) {
+      return (jint(codePoint - 0xff37))
     }
     return (jint(-1))
   }
@@ -397,11 +397,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func highSurrogate(codePoint:jint) ->jchar  {
-    return (jchar(jchar((jint(codePoint >> 10) + jint(0xd7c0)))))
+    return (jchar(jchar((jint(codePoint >> 10) + 0xd7c0))))
   }
 
   public static func lowSurrogate(codePoint:jint) ->jchar  {
-    return (jchar(jchar((jint(codePoint & jint(0x3ff)) | jint(0xdc00)))))
+    return (jchar(jchar((jint(codePoint & 0x3ff) | 0xdc00))))
   }
 
   public static func isAlphabetic(codePoint:jint) ->jboolean  {
@@ -585,10 +585,10 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   static func binarySearchRange(table:[jint]?, _ c:jint) ->jint  {
-    var value:jint = 0
-    var low:jint = 0
-    var mid:jint = -1
-    var high:jint = table!.length - 1
+    var value:jint = jint(0)
+    var low:jint = jint(0)
+    var mid:jint = jint(-1)
+    var high:jint = jint(table!.length - 1)
     while (low <= high) {
       mid = jint(low + high) >> 1
       value = table![mid]
@@ -634,216 +634,216 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
   var rangeStart:jint = 0
   var rangeEnd:jint = 0
 
-  public static let SURROGATES_AREA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SURROGATES_AREA",withjint: jint(0xD800),withjint: jint(0xDFFF))
-  public static let BASIC_LATIN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BASIC_LATIN",withjint: 0,withjint: jint(0x7F))
-  public static let LATIN_1_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_1_SUPPLEMENT",withjint: jint(0x80),withjint: jint(0xFF))
-  public static let LATIN_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_A",withjint: jint(0x100),withjint: jint(0x17F))
-  public static let LATIN_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_B",withjint: jint(0x180),withjint: jint(0x24F))
-  public static let IPA_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IPA_EXTENSIONS",withjint: jint(0x250),withjint: jint(0x2AF))
-  public static let SPACING_MODIFIER_LETTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SPACING_MODIFIER_LETTERS",withjint: jint(0x2B0),withjint: jint(0x2FF))
-  public static let COMBINING_DIACRITICAL_MARKS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_DIACRITICAL_MARKS",withjint: jint(0x300),withjint: jint(0x36F))
-  public static let GREEK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GREEK",withjint: jint(0x370),withjint: jint(0x3FF))
-  public static let CYRILLIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC",withjint: jint(0x400),withjint: jint(0x4FF))
-  public static let CYRILLIC_SUPPLEMENTARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_SUPPLEMENTARY",withjint: jint(0x500),withjint: jint(0x52F))
-  public static let ARMENIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARMENIAN",withjint: jint(0x530),withjint: jint(0x58F))
-  public static let HEBREW:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HEBREW",withjint: jint(0x590),withjint: jint(0x5FF))
-  public static let ARABIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC",withjint: jint(0x600),withjint: jint(0x6FF))
-  public static let SYRIAC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SYRIAC",withjint: jint(0x700),withjint: jint(0x74F))
-  public static let THAANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "THAANA",withjint: jint(0x780),withjint: jint(0x7BF))
-  public static let DEVANAGARI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DEVANAGARI",withjint: jint(0x900),withjint: jint(0x97F))
-  public static let BENGALI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BENGALI",withjint: jint(0x980),withjint: jint(0x9FF))
-  public static let GURMUKHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GURMUKHI",withjint: jint(0xA00),withjint: jint(0xA7F))
-  public static let GUJARATI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GUJARATI",withjint: jint(0xA80),withjint: jint(0xAFF))
-  public static let ORIYA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ORIYA",withjint: jint(0xB00),withjint: jint(0xB7F))
-  public static let TAMIL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAMIL",withjint: jint(0xB80),withjint: jint(0xBFF))
-  public static let TELUGU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TELUGU",withjint: jint(0xC00),withjint: jint(0xC7F))
-  public static let KANNADA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANNADA",withjint: jint(0xC80),withjint: jint(0xCFF))
-  public static let MALAYALAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MALAYALAM",withjint: jint(0xD00),withjint: jint(0xD7F))
-  public static let SINHALA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SINHALA",withjint: jint(0xD80),withjint: jint(0xDFF))
-  public static let THAI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "THAI",withjint: jint(0xE00),withjint: jint(0xE7F))
-  public static let LAO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LAO",withjint: jint(0xE80),withjint: jint(0xEFF))
-  public static let TIBETAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TIBETAN",withjint: jint(0xF00),withjint: jint(0xFFF))
-  public static let MYANMAR:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MYANMAR",withjint: jint(0x1000),withjint: jint(0x109F))
-  public static let GEORGIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEORGIAN",withjint: jint(0x10A0),withjint: jint(0x10FF))
-  public static let HANGUL_JAMO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO",withjint: jint(0x1100),withjint: jint(0x11FF))
-  public static let ETHIOPIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC",withjint: jint(0x1200),withjint: jint(0x137F))
-  public static let CHEROKEE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CHEROKEE",withjint: jint(0x13A0),withjint: jint(0x13FF))
-  public static let UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS",withjint: jint(0x1400),withjint: jint(0x167F))
-  public static let OGHAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OGHAM",withjint: jint(0x1680),withjint: jint(0x169f))
-  public static let RUNIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "RUNIC",withjint: jint(0x16A0),withjint: jint(0x16FF))
-  public static let TAGALOG:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGALOG",withjint: jint(0x1700),withjint: jint(0x171F))
-  public static let HANUNOO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANUNOO",withjint: jint(0x1720),withjint: jint(0x173F))
-  public static let BUHID:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BUHID",withjint: jint(0x1740),withjint: jint(0x175F))
-  public static let TAGBANWA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGBANWA",withjint: jint(0x1760),withjint: jint(0x177F))
-  public static let KHMER:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHMER",withjint: jint(0x1780),withjint: jint(0x17FF))
-  public static let MONGOLIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MONGOLIAN",withjint: jint(0x1800),withjint: jint(0x18AF))
-  public static let LIMBU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LIMBU",withjint: jint(0x1900),withjint: jint(0x194F))
-  public static let TAI_LE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_LE",withjint: jint(0x1950),withjint: jint(0x197F))
-  public static let KHMER_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHMER_SYMBOLS",withjint: jint(0x19E0),withjint: jint(0x19FF))
-  public static let PHONETIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHONETIC_EXTENSIONS",withjint: jint(0x1D00),withjint: jint(0x1D7F))
-  public static let LATIN_EXTENDED_ADDITIONAL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_ADDITIONAL",withjint: jint(0x1E00),withjint: jint(0x1EFF))
-  public static let GREEK_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GREEK_EXTENDED",withjint: jint(0x1F00),withjint: jint(0x1FFF))
-  public static let GENERAL_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GENERAL_PUNCTUATION",withjint: jint(0x2000),withjint: jint(0x206F))
-  public static let SUPERSCRIPTS_AND_SUBSCRIPTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPERSCRIPTS_AND_SUBSCRIPTS",withjint: jint(0x2070),withjint: jint(0x209F))
-  public static let CURRENCY_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CURRENCY_SYMBOLS",withjint: jint(0x2070),withjint: jint(0x20CF))
-  public static let COMBINING_MARKS_FOR_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_MARKS_FOR_SYMBOLS",withjint: jint(0x20D0),withjint: jint(0x20FF))
-  public static let LETTERLIKE_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LETTERLIKE_SYMBOLS",withjint: jint(0x2100),withjint: jint(0x214F))
-  public static let NUMBER_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NUMBER_FORMS",withjint: jint(0x2150),withjint: jint(0x218F))
-  public static let ARROWS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARROWS",withjint: jint(0x2190),withjint: jint(0x21FF))
-  public static let MATHEMATICAL_OPERATORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MATHEMATICAL_OPERATORS",withjint: jint(0x2200),withjint: jint(0x22FF))
-  public static let MISCELLANEOUS_TECHNICAL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_TECHNICAL",withjint: jint(0x2300),withjint: jint(0x23FF))
-  public static let CONTROL_PICTURES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CONTROL_PICTURES",withjint: jint(0x2400),withjint: jint(0x243F))
-  public static let OPTICAL_CHARACTER_RECOGNITION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OPTICAL_CHARACTER_RECOGNITION",withjint: jint(0x2440),withjint: jint(0x245F))
-  public static let ENCLOSED_ALPHANUMERICS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_ALPHANUMERICS",withjint: jint(0x2460),withjint: jint(0x24FF))
-  public static let BOX_DRAWING:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOX_DRAWING",withjint: jint(0x2500),withjint: jint(0x257F))
-  public static let BLOCK_ELEMENTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BLOCK_ELEMENTS",withjint: jint(0x2580),withjint: jint(0x259F))
-  public static let GEOMETRIC_SHAPES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEOMETRIC_SHAPES",withjint: jint(0x25A0),withjint: jint(0x25FF))
-  public static let MISCELLANEOUS_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS",withjint: jint(0x2600),withjint: jint(0x26FF))
-  public static let DINGBATS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DINGBATS",withjint: jint(0x2700),withjint: jint(0x27BF))
-  public static let MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A",withjint: jint(0x27C0),withjint: jint(0x27EF))
-  public static let SUPPLEMENTAL_ARROWS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_ARROWS_A",withjint: jint(0x27F0),withjint: jint(0x27FF))
-  public static let BRAILLE_PATTERNS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BRAILLE_PATTERNS",withjint: jint(0x2800),withjint: jint(0x28FF))
-  public static let SUPPLEMENTAL_ARROWS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_ARROWS_B",withjint: jint(0x2900),withjint: jint(0x297F))
-  public static let MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B",withjint: jint(0x2980),withjint: jint(0x29FF))
-  public static let SUPPLEMENTAL_MATHEMATICAL_OPERATORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_MATHEMATICAL_OPERATORS",withjint: jint(0x2A00),withjint: jint(0x2AFF))
-  public static let MISCELLANEOUS_SYMBOLS_AND_ARROWS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS_AND_ARROWS",withjint: jint(0x2B00),withjint: jint(0x2BFF))
-  public static let CJK_RADICALS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_RADICALS_SUPPLEMENT",withjint: jint(0x2E80),withjint: jint(0x2EFF))
-  public static let KANGXI_RADICALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANGXI_RADICALS",withjint: jint(0x2F00),withjint: jint(0x2FDF))
-  public static let IDEOGRAPHIC_DESCRIPTION_CHARACTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IDEOGRAPHIC_DESCRIPTION_CHARACTERS",withjint: jint(0x2FF0),withjint: jint(0x2FFF))
-  public static let CJK_SYMBOLS_AND_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_SYMBOLS_AND_PUNCTUATION",withjint: jint(0x3000),withjint: jint(0x303F))
-  public static let HIRAGANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIRAGANA",withjint: jint(0x3040),withjint: jint(0x309F))
-  public static let KATAKANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KATAKANA",withjint: jint(0x30A0),withjint: jint(0x30FF))
-  public static let BOPOMOFO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOPOMOFO",withjint: jint(0x3100),withjint: jint(0x312F))
-  public static let HANGUL_COMPATIBILITY_JAMO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_COMPATIBILITY_JAMO",withjint: jint(0x3130),withjint: jint(0x318F))
-  public static let KANBUN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANBUN",withjint: jint(0x3190),withjint: jint(0x319F))
-  public static let BOPOMOFO_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOPOMOFO_EXTENDED",withjint: jint(0x31A0),withjint: jint(0x31BF))
-  public static let KATAKANA_PHONETIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KATAKANA_PHONETIC_EXTENSIONS",withjint: jint(0x31F0),withjint: jint(0x31FF))
-  public static let ENCLOSED_CJK_LETTERS_AND_MONTHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_CJK_LETTERS_AND_MONTHS",withjint: jint(0x3200),withjint: jint(0x32FF))
-  public static let CJK_COMPATIBILITY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY",withjint: jint(0x3300),withjint: jint(0x33FF))
-  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A",withjint: jint(0x3400),withjint: jint(0x4DBF))
-  public static let YIJING_HEXAGRAM_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YIJING_HEXAGRAM_SYMBOLS",withjint: jint(0x4DC0),withjint: jint(0x4DFF))
-  public static let CJK_UNIFIED_IDEOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS",withjint: jint(0x4E00),withjint: jint(0x9FFF))
-  public static let YI_SYLLABLES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YI_SYLLABLES",withjint: jint(0xA000),withjint: jint(0xA48F))
-  public static let YI_RADICALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YI_RADICALS",withjint: jint(0xA490),withjint: jint(0xA4CF))
-  public static let HANGUL_SYLLABLES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_SYLLABLES",withjint: jint(0xAC00),withjint: jint(0xD7AF))
-  public static let HIGH_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIGH_SURROGATES",withjint: jint(0xD800),withjint: jint(0xDB7F))
-  public static let HIGH_PRIVATE_USE_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIGH_PRIVATE_USE_SURROGATES",withjint: jint(0xDB80),withjint: jint(0xDBFF))
-  public static let LOW_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LOW_SURROGATES",withjint: jint(0xDC00),withjint: jint(0xDFFF))
-  public static let PRIVATE_USE_AREA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PRIVATE_USE_AREA",withjint: jint(0xE000),withjint: jint(0xF8FF))
-  public static let CJK_COMPATIBILITY_IDEOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_IDEOGRAPHS",withjint: jint(0xF900),withjint: jint(0xFAFF))
-  public static let ALPHABETIC_PRESENTATION_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ALPHABETIC_PRESENTATION_FORMS",withjint: jint(0xFB00),withjint: jint(0xFB4F))
-  public static let ARABIC_PRESENTATION_FORMS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_PRESENTATION_FORMS_A",withjint: jint(0xFB50),withjint: jint(0xFDFF))
-  public static let VARIATION_SELECTORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VARIATION_SELECTORS",withjint: jint(0xFE00),withjint: jint(0xFE0F))
-  public static let COMBINING_HALF_MARKS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_HALF_MARKS",withjint: jint(0xFE20),withjint: jint(0xFE2F))
-  public static let CJK_COMPATIBILITY_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_FORMS",withjint: jint(0xFE30),withjint: jint(0xFE4F))
-  public static let SMALL_FORM_VARIANTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SMALL_FORM_VARIANTS",withjint: jint(0xFE50),withjint: jint(0xFE6F))
-  public static let ARABIC_PRESENTATION_FORMS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_PRESENTATION_FORMS_B",withjint: jint(0xFB50),withjint: jint(0xFDFF))
-  public static let HALFWIDTH_AND_FULLWIDTH_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HALFWIDTH_AND_FULLWIDTH_FORMS",withjint: jint(0xFF00),withjint: jint(0xFFEF))
-  public static let SPECIALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SPECIALS",withjint: jint(0xFFF0),withjint: jint(0xFFFF))
-  public static let LINEAR_B_SYLLABARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LINEAR_B_SYLLABARY",withjint: jint(0x10000),withjint: jint(0x1007F))
-  public static let LINEAR_B_IDEOGRAMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LINEAR_B_IDEOGRAMS",withjint: jint(0x10080),withjint: jint(0x100FF))
-  public static let AEGEAN_NUMBERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "AEGEAN_NUMBERS",withjint: jint(0x10100),withjint: jint(0x1013F))
-  public static let OLD_ITALIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_ITALIC",withjint: jint(0x10300),withjint: jint(0x1032F))
-  public static let GOTHIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GOTHIC",withjint: jint(0x10330),withjint: jint(0x1034F))
-  public static let UGARITIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UGARITIC",withjint: jint(0x10380),withjint: jint(0x1039F))
-  public static let DESERET:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DESERET",withjint: jint(0x10400),withjint: jint(0x1044F))
-  public static let SHAVIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SHAVIAN",withjint: jint(0x10450),withjint: jint(0x1047F))
-  public static let OSMANYA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OSMANYA",withjint: jint(0x10f80),withjint: jint(0x104AF))
-  public static let CYPRIOT_SYLLABARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYPRIOT_SYLLABARY",withjint: jint(0x10800),withjint: jint(0x1085F))
-  public static let BYZANTINE_MUSICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BYZANTINE_MUSICAL_SYMBOLS",withjint: jint(0x1D000),withjint: jint(0x1D0FF))
-  public static let MUSICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MUSICAL_SYMBOLS",withjint: jint(0x1D100),withjint: jint(0x1D1FF))
-  public static let TAI_XUAN_JING_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_XUAN_JING_SYMBOLS",withjint: jint(0x1D300),withjint: jint(0x1D35F))
-  public static let MATHEMATICAL_ALPHANUMERIC_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MATHEMATICAL_ALPHANUMERIC_SYMBOLS",withjint: jint(0x1D400),withjint: jint(0x1D7FF))
-  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B",withjint: jint(0x20000),withjint: jint(0x2a6DF))
-  public static let CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT",withjint: jint(0x2F800),withjint: jint(0x2FA1F))
-  public static let TAGS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGS",withjint: jint(0xE0000),withjint: jint(0xE007F))
-  public static let VARIATION_SELECTORS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VARIATION_SELECTORS_SUPPLEMENT",withjint: jint(0xE0100),withjint: jint(0xE01EF))
-  public static let SUPPLEMENTARY_PRIVATE_USE_AREA_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTARY_PRIVATE_USE_AREA_A",withjint: jint(0xF0000),withjint: jint(0xFFFFF))
-  public static let SUPPLEMENTARY_PRIVATE_USE_AREA_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTARY_PRIVATE_USE_AREA_B",withjint: jint(0x100000),withjint: jint(0x10FFFF))
-  public static let ANCIENT_GREEK_MUSICAL_NOTATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_GREEK_MUSICAL_NOTATION",withjint: jint(0x1D200),withjint: jint(0x1D24F))
-  public static let ANCIENT_GREEK_NUMBERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_GREEK_NUMBERS",withjint: jint(0x10140),withjint: jint(0x1018F))
-  public static let ARABIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_SUPPLEMENT",withjint: jint(0x750),withjint: jint(0x77F))
-  public static let BUGINESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BUGINESE",withjint: jint(0x1A00),withjint: jint(0x1A1F))
-  public static let CJK_STROKES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_STROKES",withjint: jint(0x31c0),withjint: jint(0x31EF))
-  public static let COMBINING_DIACRITICAL_MARKS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_DIACRITICAL_MARKS_SUPPLEMENT",withjint: jint(0x1DC0),withjint: jint(0x1DFF))
-  public static let COPTIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COPTIC",withjint: jint(0x2C80),withjint: jint(0x2CFF))
-  public static let ETHIOPIC_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_EXTENDED",withjint: jint(0x2D80),withjint: jint(0x2DDF))
-  public static let ETHIOPIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_SUPPLEMENT",withjint: jint(0x1380),withjint: jint(0x139F))
-  public static let GEORGIAN_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEORGIAN_SUPPLEMENT",withjint: jint(0x2D00),withjint: jint(0x2D2F))
-  public static let GLAGOLITIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GLAGOLITIC",withjint: jint(0x2C00),withjint: jint(0x2C5F))
-  public static let KHAROSHTHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHAROSHTHI",withjint: jint(0x10A00),withjint: jint(0x10A5F))
-  public static let MODIFIER_TONE_LETTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MODIFIER_TONE_LETTERS",withjint: jint(0xA700),withjint: jint(0xA71F))
-  public static let NEW_TAI_LUE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NEW_TAI_LUE",withjint: jint(0x1980),withjint: jint(0x19DF))
-  public static let OLD_PERSIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_PERSIAN",withjint: jint(0x103A0),withjint: jint(0x103DF))
-  public static let PHONETIC_EXTENSIONS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHONETIC_EXTENSIONS_SUPPLEMENT",withjint: jint(0x1D80),withjint: jint(0x1DBF))
-  public static let SUPPLEMENTAL_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_PUNCTUATION",withjint: jint(0x2E00),withjint: jint(0x2E7F))
-  public static let SYLOTI_NAGRI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SYLOTI_NAGRI",withjint: jint(0xA800),withjint: jint(0xA82F))
-  public static let TIFINAGH:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TIFINAGH",withjint: jint(0x2D30),withjint: jint(0x2D7F))
-  public static let VERTICAL_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VERTICAL_FORMS",withjint: jint(0xFE10),withjint: jint(0xFE1F))
-  public static let NKO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NKO",withjint: jint(0x7C0),withjint: jint(0x7FF))
-  public static let BALINESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BALINESE",withjint: jint(0x1B00),withjint: jint(0x1B7F))
-  public static let LATIN_EXTENDED_C:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_C",withjint: jint(0x2C60),withjint: jint(0x2C7F))
-  public static let LATIN_EXTENDED_D:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_D",withjint: jint(0xA720),withjint: jint(0xA7FF))
-  public static let PHAGS_PA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHAGS_PA",withjint: jint(0xA840),withjint: jint(0xA87F))
-  public static let PHOENICIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHOENICIAN",withjint: jint(0x10900),withjint: jint(0x1091F))
-  public static let CUNEIFORM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CUNEIFORM",withjint: jint(0x12000),withjint: jint(0x123FF))
-  public static let CUNEIFORM_NUMBERS_AND_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CUNEIFORM_NUMBERS_AND_PUNCTUATION",withjint: jint(0x12400),withjint: jint(0x1247F))
-  public static let COUNTING_ROD_NUMERALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COUNTING_ROD_NUMERALS",withjint: jint(0x1D360),withjint: jint(0x1D37F))
-  public static let SUNDANESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUNDANESE",withjint: jint(0x1B80),withjint: jint(0x1BBF))
-  public static let LEPCHA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LEPCHA",withjint: jint(0x1C00),withjint: jint(0x1C4F))
-  public static let OL_CHIKI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OL_CHIKI",withjint: jint(0x1C50),withjint: jint(0x1C7F))
-  public static let CYRILLIC_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_EXTENDED_A",withjint: jint(0x2DE0),withjint: jint(0x2DFF))
-  public static let VAI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VAI",withjint: jint(0xA500),withjint: jint(0xA63F))
-  public static let CYRILLIC_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_EXTENDED_B",withjint: jint(0xA640),withjint: jint(0xA69F))
-  public static let SAURASHTRA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SAURASHTRA",withjint: jint(0xA880),withjint: jint(0xA8DF))
-  public static let KAYAH_LI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KAYAH_LI",withjint: jint(0xA930),withjint: jint(0xA95F))
-  public static let REJANG:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "REJANG",withjint: jint(0xA930),withjint: jint(0xa5F))
-  public static let CHAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CHAM",withjint: jint(0xAA00),withjint: jint(0xAA5F))
-  public static let ANCIENT_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_SYMBOLS",withjint: jint(0x10190),withjint: jint(0x101CF))
-  public static let PHAISTOS_DISC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHAISTOS_DISC",withjint: jint(0x101D0),withjint: jint(0x101FF))
-  public static let LYCIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LYCIAN",withjint: jint(0x10280),withjint: jint(0x1029F))
-  public static let CARIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CARIAN",withjint: jint(0x102A0),withjint: jint(0x102DF))
-  public static let LYDIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LYDIAN",withjint: jint(0x10920),withjint: jint(0x1093F))
-  public static let MAHJONG_TILES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MAHJONG_TILES",withjint: jint(0x1F000),withjint: jint(0x1F02F))
-  public static let DOMINO_TILES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DOMINO_TILES",withjint: jint(0x1F030),withjint: jint(0x1F09F))
-  public static let SAMARITAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SAMARITAN",withjint: jint(0x800),withjint: jint(0x83F))
-  public static let UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED",withjint: jint(0x1400),withjint: jint(0x167F))
-  public static let TAI_THAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_THAM",withjint: jint(0x1A20),withjint: jint(0x1AAF))
-  public static let VEDIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VEDIC_EXTENSIONS",withjint: jint(0x1CD0),withjint: jint(0x1CFF))
-  public static let LISU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LISU",withjint: jint(0xA4D0),withjint: jint(0xA4FF))
-  public static let BAMUM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BAMUM",withjint: jint(0xA6A0),withjint: jint(0xA6FF))
-  public static let COMMON_INDIC_NUMBER_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMMON_INDIC_NUMBER_FORMS",withjint: jint(0xA830),withjint: jint(0xA83F))
-  public static let DEVANAGARI_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DEVANAGARI_EXTENDED",withjint: jint(0xA8E0),withjint: jint(0xA8FF))
-  public static let HANGUL_JAMO_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO_EXTENDED_A",withjint: jint(0xA980),withjint: jint(0xA9DF))
-  public static let JAVANESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "JAVANESE",withjint: jint(0xA980),withjint: jint(0xA9DF))
-  public static let MYANMAR_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MYANMAR_EXTENDED_A",withjint: jint(0xAA60),withjint: jint(0xAA7F))
-  public static let TAI_VIET:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_VIET",withjint: jint(0xAA80),withjint: jint(0xAADF))
-  public static let MEETEI_MAYEK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MEETEI_MAYEK",withjint: jint(0xAAE0),withjint: jint(0xABFF))
-  public static let HANGUL_JAMO_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO_EXTENDED_B",withjint: jint(0xD7B0),withjint: jint(0xD7FF))
-  public static let IMPERIAL_ARAMAIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IMPERIAL_ARAMAIC",withjint: jint(0x10840),withjint: jint(0x1085F))
-  public static let OLD_SOUTH_ARABIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_SOUTH_ARABIAN",withjint: jint(0x10A60),withjint: jint(0x10A7F))
-  public static let AVESTAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "AVESTAN",withjint: jint(0x10B00),withjint: jint(0x10B3F))
-  public static let INSCRIPTIONAL_PARTHIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "INSCRIPTIONAL_PARTHIAN",withjint: jint(0x10B40),withjint: jint(0x10B5F))
-  public static let INSCRIPTIONAL_PAHLAVI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "INSCRIPTIONAL_PAHLAVI",withjint: jint(0x10B60),withjint: jint(0x10B7F))
-  public static let OLD_TURKIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_TURKIC",withjint: jint(0x10C00),withjint: jint(0x10C4F))
-  public static let RUMI_NUMERAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "RUMI_NUMERAL_SYMBOLS",withjint: jint(0x10E60),withjint: jint(0x10E7F))
-  public static let KAITHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KAITHI",withjint: jint(0x11080),withjint: jint(0x110CF))
-  public static let EGYPTIAN_HIEROGLYPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "EGYPTIAN_HIEROGLYPHS",withjint: jint(0x13000),withjint: jint(0x1342F))
-  public static let ENCLOSED_ALPHANUMERIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_ALPHANUMERIC_SUPPLEMENT",withjint: jint(0x1F100),withjint: jint(0x1F1FF))
-  public static let ENCLOSED_IDEOGRAPHIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_IDEOGRAPHIC_SUPPLEMENT",withjint: jint(0x1F200),withjint: jint(0x1F2FF))
-  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C",withjint: jint(0x2A700),withjint: jint(0x2B73F))
-  public static let MANDAIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MANDAIC",withjint: jint(0x840),withjint: jint(0x85F))
-  public static let BATAK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BATAK",withjint: jint(0x1BC0),withjint: jint(0x1BFF))
-  public static let ETHIOPIC_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_EXTENDED_A",withjint: jint(0x2DE0),withjint: jint(0x2DFF))
-  public static let BRAHMI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BRAHMI",withjint: jint(0x11000),withjint: jint(0x1107F))
-  public static let BAMUM_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BAMUM_SUPPLEMENT",withjint: jint(0x16800),withjint: jint(0x16A3F))
-  public static let KANA_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANA_SUPPLEMENT",withjint: jint(0x1B000),withjint: jint(0x1B0FF))
-  public static let PLAYING_CARDS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PLAYING_CARDS",withjint: jint(0x1F0A0),withjint: jint(0x1F0FF))
-  public static let MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS",withjint: jint(0x1F300),withjint: jint(0x1F5FF))
-  public static let EMOTICONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "EMOTICONS",withjint: jint(0x1F600),withjint: jint(0x1F64F))
-  public static let TRANSPORT_AND_MAP_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TRANSPORT_AND_MAP_SYMBOLS",withjint: jint(0x1F680),withjint: jint(0x1F6FF))
-  public static let ALCHEMICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ALCHEMICAL_SYMBOLS",withjint: jint(0x1F700),withjint: jint(0x1F77F))
-  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D",withjint: jint(0x2B740),withjint: jint(0x2B81F))
+  public static let SURROGATES_AREA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SURROGATES_AREA",withjint: 0xD800,withjint: 0xDFFF)
+  public static let BASIC_LATIN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BASIC_LATIN",withjint: 0,withjint: 0x7F)
+  public static let LATIN_1_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_1_SUPPLEMENT",withjint: 0x80,withjint: 0xFF)
+  public static let LATIN_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_A",withjint: 0x100,withjint: 0x17F)
+  public static let LATIN_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_B",withjint: 0x180,withjint: 0x24F)
+  public static let IPA_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IPA_EXTENSIONS",withjint: 0x250,withjint: 0x2AF)
+  public static let SPACING_MODIFIER_LETTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SPACING_MODIFIER_LETTERS",withjint: 0x2B0,withjint: 0x2FF)
+  public static let COMBINING_DIACRITICAL_MARKS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_DIACRITICAL_MARKS",withjint: 0x300,withjint: 0x36F)
+  public static let GREEK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GREEK",withjint: 0x370,withjint: 0x3FF)
+  public static let CYRILLIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC",withjint: 0x400,withjint: 0x4FF)
+  public static let CYRILLIC_SUPPLEMENTARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_SUPPLEMENTARY",withjint: 0x500,withjint: 0x52F)
+  public static let ARMENIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARMENIAN",withjint: 0x530,withjint: 0x58F)
+  public static let HEBREW:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HEBREW",withjint: 0x590,withjint: 0x5FF)
+  public static let ARABIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC",withjint: 0x600,withjint: 0x6FF)
+  public static let SYRIAC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SYRIAC",withjint: 0x700,withjint: 0x74F)
+  public static let THAANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "THAANA",withjint: 0x780,withjint: 0x7BF)
+  public static let DEVANAGARI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DEVANAGARI",withjint: 0x900,withjint: 0x97F)
+  public static let BENGALI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BENGALI",withjint: 0x980,withjint: 0x9FF)
+  public static let GURMUKHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GURMUKHI",withjint: 0xA00,withjint: 0xA7F)
+  public static let GUJARATI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GUJARATI",withjint: 0xA80,withjint: 0xAFF)
+  public static let ORIYA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ORIYA",withjint: 0xB00,withjint: 0xB7F)
+  public static let TAMIL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAMIL",withjint: 0xB80,withjint: 0xBFF)
+  public static let TELUGU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TELUGU",withjint: 0xC00,withjint: 0xC7F)
+  public static let KANNADA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANNADA",withjint: 0xC80,withjint: 0xCFF)
+  public static let MALAYALAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MALAYALAM",withjint: 0xD00,withjint: 0xD7F)
+  public static let SINHALA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SINHALA",withjint: 0xD80,withjint: 0xDFF)
+  public static let THAI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "THAI",withjint: 0xE00,withjint: 0xE7F)
+  public static let LAO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LAO",withjint: 0xE80,withjint: 0xEFF)
+  public static let TIBETAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TIBETAN",withjint: 0xF00,withjint: 0xFFF)
+  public static let MYANMAR:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MYANMAR",withjint: 0x1000,withjint: 0x109F)
+  public static let GEORGIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEORGIAN",withjint: 0x10A0,withjint: 0x10FF)
+  public static let HANGUL_JAMO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO",withjint: 0x1100,withjint: 0x11FF)
+  public static let ETHIOPIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC",withjint: 0x1200,withjint: 0x137F)
+  public static let CHEROKEE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CHEROKEE",withjint: 0x13A0,withjint: 0x13FF)
+  public static let UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS",withjint: 0x1400,withjint: 0x167F)
+  public static let OGHAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OGHAM",withjint: 0x1680,withjint: 0x169f)
+  public static let RUNIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "RUNIC",withjint: 0x16A0,withjint: 0x16FF)
+  public static let TAGALOG:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGALOG",withjint: 0x1700,withjint: 0x171F)
+  public static let HANUNOO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANUNOO",withjint: 0x1720,withjint: 0x173F)
+  public static let BUHID:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BUHID",withjint: 0x1740,withjint: 0x175F)
+  public static let TAGBANWA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGBANWA",withjint: 0x1760,withjint: 0x177F)
+  public static let KHMER:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHMER",withjint: 0x1780,withjint: 0x17FF)
+  public static let MONGOLIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MONGOLIAN",withjint: 0x1800,withjint: 0x18AF)
+  public static let LIMBU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LIMBU",withjint: 0x1900,withjint: 0x194F)
+  public static let TAI_LE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_LE",withjint: 0x1950,withjint: 0x197F)
+  public static let KHMER_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHMER_SYMBOLS",withjint: 0x19E0,withjint: 0x19FF)
+  public static let PHONETIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHONETIC_EXTENSIONS",withjint: 0x1D00,withjint: 0x1D7F)
+  public static let LATIN_EXTENDED_ADDITIONAL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_ADDITIONAL",withjint: 0x1E00,withjint: 0x1EFF)
+  public static let GREEK_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GREEK_EXTENDED",withjint: 0x1F00,withjint: 0x1FFF)
+  public static let GENERAL_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GENERAL_PUNCTUATION",withjint: 0x2000,withjint: 0x206F)
+  public static let SUPERSCRIPTS_AND_SUBSCRIPTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPERSCRIPTS_AND_SUBSCRIPTS",withjint: 0x2070,withjint: 0x209F)
+  public static let CURRENCY_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CURRENCY_SYMBOLS",withjint: 0x2070,withjint: 0x20CF)
+  public static let COMBINING_MARKS_FOR_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_MARKS_FOR_SYMBOLS",withjint: 0x20D0,withjint: 0x20FF)
+  public static let LETTERLIKE_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LETTERLIKE_SYMBOLS",withjint: 0x2100,withjint: 0x214F)
+  public static let NUMBER_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NUMBER_FORMS",withjint: 0x2150,withjint: 0x218F)
+  public static let ARROWS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARROWS",withjint: 0x2190,withjint: 0x21FF)
+  public static let MATHEMATICAL_OPERATORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MATHEMATICAL_OPERATORS",withjint: 0x2200,withjint: 0x22FF)
+  public static let MISCELLANEOUS_TECHNICAL:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_TECHNICAL",withjint: 0x2300,withjint: 0x23FF)
+  public static let CONTROL_PICTURES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CONTROL_PICTURES",withjint: 0x2400,withjint: 0x243F)
+  public static let OPTICAL_CHARACTER_RECOGNITION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OPTICAL_CHARACTER_RECOGNITION",withjint: 0x2440,withjint: 0x245F)
+  public static let ENCLOSED_ALPHANUMERICS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_ALPHANUMERICS",withjint: 0x2460,withjint: 0x24FF)
+  public static let BOX_DRAWING:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOX_DRAWING",withjint: 0x2500,withjint: 0x257F)
+  public static let BLOCK_ELEMENTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BLOCK_ELEMENTS",withjint: 0x2580,withjint: 0x259F)
+  public static let GEOMETRIC_SHAPES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEOMETRIC_SHAPES",withjint: 0x25A0,withjint: 0x25FF)
+  public static let MISCELLANEOUS_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS",withjint: 0x2600,withjint: 0x26FF)
+  public static let DINGBATS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DINGBATS",withjint: 0x2700,withjint: 0x27BF)
+  public static let MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A",withjint: 0x27C0,withjint: 0x27EF)
+  public static let SUPPLEMENTAL_ARROWS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_ARROWS_A",withjint: 0x27F0,withjint: 0x27FF)
+  public static let BRAILLE_PATTERNS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BRAILLE_PATTERNS",withjint: 0x2800,withjint: 0x28FF)
+  public static let SUPPLEMENTAL_ARROWS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_ARROWS_B",withjint: 0x2900,withjint: 0x297F)
+  public static let MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B",withjint: 0x2980,withjint: 0x29FF)
+  public static let SUPPLEMENTAL_MATHEMATICAL_OPERATORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_MATHEMATICAL_OPERATORS",withjint: 0x2A00,withjint: 0x2AFF)
+  public static let MISCELLANEOUS_SYMBOLS_AND_ARROWS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS_AND_ARROWS",withjint: 0x2B00,withjint: 0x2BFF)
+  public static let CJK_RADICALS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_RADICALS_SUPPLEMENT",withjint: 0x2E80,withjint: 0x2EFF)
+  public static let KANGXI_RADICALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANGXI_RADICALS",withjint: 0x2F00,withjint: 0x2FDF)
+  public static let IDEOGRAPHIC_DESCRIPTION_CHARACTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IDEOGRAPHIC_DESCRIPTION_CHARACTERS",withjint: 0x2FF0,withjint: 0x2FFF)
+  public static let CJK_SYMBOLS_AND_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_SYMBOLS_AND_PUNCTUATION",withjint: 0x3000,withjint: 0x303F)
+  public static let HIRAGANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIRAGANA",withjint: 0x3040,withjint: 0x309F)
+  public static let KATAKANA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KATAKANA",withjint: 0x30A0,withjint: 0x30FF)
+  public static let BOPOMOFO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOPOMOFO",withjint: 0x3100,withjint: 0x312F)
+  public static let HANGUL_COMPATIBILITY_JAMO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_COMPATIBILITY_JAMO",withjint: 0x3130,withjint: 0x318F)
+  public static let KANBUN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANBUN",withjint: 0x3190,withjint: 0x319F)
+  public static let BOPOMOFO_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BOPOMOFO_EXTENDED",withjint: 0x31A0,withjint: 0x31BF)
+  public static let KATAKANA_PHONETIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KATAKANA_PHONETIC_EXTENSIONS",withjint: 0x31F0,withjint: 0x31FF)
+  public static let ENCLOSED_CJK_LETTERS_AND_MONTHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_CJK_LETTERS_AND_MONTHS",withjint: 0x3200,withjint: 0x32FF)
+  public static let CJK_COMPATIBILITY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY",withjint: 0x3300,withjint: 0x33FF)
+  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A",withjint: 0x3400,withjint: 0x4DBF)
+  public static let YIJING_HEXAGRAM_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YIJING_HEXAGRAM_SYMBOLS",withjint: 0x4DC0,withjint: 0x4DFF)
+  public static let CJK_UNIFIED_IDEOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS",withjint: 0x4E00,withjint: 0x9FFF)
+  public static let YI_SYLLABLES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YI_SYLLABLES",withjint: 0xA000,withjint: 0xA48F)
+  public static let YI_RADICALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "YI_RADICALS",withjint: 0xA490,withjint: 0xA4CF)
+  public static let HANGUL_SYLLABLES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_SYLLABLES",withjint: 0xAC00,withjint: 0xD7AF)
+  public static let HIGH_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIGH_SURROGATES",withjint: 0xD800,withjint: 0xDB7F)
+  public static let HIGH_PRIVATE_USE_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HIGH_PRIVATE_USE_SURROGATES",withjint: 0xDB80,withjint: 0xDBFF)
+  public static let LOW_SURROGATES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LOW_SURROGATES",withjint: 0xDC00,withjint: 0xDFFF)
+  public static let PRIVATE_USE_AREA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PRIVATE_USE_AREA",withjint: 0xE000,withjint: 0xF8FF)
+  public static let CJK_COMPATIBILITY_IDEOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_IDEOGRAPHS",withjint: 0xF900,withjint: 0xFAFF)
+  public static let ALPHABETIC_PRESENTATION_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ALPHABETIC_PRESENTATION_FORMS",withjint: 0xFB00,withjint: 0xFB4F)
+  public static let ARABIC_PRESENTATION_FORMS_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_PRESENTATION_FORMS_A",withjint: 0xFB50,withjint: 0xFDFF)
+  public static let VARIATION_SELECTORS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VARIATION_SELECTORS",withjint: 0xFE00,withjint: 0xFE0F)
+  public static let COMBINING_HALF_MARKS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_HALF_MARKS",withjint: 0xFE20,withjint: 0xFE2F)
+  public static let CJK_COMPATIBILITY_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_FORMS",withjint: 0xFE30,withjint: 0xFE4F)
+  public static let SMALL_FORM_VARIANTS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SMALL_FORM_VARIANTS",withjint: 0xFE50,withjint: 0xFE6F)
+  public static let ARABIC_PRESENTATION_FORMS_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_PRESENTATION_FORMS_B",withjint: 0xFB50,withjint: 0xFDFF)
+  public static let HALFWIDTH_AND_FULLWIDTH_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HALFWIDTH_AND_FULLWIDTH_FORMS",withjint: 0xFF00,withjint: 0xFFEF)
+  public static let SPECIALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SPECIALS",withjint: 0xFFF0,withjint: 0xFFFF)
+  public static let LINEAR_B_SYLLABARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LINEAR_B_SYLLABARY",withjint: 0x10000,withjint: 0x1007F)
+  public static let LINEAR_B_IDEOGRAMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LINEAR_B_IDEOGRAMS",withjint: 0x10080,withjint: 0x100FF)
+  public static let AEGEAN_NUMBERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "AEGEAN_NUMBERS",withjint: 0x10100,withjint: 0x1013F)
+  public static let OLD_ITALIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_ITALIC",withjint: 0x10300,withjint: 0x1032F)
+  public static let GOTHIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GOTHIC",withjint: 0x10330,withjint: 0x1034F)
+  public static let UGARITIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UGARITIC",withjint: 0x10380,withjint: 0x1039F)
+  public static let DESERET:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DESERET",withjint: 0x10400,withjint: 0x1044F)
+  public static let SHAVIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SHAVIAN",withjint: 0x10450,withjint: 0x1047F)
+  public static let OSMANYA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OSMANYA",withjint: 0x10f80,withjint: 0x104AF)
+  public static let CYPRIOT_SYLLABARY:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYPRIOT_SYLLABARY",withjint: 0x10800,withjint: 0x1085F)
+  public static let BYZANTINE_MUSICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BYZANTINE_MUSICAL_SYMBOLS",withjint: 0x1D000,withjint: 0x1D0FF)
+  public static let MUSICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MUSICAL_SYMBOLS",withjint: 0x1D100,withjint: 0x1D1FF)
+  public static let TAI_XUAN_JING_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_XUAN_JING_SYMBOLS",withjint: 0x1D300,withjint: 0x1D35F)
+  public static let MATHEMATICAL_ALPHANUMERIC_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MATHEMATICAL_ALPHANUMERIC_SYMBOLS",withjint: 0x1D400,withjint: 0x1D7FF)
+  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B",withjint: 0x20000,withjint: 0x2a6DF)
+  public static let CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT",withjint: 0x2F800,withjint: 0x2FA1F)
+  public static let TAGS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAGS",withjint: 0xE0000,withjint: 0xE007F)
+  public static let VARIATION_SELECTORS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VARIATION_SELECTORS_SUPPLEMENT",withjint: 0xE0100,withjint: 0xE01EF)
+  public static let SUPPLEMENTARY_PRIVATE_USE_AREA_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTARY_PRIVATE_USE_AREA_A",withjint: 0xF0000,withjint: 0xFFFFF)
+  public static let SUPPLEMENTARY_PRIVATE_USE_AREA_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTARY_PRIVATE_USE_AREA_B",withjint: 0x100000,withjint: 0x10FFFF)
+  public static let ANCIENT_GREEK_MUSICAL_NOTATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_GREEK_MUSICAL_NOTATION",withjint: 0x1D200,withjint: 0x1D24F)
+  public static let ANCIENT_GREEK_NUMBERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_GREEK_NUMBERS",withjint: 0x10140,withjint: 0x1018F)
+  public static let ARABIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ARABIC_SUPPLEMENT",withjint: 0x750,withjint: 0x77F)
+  public static let BUGINESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BUGINESE",withjint: 0x1A00,withjint: 0x1A1F)
+  public static let CJK_STROKES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_STROKES",withjint: 0x31c0,withjint: 0x31EF)
+  public static let COMBINING_DIACRITICAL_MARKS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMBINING_DIACRITICAL_MARKS_SUPPLEMENT",withjint: 0x1DC0,withjint: 0x1DFF)
+  public static let COPTIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COPTIC",withjint: 0x2C80,withjint: 0x2CFF)
+  public static let ETHIOPIC_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_EXTENDED",withjint: 0x2D80,withjint: 0x2DDF)
+  public static let ETHIOPIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_SUPPLEMENT",withjint: 0x1380,withjint: 0x139F)
+  public static let GEORGIAN_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GEORGIAN_SUPPLEMENT",withjint: 0x2D00,withjint: 0x2D2F)
+  public static let GLAGOLITIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "GLAGOLITIC",withjint: 0x2C00,withjint: 0x2C5F)
+  public static let KHAROSHTHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KHAROSHTHI",withjint: 0x10A00,withjint: 0x10A5F)
+  public static let MODIFIER_TONE_LETTERS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MODIFIER_TONE_LETTERS",withjint: 0xA700,withjint: 0xA71F)
+  public static let NEW_TAI_LUE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NEW_TAI_LUE",withjint: 0x1980,withjint: 0x19DF)
+  public static let OLD_PERSIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_PERSIAN",withjint: 0x103A0,withjint: 0x103DF)
+  public static let PHONETIC_EXTENSIONS_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHONETIC_EXTENSIONS_SUPPLEMENT",withjint: 0x1D80,withjint: 0x1DBF)
+  public static let SUPPLEMENTAL_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUPPLEMENTAL_PUNCTUATION",withjint: 0x2E00,withjint: 0x2E7F)
+  public static let SYLOTI_NAGRI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SYLOTI_NAGRI",withjint: 0xA800,withjint: 0xA82F)
+  public static let TIFINAGH:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TIFINAGH",withjint: 0x2D30,withjint: 0x2D7F)
+  public static let VERTICAL_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VERTICAL_FORMS",withjint: 0xFE10,withjint: 0xFE1F)
+  public static let NKO:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "NKO",withjint: 0x7C0,withjint: 0x7FF)
+  public static let BALINESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BALINESE",withjint: 0x1B00,withjint: 0x1B7F)
+  public static let LATIN_EXTENDED_C:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_C",withjint: 0x2C60,withjint: 0x2C7F)
+  public static let LATIN_EXTENDED_D:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LATIN_EXTENDED_D",withjint: 0xA720,withjint: 0xA7FF)
+  public static let PHAGS_PA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHAGS_PA",withjint: 0xA840,withjint: 0xA87F)
+  public static let PHOENICIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHOENICIAN",withjint: 0x10900,withjint: 0x1091F)
+  public static let CUNEIFORM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CUNEIFORM",withjint: 0x12000,withjint: 0x123FF)
+  public static let CUNEIFORM_NUMBERS_AND_PUNCTUATION:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CUNEIFORM_NUMBERS_AND_PUNCTUATION",withjint: 0x12400,withjint: 0x1247F)
+  public static let COUNTING_ROD_NUMERALS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COUNTING_ROD_NUMERALS",withjint: 0x1D360,withjint: 0x1D37F)
+  public static let SUNDANESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SUNDANESE",withjint: 0x1B80,withjint: 0x1BBF)
+  public static let LEPCHA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LEPCHA",withjint: 0x1C00,withjint: 0x1C4F)
+  public static let OL_CHIKI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OL_CHIKI",withjint: 0x1C50,withjint: 0x1C7F)
+  public static let CYRILLIC_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_EXTENDED_A",withjint: 0x2DE0,withjint: 0x2DFF)
+  public static let VAI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VAI",withjint: 0xA500,withjint: 0xA63F)
+  public static let CYRILLIC_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CYRILLIC_EXTENDED_B",withjint: 0xA640,withjint: 0xA69F)
+  public static let SAURASHTRA:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SAURASHTRA",withjint: 0xA880,withjint: 0xA8DF)
+  public static let KAYAH_LI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KAYAH_LI",withjint: 0xA930,withjint: 0xA95F)
+  public static let REJANG:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "REJANG",withjint: 0xA930,withjint: 0xa5F)
+  public static let CHAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CHAM",withjint: 0xAA00,withjint: 0xAA5F)
+  public static let ANCIENT_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ANCIENT_SYMBOLS",withjint: 0x10190,withjint: 0x101CF)
+  public static let PHAISTOS_DISC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PHAISTOS_DISC",withjint: 0x101D0,withjint: 0x101FF)
+  public static let LYCIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LYCIAN",withjint: 0x10280,withjint: 0x1029F)
+  public static let CARIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CARIAN",withjint: 0x102A0,withjint: 0x102DF)
+  public static let LYDIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LYDIAN",withjint: 0x10920,withjint: 0x1093F)
+  public static let MAHJONG_TILES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MAHJONG_TILES",withjint: 0x1F000,withjint: 0x1F02F)
+  public static let DOMINO_TILES:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DOMINO_TILES",withjint: 0x1F030,withjint: 0x1F09F)
+  public static let SAMARITAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "SAMARITAN",withjint: 0x800,withjint: 0x83F)
+  public static let UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED",withjint: 0x1400,withjint: 0x167F)
+  public static let TAI_THAM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_THAM",withjint: 0x1A20,withjint: 0x1AAF)
+  public static let VEDIC_EXTENSIONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "VEDIC_EXTENSIONS",withjint: 0x1CD0,withjint: 0x1CFF)
+  public static let LISU:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "LISU",withjint: 0xA4D0,withjint: 0xA4FF)
+  public static let BAMUM:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BAMUM",withjint: 0xA6A0,withjint: 0xA6FF)
+  public static let COMMON_INDIC_NUMBER_FORMS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "COMMON_INDIC_NUMBER_FORMS",withjint: 0xA830,withjint: 0xA83F)
+  public static let DEVANAGARI_EXTENDED:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "DEVANAGARI_EXTENDED",withjint: 0xA8E0,withjint: 0xA8FF)
+  public static let HANGUL_JAMO_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO_EXTENDED_A",withjint: 0xA980,withjint: 0xA9DF)
+  public static let JAVANESE:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "JAVANESE",withjint: 0xA980,withjint: 0xA9DF)
+  public static let MYANMAR_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MYANMAR_EXTENDED_A",withjint: 0xAA60,withjint: 0xAA7F)
+  public static let TAI_VIET:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TAI_VIET",withjint: 0xAA80,withjint: 0xAADF)
+  public static let MEETEI_MAYEK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MEETEI_MAYEK",withjint: 0xAAE0,withjint: 0xABFF)
+  public static let HANGUL_JAMO_EXTENDED_B:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "HANGUL_JAMO_EXTENDED_B",withjint: 0xD7B0,withjint: 0xD7FF)
+  public static let IMPERIAL_ARAMAIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "IMPERIAL_ARAMAIC",withjint: 0x10840,withjint: 0x1085F)
+  public static let OLD_SOUTH_ARABIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_SOUTH_ARABIAN",withjint: 0x10A60,withjint: 0x10A7F)
+  public static let AVESTAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "AVESTAN",withjint: 0x10B00,withjint: 0x10B3F)
+  public static let INSCRIPTIONAL_PARTHIAN:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "INSCRIPTIONAL_PARTHIAN",withjint: 0x10B40,withjint: 0x10B5F)
+  public static let INSCRIPTIONAL_PAHLAVI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "INSCRIPTIONAL_PAHLAVI",withjint: 0x10B60,withjint: 0x10B7F)
+  public static let OLD_TURKIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "OLD_TURKIC",withjint: 0x10C00,withjint: 0x10C4F)
+  public static let RUMI_NUMERAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "RUMI_NUMERAL_SYMBOLS",withjint: 0x10E60,withjint: 0x10E7F)
+  public static let KAITHI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KAITHI",withjint: 0x11080,withjint: 0x110CF)
+  public static let EGYPTIAN_HIEROGLYPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "EGYPTIAN_HIEROGLYPHS",withjint: 0x13000,withjint: 0x1342F)
+  public static let ENCLOSED_ALPHANUMERIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_ALPHANUMERIC_SUPPLEMENT",withjint: 0x1F100,withjint: 0x1F1FF)
+  public static let ENCLOSED_IDEOGRAPHIC_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ENCLOSED_IDEOGRAPHIC_SUPPLEMENT",withjint: 0x1F200,withjint: 0x1F2FF)
+  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C",withjint: 0x2A700,withjint: 0x2B73F)
+  public static let MANDAIC:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MANDAIC",withjint: 0x840,withjint: 0x85F)
+  public static let BATAK:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BATAK",withjint: 0x1BC0,withjint: 0x1BFF)
+  public static let ETHIOPIC_EXTENDED_A:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ETHIOPIC_EXTENDED_A",withjint: 0x2DE0,withjint: 0x2DFF)
+  public static let BRAHMI:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BRAHMI",withjint: 0x11000,withjint: 0x1107F)
+  public static let BAMUM_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "BAMUM_SUPPLEMENT",withjint: 0x16800,withjint: 0x16A3F)
+  public static let KANA_SUPPLEMENT:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "KANA_SUPPLEMENT",withjint: 0x1B000,withjint: 0x1B0FF)
+  public static let PLAYING_CARDS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "PLAYING_CARDS",withjint: 0x1F0A0,withjint: 0x1F0FF)
+  public static let MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS",withjint: 0x1F300,withjint: 0x1F5FF)
+  public static let EMOTICONS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "EMOTICONS",withjint: 0x1F600,withjint: 0x1F64F)
+  public static let TRANSPORT_AND_MAP_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "TRANSPORT_AND_MAP_SYMBOLS",withjint: 0x1F680,withjint: 0x1F6FF)
+  public static let ALCHEMICAL_SYMBOLS:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "ALCHEMICAL_SYMBOLS",withjint: 0x1F700,withjint: 0x1F77F)
+  public static let CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:JavaCharacter_UnicodeBlock? = JavaCharacter_UnicodeBlock(withString: "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D",withjint: 0x2B740,withjint: 0x2B81F)
   private static var BLOCKS:[JavaCharacter_UnicodeBlock?]? = [null,UnicodeBlock.BASIC_LATIN,UnicodeBlock.LATIN_1_SUPPLEMENT,UnicodeBlock.LATIN_EXTENDED_A,UnicodeBlock.LATIN_EXTENDED_B,UnicodeBlock.IPA_EXTENSIONS,UnicodeBlock.SPACING_MODIFIER_LETTERS,UnicodeBlock.COMBINING_DIACRITICAL_MARKS,UnicodeBlock.GREEK,UnicodeBlock.CYRILLIC,UnicodeBlock.ARMENIAN,UnicodeBlock.HEBREW,UnicodeBlock.ARABIC,UnicodeBlock.SYRIAC,UnicodeBlock.THAANA,UnicodeBlock.DEVANAGARI,UnicodeBlock.BENGALI,UnicodeBlock.GURMUKHI,UnicodeBlock.GUJARATI,UnicodeBlock.ORIYA,UnicodeBlock.TAMIL,UnicodeBlock.TELUGU,UnicodeBlock.KANNADA,UnicodeBlock.MALAYALAM,UnicodeBlock.SINHALA,UnicodeBlock.THAI,UnicodeBlock.LAO,UnicodeBlock.TIBETAN,UnicodeBlock.MYANMAR,UnicodeBlock.GEORGIAN,UnicodeBlock.HANGUL_JAMO,UnicodeBlock.ETHIOPIC,UnicodeBlock.CHEROKEE,UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,UnicodeBlock.OGHAM,UnicodeBlock.RUNIC,UnicodeBlock.KHMER,UnicodeBlock.MONGOLIAN,UnicodeBlock.LATIN_EXTENDED_ADDITIONAL,UnicodeBlock.GREEK_EXTENDED,UnicodeBlock.GENERAL_PUNCTUATION,UnicodeBlock.SUPERSCRIPTS_AND_SUBSCRIPTS,UnicodeBlock.CURRENCY_SYMBOLS,UnicodeBlock.COMBINING_MARKS_FOR_SYMBOLS,UnicodeBlock.LETTERLIKE_SYMBOLS,UnicodeBlock.NUMBER_FORMS,UnicodeBlock.ARROWS,UnicodeBlock.MATHEMATICAL_OPERATORS,UnicodeBlock.MISCELLANEOUS_TECHNICAL,UnicodeBlock.CONTROL_PICTURES,UnicodeBlock.OPTICAL_CHARACTER_RECOGNITION,UnicodeBlock.ENCLOSED_ALPHANUMERICS,UnicodeBlock.BOX_DRAWING,UnicodeBlock.BLOCK_ELEMENTS,UnicodeBlock.GEOMETRIC_SHAPES,UnicodeBlock.MISCELLANEOUS_SYMBOLS,UnicodeBlock.DINGBATS,UnicodeBlock.BRAILLE_PATTERNS,UnicodeBlock.CJK_RADICALS_SUPPLEMENT,UnicodeBlock.KANGXI_RADICALS,UnicodeBlock.IDEOGRAPHIC_DESCRIPTION_CHARACTERS,UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION,UnicodeBlock.HIRAGANA,UnicodeBlock.KATAKANA,UnicodeBlock.BOPOMOFO,UnicodeBlock.HANGUL_COMPATIBILITY_JAMO,UnicodeBlock.KANBUN,UnicodeBlock.BOPOMOFO_EXTENDED,UnicodeBlock.ENCLOSED_CJK_LETTERS_AND_MONTHS,UnicodeBlock.CJK_COMPATIBILITY,UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A,UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS,UnicodeBlock.YI_SYLLABLES,UnicodeBlock.YI_RADICALS,UnicodeBlock.HANGUL_SYLLABLES,UnicodeBlock.HIGH_SURROGATES,UnicodeBlock.HIGH_PRIVATE_USE_SURROGATES,UnicodeBlock.LOW_SURROGATES,UnicodeBlock.PRIVATE_USE_AREA,UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS,UnicodeBlock.ALPHABETIC_PRESENTATION_FORMS,UnicodeBlock.ARABIC_PRESENTATION_FORMS_A,UnicodeBlock.COMBINING_HALF_MARKS,UnicodeBlock.CJK_COMPATIBILITY_FORMS,UnicodeBlock.SMALL_FORM_VARIANTS,UnicodeBlock.ARABIC_PRESENTATION_FORMS_B,UnicodeBlock.SPECIALS,UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS,UnicodeBlock.OLD_ITALIC,UnicodeBlock.GOTHIC,UnicodeBlock.DESERET,UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS,UnicodeBlock.MUSICAL_SYMBOLS,UnicodeBlock.MATHEMATICAL_ALPHANUMERIC_SYMBOLS,UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B,UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT,UnicodeBlock.TAGS,UnicodeBlock.CYRILLIC_SUPPLEMENTARY,UnicodeBlock.TAGALOG,UnicodeBlock.HANUNOO,UnicodeBlock.BUHID,UnicodeBlock.TAGBANWA,UnicodeBlock.MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A,UnicodeBlock.SUPPLEMENTAL_ARROWS_A,UnicodeBlock.SUPPLEMENTAL_ARROWS_B,UnicodeBlock.MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B,UnicodeBlock.SUPPLEMENTAL_MATHEMATICAL_OPERATORS,UnicodeBlock.KATAKANA_PHONETIC_EXTENSIONS,UnicodeBlock.VARIATION_SELECTORS,UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_A,UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_B,UnicodeBlock.LIMBU,UnicodeBlock.TAI_LE,UnicodeBlock.KHMER_SYMBOLS,UnicodeBlock.PHONETIC_EXTENSIONS,UnicodeBlock.MISCELLANEOUS_SYMBOLS_AND_ARROWS,UnicodeBlock.YIJING_HEXAGRAM_SYMBOLS,UnicodeBlock.LINEAR_B_SYLLABARY,UnicodeBlock.LINEAR_B_IDEOGRAMS,UnicodeBlock.AEGEAN_NUMBERS,UnicodeBlock.UGARITIC,UnicodeBlock.SHAVIAN,UnicodeBlock.OSMANYA,UnicodeBlock.CYPRIOT_SYLLABARY,UnicodeBlock.TAI_XUAN_JING_SYMBOLS,UnicodeBlock.VARIATION_SELECTORS_SUPPLEMENT,UnicodeBlock.ANCIENT_GREEK_MUSICAL_NOTATION,UnicodeBlock.ANCIENT_GREEK_NUMBERS,UnicodeBlock.ARABIC_SUPPLEMENT,UnicodeBlock.BUGINESE,UnicodeBlock.CJK_STROKES,UnicodeBlock.COMBINING_DIACRITICAL_MARKS_SUPPLEMENT,UnicodeBlock.COPTIC,UnicodeBlock.ETHIOPIC_EXTENDED,UnicodeBlock.ETHIOPIC_SUPPLEMENT,UnicodeBlock.GEORGIAN_SUPPLEMENT,UnicodeBlock.GLAGOLITIC,UnicodeBlock.KHAROSHTHI,UnicodeBlock.MODIFIER_TONE_LETTERS,UnicodeBlock.NEW_TAI_LUE,UnicodeBlock.OLD_PERSIAN,UnicodeBlock.PHONETIC_EXTENSIONS_SUPPLEMENT,UnicodeBlock.SUPPLEMENTAL_PUNCTUATION,UnicodeBlock.SYLOTI_NAGRI,UnicodeBlock.TIFINAGH,UnicodeBlock.VERTICAL_FORMS,UnicodeBlock.NKO,UnicodeBlock.BALINESE,UnicodeBlock.LATIN_EXTENDED_C,UnicodeBlock.LATIN_EXTENDED_D,UnicodeBlock.PHAGS_PA,UnicodeBlock.PHOENICIAN,UnicodeBlock.CUNEIFORM,UnicodeBlock.CUNEIFORM_NUMBERS_AND_PUNCTUATION,UnicodeBlock.COUNTING_ROD_NUMERALS,UnicodeBlock.SUNDANESE,UnicodeBlock.LEPCHA,UnicodeBlock.OL_CHIKI,UnicodeBlock.CYRILLIC_EXTENDED_A,UnicodeBlock.VAI,UnicodeBlock.CYRILLIC_EXTENDED_B,UnicodeBlock.SAURASHTRA,UnicodeBlock.KAYAH_LI,UnicodeBlock.REJANG,UnicodeBlock.CHAM,UnicodeBlock.ANCIENT_SYMBOLS,UnicodeBlock.PHAISTOS_DISC,UnicodeBlock.LYCIAN,UnicodeBlock.CARIAN,UnicodeBlock.LYDIAN,UnicodeBlock.MAHJONG_TILES,UnicodeBlock.DOMINO_TILES,UnicodeBlock.SAMARITAN,UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED,UnicodeBlock.TAI_THAM,UnicodeBlock.VEDIC_EXTENSIONS,UnicodeBlock.LISU,UnicodeBlock.BAMUM,UnicodeBlock.COMMON_INDIC_NUMBER_FORMS,UnicodeBlock.DEVANAGARI_EXTENDED,UnicodeBlock.HANGUL_JAMO_EXTENDED_A,UnicodeBlock.JAVANESE,UnicodeBlock.MYANMAR_EXTENDED_A,UnicodeBlock.TAI_VIET,UnicodeBlock.MEETEI_MAYEK,UnicodeBlock.HANGUL_JAMO_EXTENDED_B,UnicodeBlock.IMPERIAL_ARAMAIC,UnicodeBlock.OLD_SOUTH_ARABIAN,UnicodeBlock.AVESTAN,UnicodeBlock.INSCRIPTIONAL_PARTHIAN,UnicodeBlock.INSCRIPTIONAL_PAHLAVI,UnicodeBlock.OLD_TURKIC,UnicodeBlock.RUMI_NUMERAL_SYMBOLS,UnicodeBlock.KAITHI,UnicodeBlock.EGYPTIAN_HIEROGLYPHS,UnicodeBlock.ENCLOSED_ALPHANUMERIC_SUPPLEMENT,UnicodeBlock.ENCLOSED_IDEOGRAPHIC_SUPPLEMENT,UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C,UnicodeBlock.MANDAIC,UnicodeBlock.BATAK,UnicodeBlock.ETHIOPIC_EXTENDED_A,UnicodeBlock.BRAHMI,UnicodeBlock.BAMUM_SUPPLEMENT,UnicodeBlock.KANA_SUPPLEMENT,UnicodeBlock.PLAYING_CARDS,UnicodeBlock.MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS,UnicodeBlock.EMOTICONS,UnicodeBlock.TRANSPORT_AND_MAP_SYMBOLS,UnicodeBlock.ALCHEMICAL_SYMBOLS,UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D]
   private static let blockAliasMap:JavaUtilMap? = JavaUtilHashMap()
 
@@ -852,7 +852,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
     if (blockName == nil) {
       throw JavaNullPointerException(withString: "blockName == null")
     }
-    var block:jint = JavaCharacter_UnicodeBlock.forNameImpl(blockName)
+    var block:jint = jint(JavaCharacter_UnicodeBlock.forNameImpl(blockName))
     if (block == -1) {
       throw JavaIllegalArgumentException(withString: "Unknown block: \(blockName)")
     }
@@ -865,7 +865,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
 
   public static func of(codePoint:jint) ->JavaCharacter_UnicodeBlock?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
-    var block:jint = JavaCharacter_UnicodeBlock.ofImpl(codePoint)
+    var block:jint = jint(JavaCharacter_UnicodeBlock.ofImpl(codePoint))
     if (block == -1 || block >= JavaCharacter_UnicodeBlock.BLOCKS!.length) {
       return nil
     }
@@ -884,7 +884,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
     if (JavaCharacter_UnicodeBlock.blockAliasMap!.containsKey(blockName)) {
       blockName = JavaCharacter_UnicodeBlock.blockAliasMap!.get(blockName).toString()
     }
-    for (var i:jint = 1; i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
+    for (var i:jint = jint(1); i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
       if (blockName!.equals(JavaCharacter_UnicodeBlock.BLOCKS![i].toString())) {
         return (jint(i))
       }
@@ -893,7 +893,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
   }
 
   static func ofImpl(codePoint:jint) ->jint  {
-    for (var i:jint = 1; i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
+    for (var i:jint = jint(1); i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
       if (codePoint >= JavaCharacter_UnicodeBlock.BLOCKS![i].rangeStart && codePoint <= JavaCharacter_UnicodeBlock.BLOCKS![i].rangeEnd) {
         return (jint(i))
       }
