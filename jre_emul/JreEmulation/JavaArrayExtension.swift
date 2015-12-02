@@ -26,7 +26,7 @@ extension Array {
         get {
             return self.count
         }
-    }
+    
 }
 
 extension SequenceType where Generator.Element == Int {

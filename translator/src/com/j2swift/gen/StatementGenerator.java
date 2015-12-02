@@ -108,12 +108,7 @@ public class StatementGenerator extends TreeVisitor {
 					initializer.getExpressions());
 		} else {
 			List<Expression> dimensions = node.getDimensions();
-			if (dimensions.size() == 1) {
-				return newSingleDimensionArrayInvocation(arrayType,
-						dimensions.get(0));
-			} else {
-				return newMultiDimensionArrayInvocation(arrayType, dimensions);
-			}
+			return newMultiDimensionArrayInvocation(arrayType, dimensions);
 		}
 	}
 
@@ -925,50 +920,60 @@ public class StatementGenerator extends TreeVisitor {
 
 	private boolean newMultiDimensionArrayInvocation(ITypeBinding arrayType,
 			List<Expression> dimensions) {
-		// TODO Auto-generated method stub
+		buffer.append(getObjectArrayInvocation(arrayType, dimensions, 0));
 		return false;
 	}
 
-	private boolean newSingleDimensionArrayInvocation(ITypeBinding arrayType,
-			Expression expression) {
-		buffer.append(nameTable.getFullName(arrayType));
-		buffer.append("(count: ");
+	private String getObjectArrayInvocation(ITypeBinding arrayType,
+			List<Expression> dimensions, int dimensionCount) {
+		if (arrayType == null || dimensionCount < 0
+				|| dimensionCount >= dimensions.size()) {
+			return "";
+		}
+		StringBuilder result = new StringBuilder("");
+		result.append(nameTable.getFullName(arrayType));
+		result.append("(count: ");
+		Expression expression = dimensions.get(dimensionCount);
 		if (expression != null) {
-			expression.accept(this);
+			result.append(StatementGenerator.generate(expression,
+					expression.getLineNumber()));
+		} else {
+			result.append(0);
 		}
-		else {
-			buffer.append(0);
+		result.append(", repeatedValue: ");
+		if (dimensionCount < dimensions.size() - 1) {
+			result.append(getObjectArrayInvocation(
+					arrayType.getComponentType(), dimensions,
+					dimensionCount + 1));
+		} else {
+			result.append(getDefaultValue(arrayType.getComponentType()));
 		}
-		buffer.append(", repeatedValue: ");
-		ITypeBinding componentType = arrayType.getComponentType();
-		if (!componentType.isPrimitive()) {
-			buffer.append("nil");
-		}
-		else {
-			buffer.append(getDefaultValue(componentType));
-		}
-		buffer.append(")");
-		return false;
+		result.append(")");
+
+		return result.toString();
 	}
-	
+
 	private String getDefaultValue(ITypeBinding binding) {
 		char type = binding.getBinaryName().charAt(0);
-		if (type == 'I' || type == 'S' || type == 'B') {//0
+		if (type == 'I' || type == 'S' || type == 'B') {// 0
 			return "0";
-		} else if (type == 'C') {//0
+		} else if (type == 'C') {// 0
 			return "0";
-		} if (type == 'J') {//new Long(0)
+		}
+		if (type == 'J') {// new Long(0)
 			return "0";
-		} if (type == 'F') {//new Float(0.0)
+		}
+		if (type == 'F') {// new Float(0.0)
 			return "0.0";
-		} if (type == 'D') {//new Double(0.0)
+		}
+		if (type == 'D') {// new Double(0.0)
 			return "0.0";
-		} if (type == 'Z') {//false
+		}
+		if (type == 'Z') {// false
 			return "false";
 		}
 		return "0";
 	}
-
 
 	private void printConstructorInvocationArgs(List<Expression> args) {
 		for (int i = 0; i < args.size(); i++) {

@@ -1335,17 +1335,23 @@ public class NameTable {
 	}
 
 	private String getArrayFullName(ITypeBinding binding) {
-		ITypeBinding erasure = binding.getErasure();
-		ITypeBinding componentType = erasure.getComponentType();
-		StringBuilder result = new StringBuilder("[]");
+		ITypeBinding componentType = binding.getErasure();
+		StringBuilder result = new StringBuilder("");
+		int currentIndex = 0;
 		while (componentType != null && componentType.getDimensions() > 0) {
-			result.insert(result.length() / 2, "[]");
 			componentType = componentType.getComponentType();
+			if (componentType != null && !componentType.isArray()) {
+				result.insert(currentIndex, "[]");
+			}
+			else {
+				result.insert(currentIndex, "[?]");
+			}
+			currentIndex ++;
 		}
 		if (componentType.isPrimitive()) {
-			result.insert(result.length() / 2, getSpecificObjCType(componentType));
+			result.insert(currentIndex, getSpecificObjCType(componentType));
 		} else {
-			result.insert(result.length() / 2, getSpecificObjCType(componentType) + "?");
+			result.insert(currentIndex, getSpecificObjCType(componentType) + "?");
 		}
 		return result.toString();
 	}
