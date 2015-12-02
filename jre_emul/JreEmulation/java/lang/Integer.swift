@@ -9,7 +9,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
   private let value:jint
 
   private static let serialVersionUID:jlong = 1360826667806852920
-  public static let MAX_VALUE:jint = jint(0x7FFFFFFF)
+  public static let MAX_VALUE:jint = 0x7FFFFFFF
   public static let MIN_VALUE:jint = -0x7fffffff - 1
   public static let SIZE:jint = 32
   private static let NTZ_TABLE:[jbyte]? = [32, 0, 1, 12, 2, 6, -1, 13, 3, -1, 7, -1, -1, -1, -1, 14, 10, 4, -1, -1, 8, -1, -1, 25, -1, -1, -1, -1, -1, 21, 27, 15, 31, 11, 5, -1, -1, -1, -1, -1, 9, -1, -1, 24, -1, -1, 20, 26, 30, -1, -1, -1, -1, 23, -1, 19, 29, -1, 22, 18, 28, 17, 16, -1]
@@ -45,20 +45,20 @@ a
   }
 
   public static func decode(string:String?) throws ->JavaInteger?  {
-    var length:jint = string!.length()
-    var i:jint = 0
+    var length:jint = jint(string!.length())
+    var i:jint = jint(0)
     if (length == 0) {
       throw try JavaInteger.invalidInt(string)!
     }
-    var firstDigit:jchar = string!.charAt(i)
-    var negative:jboolean = firstDigit == "-".asciiValue
+    var firstDigit:jchar = jchar(string!.charAt(i))
+    var negative:jboolean = jboolean(firstDigit == "-".asciiValue)
     if (negative) {
       if (length == 1) {
         throw try JavaInteger.invalidInt(string)!
       }
       firstDigit = string!.charAt(++i)
     }
-    var base:jint = 10
+    var base:jint = jint(10)
     if (firstDigit == "0".asciiValue) {
       if (++i == length) {
         return JavaInteger.valueOf(0)
@@ -79,7 +79,7 @@ a
       }
       base = 16
     }
-    var result:jint = try JavaInteger.parse(string,i,base,negative)
+    var result:jint = jint(try JavaInteger.parse(string,i,base,negative))
     return JavaInteger.valueOf(result)
   }
 
@@ -169,12 +169,12 @@ a
     if (string == nil) {
       throw try JavaInteger.invalidInt(string)!
     }
-    var length:jint = string!.length()
-    var i:jint = 0
+    var length:jint = jint(string!.length())
+    var i:jint = jint(0)
     if (length == 0) {
       throw try JavaInteger.invalidInt(string)!
     }
-    var negative:jboolean = string!.charAt(i) == "-".asciiValue
+    var negative:jboolean = jboolean(string!.charAt(i) == "-".asciiValue)
     if (negative && ++i == length) {
       throw try JavaInteger.invalidInt(string)!
     }
@@ -182,18 +182,18 @@ a
   }
 
   static func parse(string:String?, _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
-    var max:jint = JavaInteger.MIN_VALUE / radix
-    var result:jint = 0
-    var length:jint = string!.length()
+    var max:jint = jint(JavaInteger.MIN_VALUE / radix)
+    var result:jint = jint(0)
+    var length:jint = jint(string!.length())
     while (offset < length) {
-      var digit:jint = JavaCharacter.digit(string!.charAt(offset++),radix)
+      var digit:jint = jint(JavaCharacter.digit(string!.charAt(offset++),radix))
       if (digit == -1) {
         throw try JavaInteger.invalidInt(string)!
       }
       if (max > result) {
         throw try JavaInteger.invalidInt(string)!
       }
-      var next:jint = result * radix - digit
+      var next:jint = jint(result * radix - digit)
       if (next > result) {
         throw try JavaInteger.invalidInt(string)!
       }
@@ -261,7 +261,7 @@ a
     if (i <= 0) {
       return (jint(jint(~i >> 26) & 32))
     }
-    var n:jint = 1
+    var n:jint = jint(1)
     if (i >> 16 == 0) {
       n += 16
       i <<= 16
@@ -282,16 +282,16 @@ a
   }
 
   public static func numberOfTrailingZeros(i:jint) ->jint  {
-    return (jint(JavaInteger.NTZ_TABLE![jint(jint(i & -i) * jint(0x0450FBAF)) >>> 26]))
+    return (jint(JavaInteger.NTZ_TABLE![jint(jint(i & -i) * 0x0450FBAF) >>> 26]))
   }
 
   public static func bitCount(var i:jint) ->jint  {
-    i -= jint(i >> 1) & jint(0x55555555)
-    i = jint(i & jint(0x33333333)) + jint(jint(i >> 2) & jint(0x33333333))
-    i = jint(jint(i >> 4) + i) & jint(0x0F0F0F0F)
+    i -= jint(i >> 1) & 0x55555555
+    i = jint(i & 0x33333333) + jint(jint(i >> 2) & 0x33333333)
+    i = jint(jint(i >> 4) + i) & 0x0F0F0F0F
     i += i >> 8
     i += i >> 16
-    return (jint(i & jint(0x0000003F)))
+    return (jint(i & 0x0000003F))
   }
 
   public static func rotateLeft(i:jint, _ distance:jint) ->jint  {
@@ -303,15 +303,15 @@ a
   }
 
   public static func reverseBytes(var i:jint) ->jint  {
-    i = jint(jint(i >>> 8) & jint(0x00FF00FF)) | jint(jint(i & jint(0x00FF00FF)) << 8)
+    i = jint(jint(i >>> 8) & 0x00FF00FF) | jint(jint(i & 0x00FF00FF) << 8)
     return (jint(jint(i >>> 16) | jint(i << 16)))
   }
 
   public static func reverse(var i:jint) ->jint  {
-    i = jint(jint(i >>> 1) & jint(0x55555555)) | jint(jint(i & jint(0x55555555)) << 1)
-    i = jint(jint(i >>> 2) & jint(0x33333333)) | jint(jint(i & jint(0x33333333)) << 2)
-    i = jint(jint(i >>> 4) & jint(0x0F0F0F0F)) | jint(jint(i & jint(0x0F0F0F0F)) << 4)
-    i = jint(jint(i >>> 8) & jint(0x00FF00FF)) | jint(jint(i & jint(0x00FF00FF)) << 8)
+    i = jint(jint(i >>> 1) & 0x55555555) | jint(jint(i & 0x55555555) << 1)
+    i = jint(jint(i >>> 2) & 0x33333333) | jint(jint(i & 0x33333333) << 2)
+    i = jint(jint(i >>> 4) & 0x0F0F0F0F) | jint(jint(i & 0x0F0F0F0F) << 4)
+    i = jint(jint(i >>> 8) & 0x00FF00FF) | jint(jint(i & 0x00FF00FF) << 8)
     return (jint(jint((i >>> 16)) | jint(jint(i) << 16)))
   }
 

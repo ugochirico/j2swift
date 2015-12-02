@@ -131,9 +131,7 @@ public class LiteralGenerator {
     if (token.equals("0x80000000") || token.equals("-2147483648")) {
       // Convert min int literal to an expression
       token = "-0x7fffffff - 1";
-    } else if (token.startsWith("0x")) {
-      token = "jint(" + token + ")";  // Ensure constant is treated as signed.
-    }
+    } 
     return token;
   }
 
@@ -165,7 +163,7 @@ public class LiteralGenerator {
 
   public static String generate(Long value) {
     if (value.longValue() == Long.MIN_VALUE) {
-      return "((jlong) 0x8000000000000000)";
+      return "0x8000000000000000";
     } else {
       return value.toString();
     }
@@ -173,7 +171,7 @@ public class LiteralGenerator {
 
   public static String generate(Integer value) {
     if (value.intValue() == Integer.MIN_VALUE) {
-      return "((jint) 0x80000000)";
+      return "0x80000000";
     } else {
       return value.toString();
     }

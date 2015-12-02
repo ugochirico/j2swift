@@ -10,6 +10,8 @@ import com.j2swift.ast.Expression;
 import com.j2swift.ast.InfixExpression;
 import com.j2swift.ast.MethodDeclaration;
 import com.j2swift.ast.PostfixExpression;
+import com.j2swift.ast.PrefixExpression;
+import com.j2swift.ast.PrefixExpression.Operator;
 import com.j2swift.ast.SimpleName;
 import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.ast.TreeVisitor;
@@ -52,6 +54,20 @@ public class FinalParameterRewriter extends TreeVisitor {
 			SimpleName simpleName = (SimpleName)exp;
 			if (simpleName.getBinding() instanceof IVariableBinding) {
 				setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean visit(PrefixExpression node) {
+		Expression exp = node.getOperand();
+		if (node.getOperator() == Operator.INCREMENT || node.getOperator() == Operator.DECREMENT) {
+			if (exp instanceof SimpleName) {
+				SimpleName simpleName = (SimpleName)exp;
+				if (simpleName.getBinding() instanceof IVariableBinding) {
+					setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+				}
 			}
 		}
 		return false;
