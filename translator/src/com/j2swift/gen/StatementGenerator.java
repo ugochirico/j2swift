@@ -946,7 +946,12 @@ public class StatementGenerator extends TreeVisitor {
 					arrayType.getComponentType(), dimensions,
 					dimensionCount + 1));
 		} else {
-			result.append(getDefaultValue(arrayType.getComponentType()));
+			if (arrayType.getComponentType().isPrimitive()) {
+				result.append(getDefaultValue(arrayType.getComponentType()));
+			}
+			else {
+				result.append("nil");
+			}
 		}
 		result.append(")");
 
