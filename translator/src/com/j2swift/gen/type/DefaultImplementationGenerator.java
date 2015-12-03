@@ -199,8 +199,8 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 			sb.append("()");
 		} else {
 			String token = "_";
-			String variable = "var ";
 			for (int i = 0; i < params.size(); i++) {
+				String variable = "var ";
 				SingleVariableDeclaration declartion = params.get(i);
 				IVariableBinding var = declartion.getVariableBinding();
 				if (BindingUtil.isFinal(var) || declartion.isFinalDeclaration()) {

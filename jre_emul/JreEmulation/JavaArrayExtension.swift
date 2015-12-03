@@ -26,11 +26,5 @@ extension Array {
         get {
             return self.count
         }
-    
-}
-
-extension SequenceType where Generator.Element == Int {
-    var sum: Int {
-        return reduce(0) { $0 + $1 }
     }
 }

@@ -142,7 +142,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     return (jint(jint(h | l) + 0x10000))
   }
 
-  public static func codePointAt(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
+  public static func codePointAt(seq:JavaCharSequence?, var _ index:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
@@ -169,7 +169,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     //TODO: add Native implemention
   }
 
-  public static func codePointBefore(seq:JavaCharSequence?, _ index:jint) throws ->jint  {
+  public static func codePointBefore(seq:JavaCharSequence?, var _ index:jint) throws ->jint  {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }

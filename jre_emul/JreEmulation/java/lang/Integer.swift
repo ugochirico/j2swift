@@ -14,9 +14,8 @@ public class JavaInteger : JavaNumber, JavaComparable {
   public static let SIZE:jint = 32
   private static let NTZ_TABLE:[jbyte]? = [32, 0, 1, 12, 2, 6, -1, 13, 3, -1, 7, -1, -1, -1, -1, 14, 10, 4, -1, -1, 8, -1, -1, 25, -1, -1, -1, -1, -1, 21, 27, 15, 31, 11, 5, -1, -1, -1, -1, -1, 9, -1, -1, 24, -1, -1, 20, 26, 30, -1, -1, -1, -1, 23, -1, 19, 29, -1, 22, 18, 28, 17, 16, -1]
   public static let TYPE:JavaClass? = ([jint].getClass().getComponentType())
-    var array : [JavaInteger?] =
-  private static let SMALL_VALUES:[JavaInteger?]? = [[JavaInteger?]](count: 256, repeatedValue: array)
-a
+  private static let SMALL_VALUES:[JavaInteger?]? = [JavaInteger?](count: 256, repeatedValue: nil)
+
 
   public init(withjint value:jint)  {
     self.value = value
@@ -181,7 +180,7 @@ a
     return (jint(try JavaInteger.parse(string,i,radix,negative)))
   }
 
-  static func parse(string:String?, _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
+  static func parse(string:String?, var _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
     var max:jint = jint(JavaInteger.MIN_VALUE / radix)
     var result:jint = jint(0)
     var length:jint = jint(string!.length())
