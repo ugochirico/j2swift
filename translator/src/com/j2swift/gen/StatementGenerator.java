@@ -893,7 +893,9 @@ public class StatementGenerator extends TreeVisitor {
 				if (exp instanceof StringLiteral) {
 					result.append("\"").append(exp).append("\"");
 				} else {
-					result.append(exp);
+
+					result.append(StatementGenerator.generate(exp,
+							exp.getLineNumber()));
 				}
 			}
 			if (i != elements.size() - 1) {
@@ -955,8 +957,7 @@ public class StatementGenerator extends TreeVisitor {
 		} else {
 			if (arrayType.getComponentType().isPrimitive()) {
 				result.append(getDefaultValue(arrayType.getComponentType()));
-			}
-			else {
+			} else {
 				result.append("nil");
 			}
 		}
