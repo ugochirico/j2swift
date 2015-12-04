@@ -2,10 +2,14 @@ package com.j2swift.gen;
 
 import java.util.Iterator;
 import java.util.List;
+
+import jdk.nashorn.internal.ir.BlockStatement;
+
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+
 import com.j2swift.Options;
 import com.j2swift.ast.ArrayAccess;
 import com.j2swift.ast.ArrayCreation;
@@ -387,10 +391,24 @@ public class StatementGenerator extends TreeVisitor {
 		buffer.append("if (");
 		node.getExpression().accept(this);
 		buffer.append(") ");
+		final boolean hasBlock = node.getThenStatement() instanceof Block;
+		if (!hasBlock) {
+			buffer.append("{\n");
+		}
 		node.getThenStatement().accept(this);
+		if (!hasBlock) {
+			buffer.append("}");
+		}
 		if (node.getElseStatement() != null) {
 			buffer.append(" else ");
+			final boolean elseHasBlock = node.getElseStatement() instanceof Block || (node.getElseStatement() instanceof IfStatement);
+			if (!elseHasBlock) {
+				buffer.append("{\n");
+			}
 			node.getElseStatement().accept(this);
+			if (!elseHasBlock) {
+				buffer.append("}\n");
+			}
 		}
 		return false;
 	}

@@ -592,9 +592,13 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     while (low <= high) {
       mid = jint(low + high) >> 1
       value = table![mid]
-      if (c > value) low = mid + 1
-      else if (c == value) return (jint(mid))
-      else high = mid - 1
+      if (c > value) {
+        low = mid + 1
+      } else if (c == value) {
+        return (jint(mid))
+      } else {
+        high = mid - 1
+      }
     }
     return (jint(mid - jint(c < value ? 1 : 0)))
   }
