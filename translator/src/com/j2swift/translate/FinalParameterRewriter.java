@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
+import com.j2swift.ast.ArrayAccess;
 import com.j2swift.ast.Assignment;
 import com.j2swift.ast.Expression;
 import com.j2swift.ast.InfixExpression;
@@ -43,6 +44,16 @@ public class FinalParameterRewriter extends TreeVisitor {
 			SimpleName simpleName = (SimpleName)exp;
 			if (simpleName.getBinding() instanceof IVariableBinding) {
 				setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+			}
+		}
+		if (exp instanceof ArrayAccess) {
+			ArrayAccess arrayAccess = (ArrayAccess)exp;
+			Expression array =  arrayAccess.getArray();
+			if (array instanceof SimpleName) {
+				SimpleName simpleName = (SimpleName)array;
+				if (simpleName.getBinding() instanceof IVariableBinding) {
+					setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+				}
 			}
 		}
 	}

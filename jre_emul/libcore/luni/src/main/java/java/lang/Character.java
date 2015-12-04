@@ -1833,7 +1833,7 @@ public final class Character implements Serializable, Comparable<Character> {
          *             if {@code blockName} is not the name of any known block.
          * @since 1.5
          */
-        public static UnicodeBlock forName(String blockName) {
+        public static UnicodeBlock forName(String blockName) throws RuntimeException {
             if (blockName == null) {
                 throw new NullPointerException("blockName == null");
             }

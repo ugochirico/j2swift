@@ -196,7 +196,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     //TODO: add Native implemention
   }
 
-  public static func toChars(codePoint:jint, _ dst:[jchar]?, _ dstIndex:jint) throws ->jint  {
+  public static func toChars(codePoint:jint, var _ dst:[jchar]?, _ dstIndex:jint) throws ->jint  {
     try JavaCharacter.checkValidCodePoint(codePoint)
     if (dst == nil) {
       throw JavaNullPointerException(withString: "dst == null")
@@ -852,7 +852,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
   private static let blockAliasMap:JavaUtilMap? = JavaUtilHashMap()
 
 
-  public static func forName(blockName:String?) ->JavaCharacter_UnicodeBlock?  {
+  public static func forName(blockName:String?) throws ->JavaCharacter_UnicodeBlock?  {
     if (blockName == nil) {
       throw JavaNullPointerException(withString: "blockName == null")
     }
