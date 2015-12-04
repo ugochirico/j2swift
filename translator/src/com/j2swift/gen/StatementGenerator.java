@@ -837,7 +837,7 @@ public class StatementGenerator extends TreeVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		if (BindingUtil.isFinal(node.getVariableBinding())) {
+		if (BindingUtil.isFinal(node.getVariableBinding()) || node.isUserDefineFinal()) {
 			buffer.append("let").append(" ");
 		} else {
 			buffer.append("var").append(" ");

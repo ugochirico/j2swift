@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 
 import com.j2swift.ast.ArrayAccess;
 import com.j2swift.ast.Assignment;
@@ -16,10 +17,13 @@ import com.j2swift.ast.PrefixExpression.Operator;
 import com.j2swift.ast.SimpleName;
 import com.j2swift.ast.SingleVariableDeclaration;
 import com.j2swift.ast.TreeVisitor;
+import com.j2swift.ast.VariableDeclarationFragment;
+import com.j2swift.util.BindingUtil;
 
 public class FinalParameterRewriter extends TreeVisitor {
 
 	private List<SingleVariableDeclaration> parameteList = new ArrayList<SingleVariableDeclaration>();
+	private List<VariableDeclarationFragment> varDeclarationList = new ArrayList<VariableDeclarationFragment>();
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
@@ -29,7 +33,18 @@ public class FinalParameterRewriter extends TreeVisitor {
 	
 	@Override
 	public void endVisit(MethodDeclaration node) {
+		for (VariableDeclarationFragment fragment : varDeclarationList) {
+			fragment.setUserDefineFinal(true);
+		}
+		varDeclarationList.clear();
 		parameteList.clear();
+	}
+	
+	public boolean visit(VariableDeclarationFragment node) {
+		if (!BindingUtil.isFinal(node.getVariableBinding())) {
+			varDeclarationList.add(node);
+		}
+		return true;
 	}
 	
 	@Override
@@ -44,6 +59,7 @@ public class FinalParameterRewriter extends TreeVisitor {
 			SimpleName simpleName = (SimpleName)exp;
 			if (simpleName.getBinding() instanceof IVariableBinding) {
 				setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+				removeVarDeclaration((IVariableBinding)simpleName.getBinding());
 			}
 		}
 		if (exp instanceof ArrayAccess) {
@@ -53,6 +69,7 @@ public class FinalParameterRewriter extends TreeVisitor {
 				SimpleName simpleName = (SimpleName)array;
 				if (simpleName.getBinding() instanceof IVariableBinding) {
 					setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+					removeVarDeclaration((IVariableBinding)simpleName.getBinding());
 				}
 			}
 		}
@@ -65,6 +82,7 @@ public class FinalParameterRewriter extends TreeVisitor {
 			SimpleName simpleName = (SimpleName)exp;
 			if (simpleName.getBinding() instanceof IVariableBinding) {
 				setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+				removeVarDeclaration((IVariableBinding)simpleName.getBinding());
 			}
 		}
 		return false;
@@ -78,6 +96,7 @@ public class FinalParameterRewriter extends TreeVisitor {
 				SimpleName simpleName = (SimpleName)exp;
 				if (simpleName.getBinding() instanceof IVariableBinding) {
 					setVariableBindingDeclarationModified((IVariableBinding)simpleName.getBinding());
+					removeVarDeclaration((IVariableBinding)simpleName.getBinding());
 				}
 			}
 		}
@@ -88,6 +107,15 @@ public class FinalParameterRewriter extends TreeVisitor {
 		for (SingleVariableDeclaration declaration : parameteList) {
 			if (declaration.getVariableBinding() == variableBinding) {
 				declaration.setFinalDeclaration(false);
+				break;
+			}
+		}
+	}
+	
+	private void removeVarDeclaration(IVariableBinding variableBinding) {
+		for (VariableDeclarationFragment fragment : varDeclarationList) {
+			if (fragment.getVariableBinding() == variableBinding) {
+				varDeclarationList.remove(fragment);
 				break;
 			}
 		}

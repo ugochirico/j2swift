@@ -137,8 +137,8 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func toCodePoint(high:jchar, _ low:jchar) ->jint  {
-    var h:jint = jint(jint(high & 0x3FF) << 10)
-    var l:jint = jint(low & 0x3FF)
+    let h:jint = jint(jint(high & 0x3FF) << 10)
+    let l:jint = jint(low & 0x3FF)
     return (jint(jint(h | l) + 0x10000))
   }
 
@@ -146,15 +146,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = jint(seq!.length())
+    let len:jint = jint(seq!.length())
     if (index < 0 || index >= len) {
       throw JavaIndexOutOfBoundsException()
     }
-    var high:jchar = jchar(seq!.charAt(index++))
+    let high:jchar = jchar(seq!.charAt(index++))
     if (index >= len) {
       return (jint(high))
     }
-    var low:jchar = jchar(seq!.charAt(index))
+    let low:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
       return (jint(JavaCharacter.toCodePoint(high,low)))
     }
@@ -173,15 +173,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = jint(seq!.length())
+    let len:jint = jint(seq!.length())
     if (index < 1 || index > len) {
       throw JavaIndexOutOfBoundsException()
     }
-    var low:jchar = jchar(seq!.charAt(--index))
+    let low:jchar = jchar(seq!.charAt(--index))
     if (--index < 0) {
       return (jint(low))
     }
-    var high:jchar = jchar(seq!.charAt(index))
+    let high:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
       return (jint(JavaCharacter.toCodePoint(high,low)))
     }
@@ -208,9 +208,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       if (dstIndex == dst!.length - 1) {
         throw JavaIndexOutOfBoundsException()
       }
-      var cpPrime:jint = jint(codePoint - 0x10000)
-      var high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
-      var low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
+      let cpPrime:jint = jint(codePoint - 0x10000)
+      let high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
+      let low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
       dst![dstIndex] = jchar(high)
       dst![dstIndex + 1] = jchar(low)
       return (jint(2))
@@ -222,9 +222,9 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   public static func toChars(codePoint:jint) ->[jchar]?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
     if (JavaCharacter.isSupplementaryCodePoint(codePoint)) {
-      var cpPrime:jint = jint(codePoint - 0x10000)
-      var high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
-      var low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
+      let cpPrime:jint = jint(codePoint - 0x10000)
+      let high:jint = jint(0xD800 | jint(jint(cpPrime >> 10) & 0x3FF))
+      let low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
       return [jchar(high),jchar(low)]
     }
     return [jchar(codePoint)]
@@ -234,7 +234,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = jint(seq!.length())
+    let len:jint = jint(seq!.length())
     if (beginIndex < 0 || endIndex > len || beginIndex > endIndex) {
       throw JavaIndexOutOfBoundsException()
     }
@@ -262,7 +262,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     if (seq == nil) {
       throw JavaNullPointerException(withString: "seq == null")
     }
-    var len:jint = jint(seq!.length())
+    let len:jint = jint(seq!.length())
     if (index < 0 || index > len) {
       throw JavaIndexOutOfBoundsException()
     }
@@ -278,7 +278,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
           throw JavaIndexOutOfBoundsException()
         }
         if (JavaCharacter.isHighSurrogate(seq!.charAt(i))) {
-          var next:jint = jint(i + 1)
+          let next:jint = jint(i + 1)
           if (next < len && JavaCharacter.isLowSurrogate(seq!.charAt(next))) {
             i++
           }
@@ -296,7 +296,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
         throw JavaIndexOutOfBoundsException()
       }
       if (JavaCharacter.isLowSurrogate(seq!.charAt(i))) {
-        var prev:jint = jint(i - 1)
+        let prev:jint = jint(i - 1)
         if (prev >= 0 && JavaCharacter.isHighSurrogate(seq!.charAt(prev))) {
           i--
         }
@@ -332,7 +332,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     }
     var result:String? = JavaCharacter.getNameImpl(codePoint)
     if (result == nil) {
-      var blockName:String? = JavaCharacter_UnicodeBlock.of(codePoint).toString().replace("_".asciiValue," ".asciiValue)
+      let blockName:String? = JavaCharacter_UnicodeBlock.of(codePoint).toString().replace("_".asciiValue," ".asciiValue)
       result = "\(blockName) \(IntegralToString.intToHexString(codePoint,true,0))"
     }
     return result
@@ -856,7 +856,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
     if (blockName == nil) {
       throw JavaNullPointerException(withString: "blockName == null")
     }
-    var block:jint = jint(JavaCharacter_UnicodeBlock.forNameImpl(blockName))
+    let block:jint = jint(JavaCharacter_UnicodeBlock.forNameImpl(blockName))
     if (block == -1) {
       throw JavaIllegalArgumentException(withString: "Unknown block: \(blockName)")
     }
@@ -869,7 +869,7 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
 
   public static func of(codePoint:jint) ->JavaCharacter_UnicodeBlock?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
-    var block:jint = jint(JavaCharacter_UnicodeBlock.ofImpl(codePoint))
+    let block:jint = jint(JavaCharacter_UnicodeBlock.ofImpl(codePoint))
     if (block == -1 || block >= JavaCharacter_UnicodeBlock.BLOCKS!.length) {
       return nil
     }

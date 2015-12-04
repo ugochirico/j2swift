@@ -21,6 +21,16 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * of a single variable.
  */
 public class VariableDeclarationFragment extends VariableDeclaration {
+	
+  private boolean userDefineFinal = false;
+  
+  public boolean isUserDefineFinal() {
+		return userDefineFinal;
+	}
+
+	public void setUserDefineFinal(boolean userDefineFinal) {
+		this.userDefineFinal = userDefineFinal;
+	}
 
   public VariableDeclarationFragment(org.eclipse.jdt.core.dom.VariableDeclarationFragment jdtNode) {
     super(jdtNode);

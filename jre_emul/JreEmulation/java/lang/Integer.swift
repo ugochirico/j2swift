@@ -44,13 +44,13 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   public static func decode(string:String?) throws ->JavaInteger?  {
-    var length:jint = jint(string!.length())
+    let length:jint = jint(string!.length())
     var i:jint = jint(0)
     if (length == 0) {
       throw try JavaInteger.invalidInt(string)!
     }
     var firstDigit:jchar = jchar(string!.charAt(i))
-    var negative:jboolean = jboolean(firstDigit == "-".asciiValue)
+    let negative:jboolean = jboolean(firstDigit == "-".asciiValue)
     if (negative) {
       if (length == 1) {
         throw try JavaInteger.invalidInt(string)!
@@ -78,7 +78,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
       }
       base = 16
     }
-    var result:jint = jint(try JavaInteger.parse(string,i,base,negative))
+    let result:jint = jint(try JavaInteger.parse(string,i,base,negative))
     return JavaInteger.valueOf(result)
   }
 
@@ -98,7 +98,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     if (string == nil || string!.length() == 0) {
       return nil
     }
-    var prop:String? = JavaSystem.getProperty(string)
+    let prop:String? = JavaSystem.getProperty(string)
     if (prop == nil) {
       return nil
     }
@@ -115,7 +115,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     if (string == nil || string!.length() == 0) {
       return JavaInteger.valueOf(defaultValue)
     }
-    var prop:String? = JavaSystem.getProperty(string)
+    let prop:String? = JavaSystem.getProperty(string)
     if (prop == nil) {
       return JavaInteger.valueOf(defaultValue)
     }
@@ -132,7 +132,7 @@ public class JavaInteger : JavaNumber, JavaComparable {
     if (string == nil || string!.length() == 0) {
       return defaultValue
     }
-    var prop:String? = JavaSystem.getProperty(string)
+    let prop:String? = JavaSystem.getProperty(string)
     if (prop == nil) {
       return defaultValue
     }
@@ -168,12 +168,12 @@ public class JavaInteger : JavaNumber, JavaComparable {
     if (string == nil) {
       throw try JavaInteger.invalidInt(string)!
     }
-    var length:jint = jint(string!.length())
+    let length:jint = jint(string!.length())
     var i:jint = jint(0)
     if (length == 0) {
       throw try JavaInteger.invalidInt(string)!
     }
-    var negative:jboolean = jboolean(string!.charAt(i) == "-".asciiValue)
+    let negative:jboolean = jboolean(string!.charAt(i) == "-".asciiValue)
     if (negative && ++i == length) {
       throw try JavaInteger.invalidInt(string)!
     }
@@ -181,18 +181,18 @@ public class JavaInteger : JavaNumber, JavaComparable {
   }
 
   static func parse(string:String?, var _ offset:jint, _ radix:jint, _ negative:jboolean) throws ->jint  {
-    var max:jint = jint(JavaInteger.MIN_VALUE / radix)
+    let max:jint = jint(JavaInteger.MIN_VALUE / radix)
     var result:jint = jint(0)
-    var length:jint = jint(string!.length())
+    let length:jint = jint(string!.length())
     while (offset < length) {
-      var digit:jint = jint(JavaCharacter.digit(string!.charAt(offset++),radix))
+      let digit:jint = jint(JavaCharacter.digit(string!.charAt(offset++),radix))
       if (digit == -1) {
         throw try JavaInteger.invalidInt(string)!
       }
       if (max > result) {
         throw try JavaInteger.invalidInt(string)!
       }
-      var next:jint = jint(result * radix - digit)
+      let next:jint = jint(result * radix - digit)
       if (next > result) {
         throw try JavaInteger.invalidInt(string)!
       }
