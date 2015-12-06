@@ -27,6 +27,9 @@
 		0FBE636A1BFF1A7A00BC4D3A /* RuntimeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */; };
 		0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE636B1BFF1DC500BC4D3A /* Exception.swift */; };
 		0FBE636E1BFF243800BC4D3A /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE636D1BFF243800BC4D3A /* Comparable.swift */; };
+		6B9B57231C14640B0077BEF1 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9B57221C14640B0077BEF1 /* Collection.swift */; };
+		6B9B57251C14647A0077BEF1 /* Iterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9B57241C14647A0077BEF1 /* Iterable.swift */; };
+		6B9B57271C1465360077BEF1 /* Iterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9B57261C1465360077BEF1 /* Iterator.swift */; };
 		6BBFC9F41C00338C006955E2 /* Serializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F31C00338C006955E2 /* Serializable.swift */; };
 		6BBFC9F61C003415006955E2 /* IOException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F51C003415006955E2 /* IOException.swift */; };
 		6BBFC9F81C0043A9006955E2 /* InvalidObjectException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBFC9F71C0043A9006955E2 /* InvalidObjectException.swift */; };
@@ -86,6 +89,9 @@
 		0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuntimeException.swift; sourceTree = "<group>"; };
 		0FBE636B1BFF1DC500BC4D3A /* Exception.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Exception.swift; sourceTree = "<group>"; };
 		0FBE636D1BFF243800BC4D3A /* Comparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
+		6B9B57221C14640B0077BEF1 /* Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		6B9B57241C14647A0077BEF1 /* Iterable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Iterable.swift; sourceTree = "<group>"; };
+		6B9B57261C1465360077BEF1 /* Iterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Iterator.swift; sourceTree = "<group>"; };
 		6BBFC9F31C00338C006955E2 /* Serializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serializable.swift; sourceTree = "<group>"; };
 		6BBFC9F51C003415006955E2 /* IOException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOException.swift; sourceTree = "<group>"; };
 		6BBFC9F71C0043A9006955E2 /* InvalidObjectException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidObjectException.swift; sourceTree = "<group>"; };
@@ -178,6 +184,7 @@
 		0FBE63651BFF1A7A00BC4D3A /* java */ = {
 			isa = PBXGroup;
 			children = (
+				6B9B57211C14640B0077BEF1 /* util */,
 				6BBFC9F21C00338C006955E2 /* io */,
 				0FBE63661BFF1A7A00BC4D3A /* lang */,
 			);
@@ -187,6 +194,7 @@
 		0FBE63661BFF1A7A00BC4D3A /* lang */ = {
 			isa = PBXGroup;
 			children = (
+				6B9B57241C14647A0077BEF1 /* Iterable.swift */,
 				6BF182061C0C9FA6006EA731 /* NullPointerException.swift */,
 				0F46F7961C0C41340041D74A /* Character.swift */,
 				FCDDA3551C0AFB7C0022ED7A /* IntegralToString.swift */,
@@ -217,6 +225,15 @@
 				0FBE63681BFF1A7A00BC4D3A /* RuntimeException.swift */,
 			);
 			path = lang;
+			sourceTree = "<group>";
+		};
+		6B9B57211C14640B0077BEF1 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				6B9B57261C1465360077BEF1 /* Iterator.swift */,
+				6B9B57221C14640B0077BEF1 /* Collection.swift */,
+			);
+			path = util;
 			sourceTree = "<group>";
 		};
 		6BBFC9F21C00338C006955E2 /* io */ = {
@@ -345,6 +362,7 @@
 				0F2DA6CA1C046CB200F2E57F /* Integer.swift in Sources */,
 				6BBFCA1B1C00BCA4006955E2 /* IndexOutOfBoundsException.swift in Sources */,
 				0FBE63691BFF1A7A00BC4D3A /* Runnable.swift in Sources */,
+				6B9B57231C14640B0077BEF1 /* Collection.swift in Sources */,
 				0FBE636C1BFF1DC500BC4D3A /* Exception.swift in Sources */,
 				6BF182071C0C9FA6006EA731 /* NullPointerException.swift in Sources */,
 				6BBFC9FE1C004BF8006955E2 /* JavaSystem.swift in Sources */,
@@ -356,6 +374,7 @@
 				0F276A921C0172C600EE845C /* Error.swift in Sources */,
 				6BFD25021BFB73FB0061F7BE /* Utility.swift in Sources */,
 				0F9E38351BF983D400E4F3CB /* J2SwiftHeader.swift in Sources */,
+				6B9B57271C1465360077BEF1 /* Iterator.swift in Sources */,
 				6BBFCA041C00721D006955E2 /* JavaArrayExtension.swift in Sources */,
 				0F276A941C01746E00EE845C /* Number.swift in Sources */,
 				6BBFC9F41C00338C006955E2 /* Serializable.swift in Sources */,
@@ -368,6 +387,7 @@
 				0F0391B01C01ABC0000EA5BC /* CharSequence.swift in Sources */,
 				0F0391B41C01B0F9000EA5BC /* AssertionError.swift in Sources */,
 				FCDDA3561C0AFB7C0022ED7A /* IntegralToString.swift in Sources */,
+				6B9B57251C14647A0077BEF1 /* Iterable.swift in Sources */,
 				0F0391B21C01B0C3000EA5BC /* ArrayStoreException.swift in Sources */,
 				0F043FC41BF5CC7F00690F83 /* JavaClass.swift in Sources */,
 				6BBFCA0A1C00BB6D006955E2 /* NumberFormatException.swift in Sources */,

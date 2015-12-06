@@ -4,13 +4,16 @@ public class JreEmulationTransfer {
 
 	public static void main(String[] args) {
 		String[] fileList = new String[] {
+				"java/util/Collection.java",
+				"java/util/Iterator.java",
+				
 				"java/lang/Integer.java",
 				"java/lang/Character.java",
 				
 				"java/lang/TypeNotPresentException.java",
 				"java/lang/IntegralToString.java",
 				"java/lang/NullPointerException.java",
-				
+				"java/lang/Iterable.java",
 				"java/lang/AssertionError.java",
 				"java/lang/ArrayStoreException.java",
 				"java/lang/CharSequence.java",

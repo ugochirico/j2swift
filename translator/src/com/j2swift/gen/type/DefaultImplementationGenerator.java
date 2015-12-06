@@ -221,6 +221,9 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 				}
 
 				String typeName = nameTable.getSpecificObjCType(var.getType());
+				if (var.getType().getTypeDeclaration().isGenericType()) {
+					typeName = "T";
+				}
 				sb.append(String.format("%s:%s",
 						nameTable.getVariableShortName(var), typeName));
 				if (!BindingUtil.isPrimitive(var)) {
@@ -246,5 +249,25 @@ public class DefaultImplementationGenerator extends TypeGenerator {
 			className += "<T>";
 		}
 		return className;
+	}
+	
+	protected String printGenericDeclaration(MethodDeclaration m) {
+		StringBuilder sb = new StringBuilder();
+		List<SingleVariableDeclaration> params = m.getParameters();
+		int i = 0;
+		for (SingleVariableDeclaration param : params) {
+			IVariableBinding varBinding = param.getVariableBinding();
+			ITypeBinding typeDeclaration = varBinding.getType().getTypeDeclaration();
+			if (varBinding != null && typeDeclaration.isGenericType()) {
+				if (i > 0) {
+					sb.append(",");
+				}
+				sb.append("<T:");
+				sb.append(nameTable.getSpecificObjCType(varBinding.getType()));
+				sb.append(">");
+				i++;
+			}
+		}
+		return sb.toString();
 	}
 }

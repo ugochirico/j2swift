@@ -82,6 +82,7 @@ public class InterfaceImplementationGenerator extends
 			returnType = "NSUInteger";
 		}
 		sb.append(selector);
+		sb.append(printGenericDeclaration(m));
 		sb.append(printMethodParameter(m));
 		if (binding.getExceptionTypes().length > 0) {
 			sb.append(" throws");
