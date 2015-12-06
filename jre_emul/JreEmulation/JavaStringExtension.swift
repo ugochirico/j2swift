@@ -76,6 +76,11 @@ public extension String {
         return false
     }
     
+    public func toUpperCase(string:String?) -> String? {
+        //TODO localization
+        return string?.uppercaseString
+    }
+    
     public func charAt(i:jint) -> jchar {
         return 0
     }

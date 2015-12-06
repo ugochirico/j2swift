@@ -28,6 +28,9 @@ public class TestClassType {
 	}
 	public static void main(String[] args) {
 		System.out.println("1 = " + Integer.valueOf(MIN_VALUE));
+		long a = 5;
+		float b = 5.1f;
+		System.out.println((float)a == b);
 	}
 	
 

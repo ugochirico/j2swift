@@ -83,7 +83,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public func charValue() ->jchar  {
-    return (jchar(value))
+    return value
   }
 
   static func checkValidCodePoint(codePoint:jint) throws  {
@@ -93,15 +93,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public func compareTo(c:JavaCharacter?) ->jint  {
-    return (jint(JavaCharacter.compare(value,c!.value)))
+    return JavaCharacter.compare(value,c!.value)
   }
 
   public static func compare(lhs:jchar, _ rhs:jchar) ->jint  {
-    return (jint(lhs - rhs))
+    return lhs - rhs
   }
 
   public static func valueOf(c:jchar) ->JavaCharacter?  {
-    return c < 128 ? JavaCharacter.smallValueOf(c) : JavaCharacter(withjchar: c)
+    return jint(c) < 128 ? JavaCharacter.smallValueOf(c) : JavaCharacter(withjchar: c)
   }
 
   static func smallValueOf(c:jchar) ->JavaCharacter?  {
@@ -109,37 +109,37 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isValidCodePoint(codePoint:jint) ->jboolean  {
-    return (jboolean((JavaCharacter.MIN_CODE_POINT <= codePoint && JavaCharacter.MAX_CODE_POINT >= codePoint)))
+    return (JavaCharacter.MIN_CODE_POINT <= codePoint && JavaCharacter.MAX_CODE_POINT >= codePoint)
   }
 
   public static func isSupplementaryCodePoint(codePoint:jint) ->jboolean  {
-    return (jboolean((JavaCharacter.MIN_SUPPLEMENTARY_CODE_POINT <= codePoint && JavaCharacter.MAX_CODE_POINT >= codePoint)))
+    return (JavaCharacter.MIN_SUPPLEMENTARY_CODE_POINT <= codePoint && JavaCharacter.MAX_CODE_POINT >= codePoint)
   }
 
   public static func isHighSurrogate(ch:jchar) ->jboolean  {
-    return (jboolean((JavaCharacter.MIN_HIGH_SURROGATE <= ch && JavaCharacter.MAX_HIGH_SURROGATE >= ch)))
+    return (JavaCharacter.MIN_HIGH_SURROGATE <= ch && JavaCharacter.MAX_HIGH_SURROGATE >= ch)
   }
 
   public static func isLowSurrogate(ch:jchar) ->jboolean  {
-    return (jboolean((JavaCharacter.MIN_LOW_SURROGATE <= ch && JavaCharacter.MAX_LOW_SURROGATE >= ch)))
+    return (JavaCharacter.MIN_LOW_SURROGATE <= ch && JavaCharacter.MAX_LOW_SURROGATE >= ch)
   }
 
   public static func isSurrogate(ch:jchar) ->jboolean  {
-    return (jboolean(ch >= JavaCharacter.MIN_SURROGATE && ch <= JavaCharacter.MAX_SURROGATE))
+    return ch >= JavaCharacter.MIN_SURROGATE && ch <= JavaCharacter.MAX_SURROGATE
   }
 
   public static func isSurrogatePair(high:jchar, _ low:jchar) ->jboolean  {
-    return (jboolean((JavaCharacter.isHighSurrogate(high) && JavaCharacter.isLowSurrogate(low))))
+    return (JavaCharacter.isHighSurrogate(high) && JavaCharacter.isLowSurrogate(low))
   }
 
   public static func charCount(codePoint:jint) ->jint  {
-    return (jint((codePoint >= 0x10000 ? 2 : 1)))
+    return (codePoint >= 0x10000 ? 2 : 1)
   }
 
   public static func toCodePoint(high:jchar, _ low:jchar) ->jint  {
-    let h:jint = jint(jint(high & 0x3FF) << 10)
-    let l:jint = jint(low & 0x3FF)
-    return (jint(jint(h | l) + 0x10000))
+    let h:jint = jint(jint(jint(high) & 0x3FF) << 10)
+    let l:jint = jint(jint(low) & 0x3FF)
+    return jint(h | l) + 0x10000
   }
 
   public static func codePointAt(seq:JavaCharSequence?, var _ index:jint) throws ->jint  {
@@ -156,7 +156,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     }
     let low:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
-      return (jint(JavaCharacter.toCodePoint(high,low)))
+      return JavaCharacter.toCodePoint(high,low)
     }
     return (jint(high))
   }
@@ -183,7 +183,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
     }
     let high:jchar = jchar(seq!.charAt(index))
     if (JavaCharacter.isSurrogatePair(high,low)) {
-      return (jint(JavaCharacter.toCodePoint(high,low)))
+      return JavaCharacter.toCodePoint(high,low)
     }
     return (jint(low))
   }
@@ -213,10 +213,10 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       let low:jint = jint(0xDC00 | jint(cpPrime & 0x3FF))
       dst![dstIndex] = jchar(high)
       dst![dstIndex + 1] = jchar(low)
-      return (jint(2))
+      return 2
     }
     dst![dstIndex] = jchar(codePoint)
-    return (jint(1))
+    return 1
   }
 
   public static func toChars(codePoint:jint) ->[jchar]?  {
@@ -251,7 +251,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       }
       result++
     }
-    return (jint(result))
+    return result
   }
 
   public static func codePointCount(seq:[jchar]?, _ offset:jint, _ count:jint) ->jint  {
@@ -267,7 +267,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       throw JavaIndexOutOfBoundsException()
     }
     if (codePointOffset == 0) {
-      return (jint(index))
+      return index
     }
     if (codePointOffset > 0) {
       var codePoints:jint = jint(codePointOffset)
@@ -285,7 +285,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
         }
         i++
       }
-      return (jint(i))
+      return i
     }
     var codePoints:jint = jint(-codePointOffset)
     var i:jint = jint(index)
@@ -302,7 +302,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
         }
       }
     }
-    return (jint(i))
+    return i
   }
 
   public static func offsetByCodePoints(seq:[jchar]?, _ start:jint, _ count:jint, _ index:jint, _ codePointOffset:jint) ->jint  {
@@ -310,7 +310,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func digit(c:jchar, _ radix:jint) ->jint  {
-    return (jint(JavaCharacter.digit(jint(c),radix)))
+    return JavaCharacter.digit(jint(c),radix)
   }
 
   public static func digit(codePoint:jint, _ radix:jint) ->jint  {
@@ -318,7 +318,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public override func equals(object:JavaObject?) ->jboolean  {
-    return (jboolean(jboolean(object is JavaCharacter) && jboolean(((object as! JavaCharacter)).value == value)))
+    return (object is JavaCharacter) && (((object as! JavaCharacter)).value == value)
   }
 
   public static func forDigit(digit:jint, _ radix:jint) ->jchar  {
@@ -327,7 +327,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
 
   public static func getName(codePoint:jint) ->String?  {
     try JavaCharacter.checkValidCodePoint(codePoint)
-    if (JavaCharacter.getType(codePoint) == JavaCharacter.UNASSIGNED) {
+    if (JavaCharacter.getType(codePoint) == jint(JavaCharacter.UNASSIGNED)) {
       return nil
     }
     var result:String? = JavaCharacter.getNameImpl(codePoint)
@@ -343,33 +343,33 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func getNumericValue(c:jchar) ->jint  {
-    return (jint(JavaCharacter.getNumericValue(jint(c))))
+    return JavaCharacter.getNumericValue(jint(c))
   }
 
   public static func getNumericValue(codePoint:jint) ->jint  {
     if (codePoint < 128) {
-      if (codePoint >= "0".asciiValue && codePoint <= "9".asciiValue) {
-        return (jint(codePoint - "0".asciiValue))
+      if (jchar(codePoint) >= "0".asciiValue && jchar(codePoint) <= "9".asciiValue) {
+        return jchar(codePoint) - "0".asciiValue
       }
-      if (codePoint >= "a".asciiValue && codePoint <= "z".asciiValue) {
-        return (jint(codePoint - jint("a".asciiValue - 10)))
+      if (jchar(codePoint) >= "a".asciiValue && jchar(codePoint) <= "z".asciiValue) {
+        return codePoint - jint(jint("a".asciiValue) - 10)
       }
-      if (codePoint >= "A".asciiValue && codePoint <= "Z".asciiValue) {
-        return (jint(codePoint - jint("A".asciiValue - 10)))
+      if (jchar(codePoint) >= "A".asciiValue && jchar(codePoint) <= "Z".asciiValue) {
+        return codePoint - jint(jint("A".asciiValue) - 10)
       }
-      return (jint(-1))
+      return -1
     }
     if (codePoint >= 0xff21 && codePoint <= 0xff3a) {
-      return (jint(codePoint - 0xff17))
+      return codePoint - 0xff17
     }
     if (codePoint >= 0xff41 && codePoint <= 0xff5a) {
-      return (jint(codePoint - 0xff37))
+      return codePoint - 0xff37
     }
-    return (jint(-1))
+    return -1
   }
 
   public static func getType(c:jchar) ->jint  {
-    return (jint(JavaCharacter.getType(jint(c))))
+    return JavaCharacter.getType(jint(c))
   }
 
   public static func getType(codePoint:jint) ->jint  {
@@ -377,7 +377,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func getDirectionality(c:jchar) ->jbyte  {
-    return (jbyte(JavaCharacter.getDirectionality(jint(c))))
+    return JavaCharacter.getDirectionality(jint(c))
   }
 
   public static func getDirectionality(codePoint:jint) ->jbyte  {
@@ -385,7 +385,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isMirrored(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isMirrored(jint(c))))
+    return JavaCharacter.isMirrored(jint(c))
   }
 
   public static func isMirrored(codePoint:jint) ->jboolean  {
@@ -397,11 +397,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func highSurrogate(codePoint:jint) ->jchar  {
-    return (jchar(jchar((jint(codePoint >> 10) + 0xd7c0))))
+    return jchar((jint(codePoint >> 10) + 0xd7c0))
   }
 
   public static func lowSurrogate(codePoint:jint) ->jchar  {
-    return (jchar(jchar((jint(codePoint & 0x3ff) | 0xdc00))))
+    return jchar((jint(codePoint & 0x3ff) | 0xdc00))
   }
 
   public static func isAlphabetic(codePoint:jint) ->jboolean  {
@@ -409,11 +409,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isBmpCodePoint(codePoint:jint) ->jboolean  {
-    return (jboolean(codePoint >= JavaCharacter.MIN_VALUE && codePoint <= JavaCharacter.MAX_VALUE))
+    return jchar(codePoint) >= JavaCharacter.MIN_VALUE && jchar(codePoint) <= JavaCharacter.MAX_VALUE
   }
 
   public static func isDefined(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isDefined(jint(c))))
+    return JavaCharacter.isDefined(jint(c))
   }
 
   public static func isDefined(codePoint:jint) ->jboolean  {
@@ -421,7 +421,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isDigit(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isDigit(jint(c))))
+    return JavaCharacter.isDigit(jint(c))
   }
 
   public static func isDigit(codePoint:jint) ->jboolean  {
@@ -429,7 +429,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isIdentifierIgnorable(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isIdentifierIgnorable(jint(c))))
+    return JavaCharacter.isIdentifierIgnorable(jint(c))
   }
 
   public static func isIdeographic(codePoint:jint) ->jboolean  {
@@ -441,7 +441,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isISOControl(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isISOControl(jint(c))))
+    return JavaCharacter.isISOControl(jint(c))
   }
 
   public static func isISOControl(c:jint) ->jboolean  {
@@ -449,7 +449,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isJavaIdentifierPart(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isJavaIdentifierPart(jint(c))))
+    return JavaCharacter.isJavaIdentifierPart(jint(c))
   }
 
   public static func isJavaIdentifierPart(codePoint:jint) ->jboolean  {
@@ -457,7 +457,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isJavaIdentifierStart(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isJavaIdentifierStart(jint(c))))
+    return JavaCharacter.isJavaIdentifierStart(jint(c))
   }
 
   public static func isJavaIdentifierStart(codePoint:jint) ->jboolean  {
@@ -465,15 +465,15 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isJavaLetter(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isJavaIdentifierStart(c)))
+    return JavaCharacter.isJavaIdentifierStart(c)
   }
 
   public static func isJavaLetterOrDigit(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isJavaIdentifierPart(c)))
+    return JavaCharacter.isJavaIdentifierPart(c)
   }
 
   public static func isLetter(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isLetter(jint(c))))
+    return JavaCharacter.isLetter(jint(c))
   }
 
   public static func isLetter(codePoint:jint) ->jboolean  {
@@ -481,7 +481,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isLetterOrDigit(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isLetterOrDigit(jint(c))))
+    return JavaCharacter.isLetterOrDigit(jint(c))
   }
 
   public static func isLetterOrDigit(codePoint:jint) ->jboolean  {
@@ -489,7 +489,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isLowerCase(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isLowerCase(jint(c))))
+    return JavaCharacter.isLowerCase(jint(c))
   }
 
   public static func isLowerCase(codePoint:jint) ->jboolean  {
@@ -497,11 +497,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isSpace(c:jchar) ->jboolean  {
-    return (jboolean(c == 0x000a || c == 0x0009 || c == 0x000c || c == 0x000d || c == " ".asciiValue))
+    return c == 0x000a || c == 0x0009 || c == 0x000c || c == 0x000d || c == " ".asciiValue
   }
 
   public static func isSpaceChar(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isSpaceChar(jint(c))))
+    return JavaCharacter.isSpaceChar(jint(c))
   }
 
   public static func isSpaceChar(codePoint:jint) ->jboolean  {
@@ -509,7 +509,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isTitleCase(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isTitleCase(jint(c))))
+    return JavaCharacter.isTitleCase(jint(c))
   }
 
   public static func isTitleCase(codePoint:jint) ->jboolean  {
@@ -517,7 +517,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isUnicodeIdentifierPart(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isUnicodeIdentifierPart(jint(c))))
+    return JavaCharacter.isUnicodeIdentifierPart(jint(c))
   }
 
   public static func isUnicodeIdentifierPart(codePoint:jint) ->jboolean  {
@@ -525,7 +525,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isUnicodeIdentifierStart(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isUnicodeIdentifierStart(jint(c))))
+    return JavaCharacter.isUnicodeIdentifierStart(jint(c))
   }
 
   public static func isUnicodeIdentifierStart(codePoint:jint) ->jboolean  {
@@ -533,7 +533,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isUpperCase(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isUpperCase(jint(c))))
+    return JavaCharacter.isUpperCase(jint(c))
   }
 
   public static func isUpperCase(codePoint:jint) ->jboolean  {
@@ -541,7 +541,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func isWhitespace(c:jchar) ->jboolean  {
-    return (jboolean(JavaCharacter.isWhitespace(jint(c))))
+    return JavaCharacter.isWhitespace(jint(c))
   }
 
   public static func isWhitespace(codePoint:jint) ->jboolean  {
@@ -549,11 +549,11 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func reverseBytes(c:jchar) ->jchar  {
-    return (jchar(jchar((jint(c << 8) | jint(c >> 8)))))
+    return jchar((jint(jint(c) << 8) | jint(jint(c) >> 8)))
   }
 
   public static func toLowerCase(c:jchar) ->jchar  {
-    return (jchar(jchar(JavaCharacter.toLowerCase(jint(c)))))
+    return jchar(JavaCharacter.toLowerCase(jint(c)))
   }
 
   public static func toLowerCase(codePoint:jint) ->jint  {
@@ -569,7 +569,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func toTitleCase(c:jchar) ->jchar  {
-    return (jchar(jchar(JavaCharacter.toTitleCase(jint(c)))))
+    return jchar(JavaCharacter.toTitleCase(jint(c)))
   }
 
   public static func toTitleCase(codePoint:jint) ->jint  {
@@ -577,7 +577,7 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
   }
 
   public static func toUpperCase(c:jchar) ->jchar  {
-    return (jchar(jchar(JavaCharacter.toUpperCase(jint(c)))))
+    return jchar(JavaCharacter.toUpperCase(jint(c)))
   }
 
   public static func toUpperCase(codePoint:jint) ->jint  {
@@ -595,12 +595,12 @@ public class JavaCharacter : JavaObject, JavaSerializable, JavaComparable {
       if (c > value) {
         low = mid + 1
       } else if (c == value) {
-        return (jint(mid))
+        return mid
       } else {
         high = mid - 1
       }
     }
-    return (jint(mid - jint(c < value ? 1 : 0)))
+    return mid - jint(c < value ? 1 : 0)
   }
 
 
@@ -620,11 +620,11 @@ public class JavaCharacter_Subset : JavaObject {
   }
 
   public override func equals(object:JavaObject?) ->jboolean  {
-    return (jboolean(object == self))
+    return object == self
   }
 
   public override func hashCode() ->jint  {
-    return (jint())
+    return
   }
 
   public override func toString() ->String?  {
@@ -890,19 +890,19 @@ public class JavaCharacter_UnicodeBlock : JavaCharacter_Subset {
     }
     for (var i:jint = jint(1); i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
       if (blockName!.equals(JavaCharacter_UnicodeBlock.BLOCKS![i].toString())) {
-        return (jint(i))
+        return i
       }
     }
-    return (jint(-1))
+    return -1
   }
 
   static func ofImpl(codePoint:jint) ->jint  {
     for (var i:jint = jint(1); i < JavaCharacter_UnicodeBlock.BLOCKS!.length; i++) {
       if (codePoint >= JavaCharacter_UnicodeBlock.BLOCKS![i].rangeStart && codePoint <= JavaCharacter_UnicodeBlock.BLOCKS![i].rangeEnd) {
-        return (jint(i))
+        return i
       }
     }
-    return (jint(-1))
+    return -1
   }
 
 

@@ -1,9 +1,8 @@
 package com.j2swift.gen;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import jdk.nashorn.internal.ir.BlockStatement;
 
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -72,6 +71,7 @@ import com.j2swift.ast.VariableDeclarationStatement;
 import com.j2swift.ast.WhileStatement;
 import com.j2swift.types.IOSTypeBinding;
 import com.j2swift.util.BindingUtil;
+import com.j2swift.util.TranslationUtil;
 
 public class StatementGenerator extends TreeVisitor {
 
@@ -431,29 +431,26 @@ public class StatementGenerator extends TreeVisitor {
 				|| op.equals(InfixExpression.Operator.NOT_EQUALS)) {
 			equalsOrNotEqualsOp = true;
 		}
-		if (equalsOrNotEqualsOp) {
-			Expression lhs = operands.get(0);
-			Expression rhs = operands.get(1);
-			// TODO
-			if (lhs instanceof StringLiteral || rhs instanceof StringLiteral) {
-				if (!(lhs instanceof StringLiteral)) {
-					// In case the lhs can't call isEqual.
-					lhs = operands.get(1);
-					rhs = operands.get(0);
-				}
-				buffer.append(op.equals(InfixExpression.Operator.NOT_EQUALS) ? "!["
-						: "[");
-				lhs.accept(this);
-				buffer.append(" isEqual:");
-				rhs.accept(this);
-				buffer.append("]");
-				return false;
-			}
-		}
 		String opStr = ' ' + op.toString() + ' ';
 		boolean isFirst = true;
 		// TODO
 		boolean needUnwarpOptional = operands.size() > 1;
+		List<ITypeBinding> types = new ArrayList<ITypeBinding>(); 
+		for (Expression operand : operands) {
+			if (!operand.getTypeBinding().isPrimitive() || BindingUtil.isBoolean(operand.getTypeBinding())) {
+				break;
+			} else {
+				types.add(operand.getTypeBinding());
+			}
+		}
+		String castTypeName = null;
+		ITypeBinding castTypeBinding = null;
+		if (types.size() == operands.size()) {
+			castTypeBinding = TranslationUtil.getImplicitPrimitiveJavaCastType(types);
+		}
+		if (castTypeBinding != null) {
+			castTypeName = nameTable.getSpecificObjCType(castTypeBinding);
+		}
 		for (Expression operand : operands) {
 			if (isFirst) {
 				if (equalsOrNotEqualsOp && operand instanceof SimpleName) {
@@ -469,20 +466,32 @@ public class StatementGenerator extends TreeVisitor {
 				buffer.append(opStr);
 			}
 			isFirst = false;
-			String castTypeName = null;
-			if (operand.getTypeBinding().isPrimitive()
-					&& operand instanceof ParenthesizedExpression) {
-				/*
-				 * process the specific assignment (firstDigit =
-				 * string.charAt(i)) == 'x'
+			boolean needAddParenthesized = false;
+			if (operand.getTypeBinding().isPrimitive() && operand.getTypeBinding() != castTypeBinding) {
+				if (castTypeName != null) {
+					buffer.append(castTypeName);
+					needAddParenthesized = !(operand instanceof ParenthesizedExpression);
+				}
+			} else {
+				/* 
+				 * process the specific assignment (firstDigit = string.charAt(i)) == 'x'
 				 */
-				castTypeName = nameTable.getSpecificObjCType(operand
-						.getTypeBinding());
+				if (operand.getTypeBinding().isPrimitive() && operand instanceof ParenthesizedExpression) {
+					String parenthesizedExpressionCastTypeName = nameTable.getSpecificObjCType(operand
+							.getTypeBinding());
+					if (parenthesizedExpressionCastTypeName != null) {
+						buffer.append(parenthesizedExpressionCastTypeName);
+					}
+				}
 			}
-			if (castTypeName != null) {
-				buffer.append(castTypeName);
+			
+			if (needAddParenthesized) {
+				buffer.append("(");
 			}
 			operand.accept(this);
+			if (needAddParenthesized) {
+				buffer.append(")");
+			}
 		}
 		return false;
 	}
